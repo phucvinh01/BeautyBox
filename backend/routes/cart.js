@@ -6,5 +6,5 @@ const router = require("express").Router();
 router.post("/add-to-cart", cartController.addToCart);
 router.get("/:id", cartController.getCart);
 router.put("/", cartController.decreaseQuantity);
-router.delete("/", cartController.removeItem);
+router.put("/remove", cartController.removeItem);
 module.exports = router;

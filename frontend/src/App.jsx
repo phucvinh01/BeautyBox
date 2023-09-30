@@ -19,6 +19,7 @@ import Category from './pages/Category'
 import Cart from './pages/Cart'
 import { addToCartFailed } from './redux/cartSlice'
 import LayoutAdmin from './pages/Admin/Layout'
+import Checkout from './pages/Checkout'
 function App() {
 
   const dispatch = useDispatch()
@@ -49,32 +50,31 @@ function App() {
     <>
       <ToastContainer
         position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
+        autoClose={ 5000 }
+        hideProgressBar={ false }
+        newestOnTop={ false }
         closeOnClick
-        rtl={false}
+        rtl={ false }
         pauseOnFocusLoss
         draggable
         pauseOnHover
         theme="light"
       />
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path='product' element={<Product />} />
-          <Route path='about' element={<About />} />
-          <Route path='category/:path' element={<Category />} />
-          <Route path='cart' element={<Cart />} />
-          <Route path="*" element={<ErrorPage />} />
+        <Route path="/" element={ <Layout /> }>
+          <Route index element={ <Home /> } />
+          <Route path='product' element={ <Product /> } />
+          <Route path='category/:path' element={ <Category /> } />
+          <Route path='checkout/:id' element={ <Checkout /> } />
+          <Route path="*" element={ <ErrorPage /> } />
         </Route>
 
-        <Route path='/admin' element={<LayoutAdmin />}>
-          <Route path='/admin/home' element={<Admin />} />
-          <Route path='/admin/product' element={<ProductAdmin />} />
-          <Route path='/admin/order' element={<Order />} />
-          <Route path='/admin/employee' element={<Employess />} />
-          <Route path='/admin/sale' element={<Sales />} />
+        <Route path='/admin' element={ <LayoutAdmin /> }>
+          <Route path='/admin/home' element={ <Admin /> } />
+          <Route path='/admin/product' element={ <ProductAdmin /> } />
+          <Route path='/admin/order' element={ <Order /> } />
+          <Route path='/admin/employee' element={ <Employess /> } />
+          <Route path='/admin/sale' element={ <Sales /> } />
         </Route>
       </Routes>
 

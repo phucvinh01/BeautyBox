@@ -6,8 +6,8 @@ import { getCategoryFailed, getCategoryStart, getCategorySuccess } from './cateS
 import { getCategory } from '../axios/CategoryRequest'
 import { getBrandFailed, getBrandStart, getBrandSuccess } from './brandSlice'
 import { getBrand } from '../axios/BrandRequest'
-import { addToCartFailed, addToCartStart, addToCartSuccess, decrementQuantityFailed, decrementQuantityStart, decrementQuantitySuccess, getCartFailed, getCartStart, getCartSuccess } from './cartSlice'
-import { Add, Decrement, Get } from '../axios/CartRequest'
+import { addToCartFailed, addToCartStart, addToCartSuccess, decrementQuantityFailed, decrementQuantityStart, decrementQuantitySuccess, getCartFailed, getCartStart, getCartSuccess, removeItemFailed, removeItemStart, removeItemSuccess } from './cartSlice'
+import { Add, Decrement, Delete, Get } from '../axios/CartRequest'
 import { Axios } from 'axios'
 
 export const login = async (user, dispatch, navigate) => {
@@ -95,6 +95,7 @@ export const addToCart = async (productId, userId, quantity, dispatch) => {
         const res = await Add(productId, userId, quantity)
         if (res) {
             dispatch(addToCartSuccess(res.data))
+            return
         }
         dispatch(addToCartFailed())
     }
@@ -111,10 +112,24 @@ export const decreaseQuantity = async (productId, userId, dispatch) => {
             console.log(res);
             dispatch(decrementQuantitySuccess(res.data))
         }
-        dispatch(decrementQuantityFailed())
     }
     catch (err) {
         dispatch(decrementQuantityFailed())
+    }
+}
+
+export const RemoveCartItem = async (productId, userId, dispatch) => {
+    dispatch(removeItemStart());
+    try {
+        console.log(userId);
+        const res = await Delete(productId, userId)
+        if (res) {
+            console.log(res);
+            dispatch(removeItemSuccess(res.data))
+        }
+    }
+    catch (err) {
+        dispatch(removeItemFailed())
     }
 }
 

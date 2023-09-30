@@ -16,8 +16,8 @@ const Decrement = (productId, userId) => {
     return Axios.put(`/v1/cart/`, { userId: userId, productId: productId })
 }
 
-const Delete = (productId) => {
-    return Axios.delete(`/v1/cart/`, { productId: productId })
+const Delete = (productId, userId) => {
+    return Axios.put(`/v1/cart/remove`, { userId: userId, productId: productId })
 }
 
 

@@ -6,16 +6,14 @@ const cartController = {
     addToCart: async (req, res) => {
         try {
             const { userId, itemId } = req.body;
-
-            console.log(itemId);
+            console.log(userId);
             let data = null;
 
             const quantity = Number.parseInt(req.body.quantity);
 
             let cart = await Cart.findOne({ userId: userId });
+            console.log(cart);
             const productDetails = await Product.findById(itemId);
-
-            console.log("productDetails", productDetails)
 
             //-- Check if cart Exists and Check the quantity if items -------
             if (cart) {
@@ -95,7 +93,7 @@ const cartController = {
             res.status(200).json({ status: true, cart: cart });
         }
         catch (err) {
-            res.status(500).err()
+            res.status(500).json({ status: false })
         }
 
     },
@@ -173,7 +171,6 @@ const cartController = {
     },
 
     removeItem: async (req, res) => {
-
         try {
             console.log("check body>>>>>>", req.body);
             const { userId, productId } = req.body;

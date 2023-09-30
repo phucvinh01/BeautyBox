@@ -21,7 +21,7 @@ const ModalEdit = (props) => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
     const [category, setCategory] = useState();
-    const [brand, setBrand] = useState();
+    const [brand, setBrand] = useState(0);
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
     const [loading, setLoading] = useState(false);
@@ -38,7 +38,7 @@ const ModalEdit = (props) => {
     useEffect(() => {
         if (openEdit) {
             setId(state._id);
-            setBrand(state.brand);
+            setBrand(state.stock);
             setName(state.name);
             setPrice(state.price);
             setCategory(state.category);
@@ -74,10 +74,10 @@ const ModalEdit = (props) => {
         <>
             <Modal
                 title='Edit'
-                width={1000}
-                open={openEdit}
-                onCancel={() => handleCancel('EDIT')}
-                footer={false}
+                width={ 1000 }
+                open={ openEdit }
+                onCancel={ () => handleCancel('EDIT') }
+                footer={ false }
                 className='modal-edit'
             >
                 <hr></hr>
@@ -85,109 +85,100 @@ const ModalEdit = (props) => {
                     <div className='col-lg-4 col-md-12 col-sm-12'>
                         <div className='mb-3'>
                             <label
-                                htmlFor={idd + '-name'}
+                                htmlFor={ idd + '-name' }
                                 className='form-label fw-bolder'>
                                 Name
                             </label>
                             <input
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                value={ name }
+                                onChange={ (e) => setName(e.target.value) }
                                 type='text'
                                 className='form-control'
-                                id={idd + '-name'}></input>
+                                id={ idd + '-name' }></input>
                         </div>
                         <div className='mb-3'>
                             <label
-                                htmlFor={idd + '-price'}
+                                htmlFor={ idd + '-price' }
                                 className='form-label fw-bolder'>
                                 Price
                             </label>
                             <input
-                                value={price}
-                                onChange={(e) => setPrice(e.target.value)}
+                                value={ price }
+                                onChange={ (e) => setPrice(e.target.value) }
                                 type='number'
                                 className='form-control'
-                                id={idd + '-price'}></input>
+                                id={ idd + '-price' }></input>
                         </div>
                         <div className='mb-3'>
                             <label
-                                htmlFor={idd + '-category'}
+                                htmlFor={ idd + '-category' }
                                 className='form-label fw-bolder'>
                                 Category
                             </label>
                             <Select
-                                value={category}
-                                onChange={onChange}
+                                value={ category }
+                                onChange={ onChange }
                                 id='category'
-                                style={{
+                                style={ {
                                     width: '100%',
-                                }}
+                                } }
                                 allowClear
-                                options={categories.map((item) => {
+                                options={ categories.map((item) => {
                                     return {
                                         value: item.name,
                                         key: item.name,
                                     };
-                                })}
+                                }) }
                             />
                         </div>
                     </div>
                     <div className='col-lg-4 col-md-12 col-sm-12'>
                         <div className='mb-3'>
                             <label
-                                htmlFor={idd + '-brand'}
+                                htmlFor={ idd + '-stock' }
                                 className='form-label fw-bolder'>
-                                Brand
+                                Stock
                             </label>
-                            <Select
-                                value={brand}
-                                onChange={onChangeBrand}
-                                id='brand'
-                                style={{
-                                    width: '100%',
-                                }}
-                                allowClear
-                                options={brands.map((item) => {
-                                    return {
-                                        value: item.name,
-                                        key: item.name,
-                                    };
-                                })}
-                            />
+                            <input
+                                value={ brand }
+                                onChange={ (e) => setBrand(e.target.value) }
+                                type='number'
+                                className='form-control'
+                                id={ idd + '-stock' }></input>
                         </div>
                         <div className='mb-3'>
                             <label
-                                htmlFor={idd + '-description'}
+                                htmlFor={ idd + '-description' }
                                 className='form-label fw-bolder'>
                                 Description
                             </label>
                             <TextArea
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                style={{
+                                value={ description }
+                                onChange={ (e) => setDescription(e.target.value) }
+                                style={ {
                                     height: 140,
                                     resize: 'none',
-                                }}
+                                } }
                                 type='text'
                                 className='form-control'
-                                id={idd + '-description'}></TextArea>
+                                id={ idd + '-description' }></TextArea>
                         </div>
                     </div>
                     <div className='col-lg-4 col-md-12 col-sm-12'>
                         <div className='p-0'>
                             <Upload
-                                setImage={setImage}
-                                value={image}
+                                setImage={ setImage }
+                                value={ image }
                             />
                         </div>
                     </div>
                 </div>
                 <div className='d-flex justify-content-end'>
                     <button
-                        disabled={loading ? true : false}
+                        disabled={ loading ? true : false }
                         className='btn btn-dark'
-                        onClick={handleSubmit}>
-                        {loading ? <Spin></Spin> : <>Submit</>}{' '}
+                        onClick={ handleSubmit }>
+                        { loading ? <Spin></Spin> : <>Submit</> }{ ' ' }
                     </button>
                 </div>
             </Modal>
