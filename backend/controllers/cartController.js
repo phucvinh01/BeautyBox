@@ -5,8 +5,6 @@ const { User } = require('../model/userModel')
 const cartController = {
     addToCart: async (req, res) => {
         try {
-
-
             const { userId, itemId } = req.body;
 
             console.log(itemId);
@@ -116,16 +114,31 @@ const cartController = {
                     .json({ status: false, message: "Cart not found for this user" });
 
             let itemIndex = cart.items.findIndex((p) => p.productId == productId);
+            let length = cart.items.length;
+            if (length === 1) {
+                let productItem = cart.items[itemIndex];
+                if (productItem.quantity === 1) {
+                    cart.items = [];
+                    cart.subTotal = 0;
+                    cart = await cart.save();
+                    return res.status(200).json({
+                        code: 200,
+                        message: "Delete successfully!",
+                        data: cart
+                    })
+                }
+                else {
+                    productItem.quantity -= 1;
+                    cart.items[itemIndex] = productItem;
+                    cart.subTotal = cart.subTotal - cart.items[itemIndex].price
+                    cart = await cart.save();
+                    return res.status(200).send({
+                        code: 200,
+                        message: "Decrease successfully!",
+                        data: cart
+                    });
+                }
 
-            if (itemIndex === 0) {
-                cart.items = [];
-                cart.subTotal = 0;
-                cart = await cart.save();
-                return res.status(200).json({
-                    code: 200,
-                    message: "Delete successfully!",
-                    data: cart
-                })
             }
 
             if (itemIndex > -1) {
@@ -162,9 +175,11 @@ const cartController = {
     removeItem: async (req, res) => {
 
         try {
-            let userId = req.params.userId;
-            let productId = req.body.productId;
+            console.log("check body>>>>>>", req.body);
+            const { userId, productId } = req.body;
+            console.log(userId);
             let cart = await Cart.findOne({ userId: userId });
+            console.log(cart);
             if (!cart)
                 return res
                     .status(404)
@@ -172,15 +187,28 @@ const cartController = {
 
             let itemIndex = cart.items.findIndex((p) => p.productId == productId);
 
-            if (itemIndex === 0) {
-                cart.items = [];
-                cart.subTotal = 0;
+            let length = cart.items.length;
+            if (length === 1) {
+                let productItem = cart.items[itemIndex];
+                if (productItem.quantity === 1) {
+                    cart.items = [];
+                    cart.subTotal = 0;
+                    cart = await cart.save();
+                    return res.status(200).json({
+                        code: 200,
+                        message: "Delete successfully!",
+                        data: cart
+                    })
+                }
+                productItem.quantity -= 1;
+                cart.items[itemIndex] = productItem;
+                cart.subTotal = cart.subTotal - cart.items[itemIndex].price
                 cart = await cart.save();
-                return res.status(200).json({
+                return res.status(200).send({
                     code: 200,
-                    message: "Delete successfully!",
+                    message: "Decrease successfully!",
                     data: cart
-                })
+                });
             }
             else if (itemIndex > -1) {
                 cart.items.splice(itemIndex, 1);
