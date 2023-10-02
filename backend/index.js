@@ -17,7 +17,7 @@ dotenv.config();
 
 const connect = async () => {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/GHN');
+    await mongoose.connect('mongodb://127.0.0.1:27017/Store');
     console.log("MongoDB database connected");
   } catch (err) {
     console.log("MongoDB database connected failed");

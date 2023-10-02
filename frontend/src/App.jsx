@@ -26,6 +26,7 @@ function App() {
   const navigate = useNavigate()
   const user = useSelector((state) => state.auth.login.currentUser);
   const cart = useSelector((state) => state.cart.cart.data);
+  console.log(user);
 
   useEffect(() => {
     if (user?.role === 1) {

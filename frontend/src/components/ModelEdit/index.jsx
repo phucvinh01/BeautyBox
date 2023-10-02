@@ -15,6 +15,7 @@ const ModalEdit = (props) => {
     const categories = useSelector((state) => state.category.category.data);
     const brands = useSelector((state) => state.brand.brand.data);
 
+    console.log(categories);
     const { TextArea } = Input;
     const idd = useId();
     const [_id, setId] = useState('');
@@ -38,7 +39,7 @@ const ModalEdit = (props) => {
     useEffect(() => {
         if (openEdit) {
             setId(state._id);
-            setBrand(state.stock);
+            setBrand(state.brand);
             setName(state.name);
             setPrice(state.price);
             setCategory(state.category);
@@ -139,12 +140,21 @@ const ModalEdit = (props) => {
                                 className='form-label fw-bolder'>
                                 Stock
                             </label>
-                            <input
+                            <Select
                                 value={ brand }
-                                onChange={ (e) => setBrand(e.target.value) }
-                                type='number'
-                                className='form-control'
-                                id={ idd + '-stock' }></input>
+                                onChange={ onChangeBrand }
+                                id='category'
+                                style={ {
+                                    width: '100%',
+                                } }
+                                allowClear
+                                options={ brands.map((item) => {
+                                    return {
+                                        value: item.name,
+                                        key: item.name,
+                                    };
+                                }) }
+                            />
                         </div>
                         <div className='mb-3'>
                             <label
