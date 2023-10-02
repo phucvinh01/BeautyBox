@@ -6,6 +6,7 @@ import Axios from 'axios';
 import { isEmpty } from 'lodash';
 import formatCurrency from '../util/formatCurrency';
 import { useNavigate } from 'react-router-dom';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 const Checkout = (props) => {
     const cart = useSelector((state) => state.cart.cart.data);
     const id = useId();
@@ -232,14 +233,18 @@ const Checkout = (props) => {
         {
             title: 'Kiểm tra thông tin',
             content: <>
-                <div className='row'>
-                    <div className='col-6 rounded-1 border' >
+                <div className='row p-3'>
+                    <div className='col-6 border' >
                         <h2 className='text-center'>Thông tin vận chuyển</h2>
-                        <p>Họ và tên: { name }</p>
-                        <p>Số điện thoại: { phone }</p>
-                        <p>Địa chỉ: { detail } ,{ nameWard }, { nameDistrict }, { nameCity }</p>
+                        <div className='mt-3'>
+                            <p className='m-0' style={ { lineHeight: '28px ' } }>Họ và tên: <span className='fw-bolder'>{ name }</span> </p>
+                            <p className='m-0' style={ { lineHeight: '28px ' } }>Số điện thoại:<span className='fw-bolder'> { phone }</span></p>
+                            <p className='m-0' style={ { lineHeight: '28px ' } }>Địa chỉ: <span className='fw-bolder'>{ detail } ,{ nameWard }, { nameDistrict }, { nameCity }</span> </p>
+                            <p className='m-0' style={ { lineHeight: '28px ' } }>Ghi chú: <span className='fw-bolder'>{ note }</span> </p>
+                        </div>
+
                     </div>
-                    <div className='col-6 rounded-1 border'>
+                    <div className='col-6 border'>
                         <h2 className='text-center'>Đơn hàng</h2>
                         { cart && cart?.items?.length > 0 && cart.items.map((item, index) => {
                             return (
@@ -273,8 +278,12 @@ const Checkout = (props) => {
         title: item.title,
     }));
     return (
-        <>
-            <div className='container px-5 mt-5'>
+        <div className='container'>
+            <div className='mt-4'>
+                <button onClick={ () => navigate('/') } title='Thoát khỏi thanh toán' className='btn btn-outline-dark'><ArrowLeftOutlined /></button>
+
+            </div>
+            <div className='container' style={ { marginTop: '70px' } }>
                 <Steps
                     current={ current }
                     items={ items }
@@ -319,7 +328,7 @@ const Checkout = (props) => {
 
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

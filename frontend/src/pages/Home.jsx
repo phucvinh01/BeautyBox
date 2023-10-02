@@ -1,40 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-import { useSelector } from 'react-redux';
-import { Card, Col, Row } from 'antd';
-import './Home.scss'
-import Products from '../components/Products';
-const Home = () => {
-    const user = useSelector((state) => state.auth.login.currentUser);
-    const products = useSelector((state) => state.product.products.data);
-    const cate = useSelector((state) => state.category.category.data);
-
-    return (
-        <>
-            <main className='container mt-3'>
-                {/* banener */ }
-                <section>
-                    <div className='row'>
-                        <div className='col-lg-12 col-md-12 col-sm-12'>
-                            <div className='mb-2 rounded'>
-                                <img className='rounded w-100' src='https://i.imgur.com/ClGiS1A.jpg' ></img>
-                            </div>
-                            <div className='rounded'>
-                                <img className='rounded w-100' src='https://i.imgur.com/lsNkd31.jpg' ></img>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section>
-                    <h3 className='text-center mb-3'>SẢN PHẨM</h3>
-                    <Products products={ products } user={ user } />
-                </section>
-            </main>
-        </>
-    )
-}
-
-=======
 import React from 'react'
 import BannerSlide from '../components/BannerSlide'
 import BrandSlide from '../components/BrandSlide'
@@ -61,12 +24,12 @@ const Home = () => {
     const cate = useSelector((state) => state.category.category.data);
 
 
-    const categories = cate.slice(4);
+    const categories = cate?.slice(4);
 
     return (
         <>
             <main className='container-fluid px-5 mt-3'>
-                {/* banener */}
+                {/* banener */ }
                 <section>
                     <div className='row'>
                         <div className='col-8'>
@@ -82,7 +45,7 @@ const Home = () => {
                         </div>
                     </div>
                 </section>
-                {/* brand */}
+                {/* brand */ }
                 <section className='mb-4'>
                     <BrandSlide />
                 </section>
@@ -93,7 +56,7 @@ const Home = () => {
                 </section>
                 <section>
                     <div className='silde-discount-banner'>
-                        <Banner2 data={banner1} />
+                        <Banner2 data={ banner1 } />
                     </div>
                 </section>
 
@@ -103,17 +66,17 @@ const Home = () => {
                         {
                             categories && categories.length > 0 && categories.map((item, index) => {
                                 return (
-                                    <Col span={3}>
+                                    <Col span={ 3 }>
                                         <Card
                                             hoverable
-                                            style={{
+                                            style={ {
                                                 width: 130,
                                                 padding: 10,
                                                 marginBottom: 10
-                                            }}
-                                            cover={<img alt="example" src={item.logo} />}
+                                            } }
+                                            cover={ <img alt="example" src={ item.logo } /> }
                                         >
-                                            <p className="d-block" style={{ fontSize: 12, height: 20 }}>{item.name}</p>
+                                            <p className="d-block" style={ { fontSize: 12, height: 20 } }>{ item.name }</p>
                                         </Card>
                                     </Col>
 
@@ -124,7 +87,7 @@ const Home = () => {
                 </section>
                 <section>
                     <div className='silde-trending-banner'>
-                        <Banner2 data={banner2} />
+                        <Banner2 data={ banner2 } />
                     </div>
                 </section>
 
@@ -147,5 +110,4 @@ const Home = () => {
     )
 }
 
->>>>>>> parent of b8a4dcc (30/9)
 export default Home

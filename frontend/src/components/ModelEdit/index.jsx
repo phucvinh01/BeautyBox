@@ -14,21 +14,13 @@ const ModalEdit = (props) => {
 
     const categories = useSelector((state) => state.category.category.data);
     const brands = useSelector((state) => state.brand.brand.data);
-
-    console.log(categories);
     const { TextArea } = Input;
     const idd = useId();
     const [_id, setId] = useState('');
     const [name, setName] = useState('');
-<<<<<<< HEAD
-    const [price, setPrice] = useState(0);
-    const [category, setCategory] = useState();
-    const [brand, setBrand] = useState(0);
-=======
     const [price, setPrice] = useState('');
     const [category, setCategory] = useState('');
     const [brand, setBrand] = useState('');
->>>>>>> parent of b8a4dcc (30/9)
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
     const [loading, setLoading] = useState(false);
@@ -129,7 +121,6 @@ const ModalEdit = (props) => {
                                 style={ {
                                     width: '100%',
                                 } }
-                                allowClear
                                 options={ categories.map((item) => {
                                     return {
                                         value: item.name,
@@ -144,16 +135,16 @@ const ModalEdit = (props) => {
                             <label
                                 htmlFor={ idd + '-stock' }
                                 className='form-label fw-bolder'>
-                                Stock
+                                Brand
                             </label>
                             <Select
                                 value={ brand }
+                                defaultValue={ brand }
                                 onChange={ onChangeBrand }
                                 id='category'
                                 style={ {
                                     width: '100%',
                                 } }
-                                allowClear
                                 options={ brands.map((item) => {
                                     return {
                                         value: item.name,

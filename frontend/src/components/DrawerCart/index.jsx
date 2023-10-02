@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './DrawerCart.scss'
 import { Button, Drawer } from 'antd';
 import { CloseOutlined } from '@ant-design/icons'
-import { Divider } from 'antd'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import formatCurrency from '../../util/formatCurrency'
-import { addToCart, decreaseQuantity, getCart } from '../../redux/api';
+import { RemoveCartItem, addToCart, decreaseQuantity, getCart } from '../../redux/api';
 import { toast } from 'react-toastify';
 const DrawerCart = (props) => {
     const dispatch = useDispatch()
+    const naviagte = useNavigate()
     const user = useSelector((state) => state.auth.login.currentUser);
     const cart = useSelector((state) => state.cart.cart.data);
-
+    const [loading, setLoading] = useState(false)
+    const error = useSelector((state) => state.cart.cart.error);
     const { onClose, open } = props
 
     const handleAddToCart = (ProductId) => {
@@ -30,6 +32,18 @@ const DrawerCart = (props) => {
         }, 1000)
     }
 
+    const handleRemove = (ProductId) => {
+        setLoading(true)
+        RemoveCartItem(ProductId, user?._id, dispatch)
+        setTimeout(() => {
+            setLoading(false)
+        }, 1000)
+    }
+
+    const handleToCheckOut = () => {
+        naviagte('checkout/' + user?._id)
+    }
+
 
     const Footer = () => {
         return (
@@ -41,7 +55,7 @@ const DrawerCart = (props) => {
                             cart?.items?.length > 0 ? <strong className='text-danger'>{ formatCurrency.format(cart.subTotal) }</strong> : <p>0</p>
                         }
                     </div>
-                    <button className='btn w-100' onClick={ () => { onClose, naviagte('checkout/' + user?._id) } }>
+                    <button disabled={ cart?.items?.length > 0 ? false : true } className='btn w-100' onClick={ () => { onClose(), naviagte('checkout/' + user?._id) } }>
                         Tiếp tục với hình hình thức mua hàng
                     </button>
                 </div>
@@ -51,18 +65,18 @@ const DrawerCart = (props) => {
 
     return (
         <>
-            <Drawer size='large' footer={ <Footer /> } placement="right" onClose={ onClose } open={ open } className='drawer-cart' zIndex={ 1040 } closeIcon={ false }>
+            <Drawer size='default' footer={ <Footer /> } placement="right" onClose={ onClose } open={ open } className='drawer-cart' zIndex={ 1040 } closeIcon={ false }>
                 <div className='d-flex justify-content-between align-items-center'>
                     <p className='m-0'>Giỏ hàng của tôi</p>
                     <button className='btn ' onClick={ onClose }><span><CloseOutlined /></span></button>
                 </div>
                 <hr></hr>
                 <div>
-                    { cart && cart?.items?.length > 0 ? cart.items.map((item) => {
+                    { cart && cart?.items?.length > 0 ? cart.items.map((item, index) => {
                         return (
                             <>
-                                <div className='row'>
-                                    <div className='col-2'>
+                                <div className='row' key={ index }>
+                                    <div className='col-2' key={ index }>
                                         <img src={ item.img } className='rounded-1 w-100' alt={ item.img }></img>
                                     </div>
                                     <div className='col-9'>
@@ -77,12 +91,13 @@ const DrawerCart = (props) => {
                                         </div>
                                     </div>
                                     <div className='col-1'>
-                                        <button className='btn-remove'>-</button>
+                                        <button className='btn-remove' onClick={ () => { handleRemove(item.productId) } }>-</button>
                                     </div>
                                 </div>
+                                <hr></hr>
                             </>
                         )
-                    }) : <p className='text-center'>Bạn không có sản phẩm nào trong giỏ hàng.</p> }
+                    }) : <p className='text-center my-auto'><strong >Bạn chưa có sản phẩm nào trong giỏ hàng</strong></p> }
                 </div>
             </Drawer>
         </>

@@ -35,46 +35,47 @@ const LoginPopup = () => {
         <>
 
             <button
-                className='btn btn-outline-dark'
-                onClick={showModal}>
-                <i className='fa-solid fa-circle-user'></i>
-                <span className='mx-1 '>Login</span>
+                className='btn'
+                onClick={ showModal }>
+                <div className='d-flex gap-2 align-items-center'>
+                    <i className='fa-solid fa-circle-user'></i>
+                    <span className='mx-1 '>Đăng nhập</span>
+                </div>
             </button>
             <div className='popup-login'>
                 <Modal
-                    open={isModalOpen}
-                    footer={null}
-                    onOk={handleOk}
-                    onCancel={handleCancel}>
+                    open={ isModalOpen }
+                    footer={ null }
+                    onOk={ handleOk }
+                    onCancel={ handleCancel }>
                     <div className='login-content'>
-                        <img src='https://i.pinimg.com/564x/85/85/f2/8585f2abc062ac1383bfc210a10bbda1.jpg'></img>
-                        <h3>HELLO THERE!</h3>
+                        <img src='https://image.hsv-tech.io/300x0/bbx/common/50a26167-9341-4be8-8aba-9682d3b4a916.webp'></img>
                     </div>
                     <div className='login-from'>
                         <div className='mb-4'>
                             <input
                                 required
                                 type='text'
-                                id={id + '-email'}
+                                id={ id + '-email' }
                                 placeholder='Username'
-                                onChange={(e) => setUsername(e.target.value)}></input>
+                                onChange={ (e) => setUsername(e.target.value) }></input>
                         </div>
                         <div className='mb-4'>
                             <input
                                 required
                                 type='password'
-                                id={id + '-password'}
+                                id={ id + '-password' }
                                 placeholder='**********'
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={ (e) => setPassword(e.target.value) }
                             ></input>
                             <p className='text-end'>
-                                <a style={{ color: "blue" }}>Forgot your password?</a>
+                                <a style={ { color: "blue" } }>Forgot your password?</a>
                             </p>
 
                         </div>
                         <div className='mb-3'>
                             <button className='login-btn__submit'
-                                onClick={handleSubmit}
+                                onClick={ handleSubmit }
                             >
                                 Login
                             </button>

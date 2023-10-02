@@ -1,13 +1,16 @@
 import React from 'react'
 import './footer.scss'
+import { useLocation } from 'react-router-dom'
 
 const Footer = () => {
+
+  const location = useLocation();
   return (
     <>
-      <div className='container'>
+      <div className='container' hidden={ location.pathname.includes('/checkout') ? true : false }>
         <div className='row'>
           <div className='col-lg-3 col-md-6 col-sm-12 footer-col'>
-            <img src='https://th.bing.com/th/id/R.4ef21f9876d4988ee1e382d780a92ffb?rik=eHvz6%2bhQOCiadA&pid=ImgRaw&r=0' width={ 200 } className='mb-3'></img>
+            <img src='https://image.hsv-tech.io/300x0/bbx/common/50a26167-9341-4be8-8aba-9682d3b4a916.webp' width={ 200 } className='mb-3'></img>
             <div className='footer-social mb-5 d-flex gap-3'>
               <i className="fa-brands fa-facebook fs-5"></i>
               <i className="fa-brands fa-tiktok fs-5"></i>
