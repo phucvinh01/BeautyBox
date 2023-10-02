@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect } from 'react'
 import SideBar from '../SideBar'
 import { Outlet, useNavigate } from 'react-router-dom'
@@ -35,4 +36,20 @@ const LayoutAdmin = () => {
     )
 }
 
+=======
+import React from 'react'
+import SideBar from '../SideBar'
+import { Outlet } from 'react-router-dom'
+
+const LayoutAdmin = () => {
+    return (
+        <>
+            <SideBar />
+            <Outlet />
+        </>
+
+    )
+}
+
+>>>>>>> parent of b8a4dcc (30/9)
 export default LayoutAdmin

@@ -19,32 +19,7 @@ const SlideNewProduct = () => {
         slidesToShow: 5,
         slidesToScroll: 5,
         speed: 1000,
-        cssEase: "linear",
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                    infinite: true,
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                    initialSlide: 1
-                }
-            },
-            {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
-        ]
+        cssEase: "linear"
     };
     return (
         <div className='slide-newproduct' >

@@ -20,9 +20,15 @@ const ModalEdit = (props) => {
     const idd = useId();
     const [_id, setId] = useState('');
     const [name, setName] = useState('');
+<<<<<<< HEAD
     const [price, setPrice] = useState(0);
     const [category, setCategory] = useState();
     const [brand, setBrand] = useState(0);
+=======
+    const [price, setPrice] = useState('');
+    const [category, setCategory] = useState('');
+    const [brand, setBrand] = useState('');
+>>>>>>> parent of b8a4dcc (30/9)
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
     const [loading, setLoading] = useState(false);

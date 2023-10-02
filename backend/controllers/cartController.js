@@ -5,19 +5,23 @@ const { User } = require('../model/userModel')
 const cartController = {
     addToCart: async (req, res) => {
         try {
+
+
             const { userId, itemId } = req.body;
-            console.log(userId);
+
+            console.log(itemId);
             let data = null;
 
             const quantity = Number.parseInt(req.body.quantity);
 
             let cart = await Cart.findOne({ userId: userId });
-            console.log(cart);
             const productDetails = await Product.findById(itemId);
+
+            console.log("productDetails", productDetails)
 
             //-- Check if cart Exists and Check the quantity if items -------
             if (cart) {
-                let indexFound = cart.items.findIndex(p => p.productId == itemId);
+                let indexFound = cart.items.findIndex(p => p.itemId == itemId);
                 console.log("Index", indexFound)
                 //----------check if product exist,just add the previous quantity with the new quantity and update the total price-------
                 if (indexFound != -1) {
@@ -69,165 +73,132 @@ const cartController = {
                 data = await cart.save();
             }
 
-            return res.status(200).json({
+            return res.status(200).send({
                 code: 200,
                 message: "Add to Cart successfully!",
                 data: data
             });
-        }
-        catch (err) {
-            console.log(err);
-        }
 
-    },
+        },
 
-    getCart: async (req, res) => {
-        try {
-            let userId = req.params.id;
-            let cart = await Cart.findOne({ userId: userId });
-            if (!cart)
-                return res
-                    .status(404)
-                    .send({ status: false, message: "Cart not found for this user" });
+        getCart: async (req, res) => {
+            try {
+                let userId = req.params.id;
+                let cart = await Cart.findOne({ userId: userId });
+                if (!cart)
+                    return res
+                        .status(404)
+                        .send({ status: false, message: "Cart not found for this user" });
 
-            res.status(200).json({ status: true, cart: cart });
-        }
-        catch (err) {
-            res.status(500).json({ status: false })
-        }
-
-    },
-
-    decreaseQuantity: async (req, res) => {
-        // use add product endpoint for increase quantity
-
-        try {
-            const { userId, productId } = req.body;
-            console.log(userId);
-            let cart = await Cart.findOne({ userId: userId });
-            console.log(cart);
-            if (!cart)
-                return res
-                    .status(404)
-                    .json({ status: false, message: "Cart not found for this user" });
-
-            let itemIndex = cart.items.findIndex((p) => p.productId == productId);
-            let length = cart.items.length;
-            if (length === 1) {
-                let productItem = cart.items[itemIndex];
-                if (productItem.quantity === 1) {
-                    cart.items = [];
-                    cart.subTotal = 0;
-                    cart = await cart.save();
-                    return res.status(200).json({
-                        code: 200,
-                        message: "Delete successfully!",
-                        data: cart
-                    })
-                }
-                else {
-                    productItem.quantity -= 1;
-                    cart.items[itemIndex] = productItem;
-                    cart.subTotal = cart.subTotal - cart.items[itemIndex].price
-                    cart = await cart.save();
-                    return res.status(200).send({
-                        code: 200,
-                        message: "Decrease successfully!",
-                        data: cart
-                    });
-                }
-
+                res.status(200).json({ status: true, cart: cart });
+            }
+            catch (err) {
+                res.status(500).json({ status: false })
             }
 
-            if (itemIndex > -1) {
-                let productItem = cart.items[itemIndex];
-                if (productItem.quantity === 1) {
-                    let cartTemp = cart.items.splice(itemIndex, 1);
-                    cart.subTotal = cart.subTotal - cart.items[itemIndex].price
-                    cart = await cart.save();
-                    return res.status(200).json({
-                        code: 200,
-                        message: "Delete successfully!",
-                        data: cart
-                    });
+        },
+
+            decreaseQuantity: async (req, res) => {
+                // use add product endpoint for increase quantity
+
+                try {
+                    const { userId, productId } = req.body;
+                    console.log(userId);
+                    let cart = await Cart.findOne({ userId: userId });
+                    console.log(cart);
+                    if (!cart)
+                        return res
+                            .status(404)
+                            .json({ status: false, message: "Cart not found for this user" });
+
+                    let itemIndex = cart.items.findIndex((p) => p.productId == productId);
+
+                    if (itemIndex === 0) {
+                        cart.items = [];
+                        cart.subTotal = 0;
+                        cart = await cart.save();
+                        return res.status(200).json({
+                            code: 200,
+                            message: "Delete successfully!",
+                            data: cart
+                        })
+                    }
+
+                    if (itemIndex > -1) {
+                        let productItem = cart.items[itemIndex];
+                        if (productItem.quantity === 1) {
+                            let cartTemp = cart.items.splice(itemIndex, 1);
+                            cart.subTotal = cart.subTotal - cart.items[itemIndex].price
+                            cart = await cart.save();
+                            return res.status(200).json({
+                                code: 200,
+                                message: "Delete successfully!",
+                                data: cart
+                            });
+                        }
+                        else {
+                            productItem.quantity -= 1;
+                            cart.items[itemIndex] = productItem;
+                            cart.subTotal = cart.subTotal - cart.items[itemIndex].price
+                            cart = await cart.save();
+                            return res.status(200).send({
+                                code: 200,
+                                message: "Decrease successfully!",
+                                data: cart
+                            });
+                        }
+                    }
+                } catch (err) {
+                    res
+                        .status(400)
+                        .send({ status: false, message: "Item does not exist in cart" });
                 }
-                else {
-                    productItem.quantity -= 1;
-                    cart.items[itemIndex] = productItem;
-                    cart.subTotal = cart.subTotal - cart.items[itemIndex].price
-                    cart = await cart.save();
-                    return res.status(200).send({
-                        code: 200,
-                        message: "Decrease successfully!",
-                        data: cart
-                    });
+            },
+
+                removeItem: async (req, res) => {
+
+                    try {
+                        let userId = req.params.userId;
+                        let productId = req.body.productId;
+                        let cart = await Cart.findOne({ userId: userId });
+                        if (!cart)
+                            return res
+                                .status(404)
+                                .json({ status: false, message: "Cart not found for this user" });
+
+                        let itemIndex = cart.items.findIndex((p) => p.productId == productId);
+
+                        if (itemIndex === 0) {
+                            cart.items = [];
+                            cart.subTotal = 0;
+                            cart = await cart.save();
+                            return res.status(200).json({
+                                code: 200,
+                                message: "Delete successfully!",
+                                data: cart
+                            })
+                        }
+                        else if (itemIndex > -1) {
+                            cart.items.splice(itemIndex, 1);
+                            cart.subTotal = cart.subTotal - cart.items[itemIndex].price
+                            cart = await cart.save();
+                            return res.status(200).json({
+                                code: 200,
+                                message: "Delete successfully!",
+                                data: cart
+                            });
+                        }
+                    }
+                    catch (err) {
+                        res
+                            .status(400)
+                            .json({ status: false, message: "Item does not exist in cart" });
+                    }
+
+
                 }
-            }
-        } catch (err) {
-            res
-                .status(400)
-                .send({ status: false, message: "Item does not exist in cart" });
-        }
-    },
-
-    removeItem: async (req, res) => {
-        try {
-            console.log("check body>>>>>>", req.body);
-            const { userId, productId } = req.body;
-            console.log(userId);
-            let cart = await Cart.findOne({ userId: userId });
-            console.log(cart);
-            if (!cart)
-                return res
-                    .status(404)
-                    .json({ status: false, message: "Cart not found for this user" });
-
-            let itemIndex = cart.items.findIndex((p) => p.productId == productId);
-
-            let length = cart.items.length;
-            if (length === 1) {
-                let productItem = cart.items[itemIndex];
-                if (productItem.quantity === 1) {
-                    cart.items = [];
-                    cart.subTotal = 0;
-                    cart = await cart.save();
-                    return res.status(200).json({
-                        code: 200,
-                        message: "Delete successfully!",
-                        data: cart
-                    })
-                }
-                productItem.quantity -= 1;
-                cart.items[itemIndex] = productItem;
-                cart.subTotal = cart.subTotal - cart.items[itemIndex].price
-                cart = await cart.save();
-                return res.status(200).send({
-                    code: 200,
-                    message: "Decrease successfully!",
-                    data: cart
-                });
-            }
-            else if (itemIndex > -1) {
-                cart.items.splice(itemIndex, 1);
-                cart.subTotal = cart.subTotal - cart.items[itemIndex].price
-                cart = await cart.save();
-                return res.status(200).json({
-                    code: 200,
-                    message: "Delete successfully!",
-                    data: cart
-                });
-            }
-        }
-        catch (err) {
-            res
-                .status(400)
-                .json({ status: false, message: "Item does not exist in cart" });
-        }
-
 
     }
-
-}
 
 
 module.exports = cartController;

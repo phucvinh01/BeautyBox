@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
 import './DrawerCart.scss'
 import { Button, Drawer } from 'antd';
 import { CloseOutlined } from '@ant-design/icons'
-import { useDispatch, useSelector } from 'react-redux';
+import { Divider } from 'antd'
+import { useSelector } from 'react-redux';
 import formatCurrency from '../../util/formatCurrency'
-import { RemoveCartItem, addToCart, decreaseQuantity, getCart } from '../../redux/api';
+import { addToCart, decreaseQuantity, getCart } from '../../redux/api';
 import { toast } from 'react-toastify';
 const DrawerCart = (props) => {
     const dispatch = useDispatch()
-    const naviagte = useNavigate()
     const user = useSelector((state) => state.auth.login.currentUser);
     const cart = useSelector((state) => state.cart.cart.data);
-    const [loading, setLoading] = useState(false)
-    const error = useSelector((state) => state.cart.cart.error);
+
     const { onClose, open } = props
 
     const handleAddToCart = (ProductId) => {
@@ -30,18 +28,6 @@ const DrawerCart = (props) => {
         setTimeout(() => {
             setLoading(false)
         }, 1000)
-    }
-
-    const handleRemove = (ProductId) => {
-        setLoading(true)
-        RemoveCartItem(ProductId, user?._id, dispatch)
-        setTimeout(() => {
-            setLoading(false)
-        }, 1000)
-    }
-
-    const handleToCheckOut = () => {
-        naviagte('checkout/' + user?._id)
     }
 
 
@@ -72,10 +58,10 @@ const DrawerCart = (props) => {
                 </div>
                 <hr></hr>
                 <div>
-                    { cart && cart?.items?.length > 0 && cart.items.map((item, index) => {
+                    { cart && cart?.items?.length > 0 ? cart.items.map((item) => {
                         return (
                             <>
-                                <div className='row' key={ index }>
+                                <div className='row'>
                                     <div className='col-2'>
                                         <img src={ item.img } className='rounded-1 w-100' alt={ item.img }></img>
                                     </div>
@@ -91,13 +77,12 @@ const DrawerCart = (props) => {
                                         </div>
                                     </div>
                                     <div className='col-1'>
-                                        <button className='btn-remove' onClick={ () => { handleRemove(item.productId) } }>-</button>
+                                        <button className='btn-remove'>-</button>
                                     </div>
                                 </div>
-                                <hr></hr>
                             </>
                         )
-                    }) }
+                    }) : <p className='text-center'>Bạn không có sản phẩm nào trong giỏ hàng.</p> }
                 </div>
             </Drawer>
         </>
