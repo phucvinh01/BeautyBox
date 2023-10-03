@@ -82,10 +82,11 @@ const cartController = {
         try {
             let userId = req.params.id;
             let cart = await Cart.findOne({ userId: userId });
+            console.log(cart);
+
             if (!cart)
                 return res
-                    .status(404)
-                    .send({ status: false, message: "Cart not found for this user" });
+                    .json({ status: false, message: "Chưa có sản phẩm trong giỏ hàng" });
 
             res.status(200).json({ status: true, cart: cart });
         }
@@ -169,6 +170,7 @@ const cartController = {
         try {
             const { userId, productId } = req.body;
             let cart = await Cart.findOne({ userId: userId });
+            console.log(cart);
             if (!cart)
                 return res
                     .status(404)

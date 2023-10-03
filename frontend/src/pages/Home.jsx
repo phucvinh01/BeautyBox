@@ -2,7 +2,6 @@ import React from 'react'
 import BannerSlide from '../components/BannerSlide'
 import BrandSlide from '../components/BrandSlide'
 import SlideProduct from '../components/SlideProduct'
-import Slider from "react-slick";
 import Banner2 from '../components/BannerSlide-2';
 import { useSelector } from 'react-redux';
 import { Card, Col, Row } from 'antd';
@@ -88,21 +87,6 @@ const Home = () => {
                 <section>
                     <div className='silde-trending-banner'>
                         <Banner2 data={ banner2 } />
-                    </div>
-                </section>
-
-                <section>
-                    <div className='box-gmail row'>
-                        <div className='col-6'>
-                            <h4>NHẬN BẢN TIN LÀM ĐẸP</h4>
-                            <p>Đừng bỏ lỡ hàng ngàn sản phẩm và chương trình siêu hấp dẫn</p>
-                        </div>
-                        <div className='col-6'>
-                            <div className='box-gmail-input mx-auto'>
-                                <input placeholder='Điền email của bạn' type='email' autoComplete='null'></input>
-                                <button>THEO DÕI</button>
-                            </div>
-                        </div>
                     </div>
                 </section>
             </main>

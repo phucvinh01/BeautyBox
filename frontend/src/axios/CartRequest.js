@@ -20,5 +20,9 @@ const Delete = (productId, userId) => {
     return Axios.put(`/v1/cart/remove`, { userId: userId, productId: productId })
 }
 
+const Empty = (userId) => {
+    return Axios.put(`/v1/cart/empty`, { userId: userId })
+}
 
-export { Add, Get, Decrement, Delete }
+
+export { Add, Get, Decrement, Delete, Empty }

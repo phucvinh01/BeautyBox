@@ -22,9 +22,9 @@ const authSlice = createSlice({
             state.login.isLoading = false;
             state.login.currentUser = action.payload;
         },
-        loginFailed: (state) => {
+        loginFailed: (state, action) => {
             state.login.isLoading = false;
-            state.login.error = true;
+            state.login.error = action.payload;
         },
         logoutStart: (state) => {
             state.logout.isLoading = true

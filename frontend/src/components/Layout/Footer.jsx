@@ -7,7 +7,22 @@ const Footer = () => {
   const location = useLocation();
   return (
     <>
-      <div className='container' hidden={ location.pathname.includes('/checkout') ? true : false }>
+
+      <div className='container'>
+        <section>
+          <div className='box-gmail row'>
+            <div className='col-6'>
+              <h4>NHẬN BẢN TIN LÀM ĐẸP</h4>
+              <p>Đừng bỏ lỡ hàng ngàn sản phẩm và chương trình siêu hấp dẫn</p>
+            </div>
+            <div className='col-6'>
+              <div className='box-gmail-input mx-auto'>
+                <input placeholder='Điền email của bạn' type='email' autoComplete='null'></input>
+                <button>THEO DÕI</button>
+              </div>
+            </div>
+          </div>
+        </section>
         <div className='row'>
           <div className='col-lg-3 col-md-6 col-sm-12 footer-col'>
             <img src='https://image.hsv-tech.io/300x0/bbx/common/50a26167-9341-4be8-8aba-9682d3b4a916.webp' width={ 200 } className='mb-3'></img>

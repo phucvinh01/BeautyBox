@@ -1,26 +1,5 @@
 const mongoose = require("mongoose");
 
-const Address = new Schema(
-    {
-        name: {
-            type: String,
-            required: true,
-        },
-        phone: {
-            type: Number,
-            required: true,
-        },
-        address: {
-            type: String,
-            required: true,
-
-        },
-        node: {
-            type: String,
-        },
-    },
-);
-module.exports = mongoose.model("shippingInfor", Address);
 
 const orderSchema = new mongoose.Schema(
     {
@@ -32,18 +11,28 @@ const orderSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
-        cart: [
-            {
-                type: mongoose.Types.ObjectId,
-                ref: "Cart",
-            }
-        ],
+        cart: {
+            type: Object,
+            required: true,
+
+        },
         status: {
+            type: Number,
+            default: 1,
+        },
+        methodShip: {
             type: String,
             required: true,
-            default: "Đang chuẩn bị",
+
         },
-        shippingInfor: { Address },
+        note: {
+            type: String,
+        },
+        shippingInfor: {
+            type: String,
+            required: true,
+
+        },
     },
     { timestamps: true }
 

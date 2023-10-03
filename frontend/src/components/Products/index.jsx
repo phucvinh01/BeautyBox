@@ -13,9 +13,9 @@ const Products = (props) => {
                         products && products.length > 0 && products.map((product) => {
                             return (
                                 <Product
-                                    key={product._id}
-                                    {...product}
-                                    user={user}
+                                    key={ product._id }
+                                    { ...product }
+                                    user={ user }
                                 />
                             )
                         })

@@ -1,16 +1,31 @@
 import React, { useEffect, useId, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Button, message, Select, Steps, theme } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Card, message, Select, Steps, theme } from 'antd';
 import { ListProvinces } from '../axios/VnProvinces';
 import Axios from 'axios';
 import { isEmpty } from 'lodash';
 import formatCurrency from '../util/formatCurrency';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Breadcrumb, Radio } from 'antd';
+import { postNewOrder } from '../axios/OrderRequest'
+import { Empty } from '../axios/CartRequest';
+import { emptyCartSuccess } from '../redux/cartSlice';
 const Checkout = (props) => {
     const cart = useSelector((state) => state.cart.cart.data);
+    const user = useSelector((state) => state.auth.login.currentUser);
+
     const id = useId();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    message.config({
+        top: 300,
+        duration: 2,
+        maxCount: 3,
+        rtl: true,
+        prefixCls: 'my-message',
+    });
 
     const [current, setCurrent] = useState(0);
     const [listprovinces, setListProvinces] = useState([]);
@@ -24,20 +39,39 @@ const Checkout = (props) => {
     const [nameDistrict, setNameDistrict] = useState("");
     const [nameWard, setNameWard] = useState("");
     const [detail, setDetail] = useState("");
-    const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
+    const [infoFisrtName, setInfoFisrtName] = useState('')
+    const [infoLasttName, setInfoLastName] = useState('')
+    const [infoPhone, setInfoPhone] = useState('')
+    const [infoEmail, setInfoEmail] = useState('')
+    const [methodShip, setMethodShip] = useState('')
     const [note, setNote] = useState("");
-    const [enable, setEnable] = useState(false)
+
+
+    const handleSubmit = async () => {
+        if (!nameCity && !nameDistrict && !nameWard && !detail) {
+            message.error("Thiếu thông tin giao hàng")
+        }
+        else {
+            const shippingInfor = `${detail}, ${nameWard}, ${nameDistrict}, ${nameCity}`
+            let r = await postNewOrder(cart, user._id, shippingInfor, note, cart.subTotal, methodShip)
+            let l = await Empty(user._id)
+            if (l.code === 200) {
+                dispatch(emptyCartSuccess(l.data))
+            }
+            if (!r.status) {
+                message.error("Đặt hàng thất bại")
+                return
+            }
+            else {
+                message.success("Đặt hàng thành công")
+                navigate('/order')
+            }
+        }
+    }
 
     function getValue(e) {
         return e.target.children[e.target.selectedIndex].getAttribute('data-name');
     }
-
-    // useEffect(() => {
-    //     if (isEmpty(nameCity) || isEmpty(nameDistrict) || isEmpty(nameWard) || isEmpty(name) || isEmpty(phone)) {
-    //         setEnable(true)
-    //     }
-    // }, [nameCity, nameDistrict, nameWard, name, phone])
 
     const getProvinces = async () => {
         let res = await ListProvinces();
@@ -60,7 +94,7 @@ const Checkout = (props) => {
             `https://provinces.open-api.vn/api/d/${districtCode}?depth=2`
         );
         if (res) {
-            setWards(res.data.wards);
+            setListWards(res.data.wards);
         }
     };
 
@@ -76,180 +110,170 @@ const Checkout = (props) => {
     useEffect(() => {
         getProvinces();
     }, []);
+    return (
+        <div className='container mt-3'>
+            <Breadcrumb className='mb-3'
+                items={ [
+                    {
+                        title: <Link to={ '/' }>Trang chủ</Link>,
+                    },
+                    {
+                        title: <span>Thanh toán</span>,
+                    },
+                ] }
+            />
+            <section>
+                <h3>Thông tin thanh toán</h3>
 
-    const next = () => {
-        setCurrent(current + 1);
-    };
-    const prev = () => {
-        setCurrent(current - 1);
-    };
-    const contentStyle = {
-        marginTop: 16,
-    };
-    const steps = [
-        {
-            title: 'Thông tin vận chuyển',
-            content: (
-                <>
-                    <div className='container'>
-                        <div className='form-control'>
-                            <div className='row'>
-                                <div className='col-6'>
-                                    <form className='p-1'>
-                                        <div className='mb-3'>
-                                            <label
-                                                htmlFor={ id + '-provinces' }
-                                                className='form-label fw-bolder text-start'>
-                                                Tỉnh/Thành Phố
-                                            </label>
-                                            <select
-                                                required
-                                                onChange={ (e) => { setProvinceCode(e.target.value), setNameCity(getValue(e)) } }
-                                                value={ provinceCode }
-                                                className='form-control'
-                                                id={ id + '-provinces' }>
-                                                <option
-                                                    key={ 0 }
-                                                    value={ 0 }>
-                                                    Chọn thành phố
-                                                </option>
-                                                { listprovinces &&
-                                                    listprovinces.map((item) => {
-                                                        return (
-                                                            <option
-                                                                data-name={ item.name }
-                                                                key={ item.code }
-                                                                value={ item.code }>
-                                                                { item.name }
-                                                            </option>
-                                                        );
-                                                    }) }
-                                            </select>
-                                        </div>
-                                        <div className='mb-3'>
-                                            <label
-                                                htmlFor={ id + '-listDistricts' }
-                                                className='form-label fw-bolder text-start'>
-                                                Huyện/Quận
-                                            </label>
-                                            <select
-                                                required
-                                                onChange={ (e) => { setDistrictCode(e.target.value), setNameDistrict(getValue(e)) } }
-                                                type='text'
-                                                value={ districtCode }
-                                                className='form-control'
-                                                id={ id + '-listDistricts' }>
-                                                <option
-
-                                                    key={ 0 }
-                                                    value={ 0 }>
-                                                    Chọn huyện/quận
-                                                </option>
-                                                { listDistricts &&
-                                                    listDistricts.map((item) => {
-                                                        return (
-                                                            <option
-                                                                data-name={ item.name }
-                                                                key={ item.code }
-                                                                value={ item.code }>
-                                                                { item.name }
-                                                            </option>
-                                                        );
-                                                    }) }
-                                            </select>
-                                        </div>
-                                        <div className='mb-3'>
-                                            <label
-                                                htmlFor={ id + '-ward' }
-                                                className='form-label fw-bolder text-start'>
-                                                Xã/Phường
-                                            </label>
-                                            <select
-                                                required
-                                                onChange={ (e) => setNameWard(getValue(e)) }
-                                                className='form-control'
-                                                id={ id + '-ward' }>
-                                                <option
-                                                    key={ 0 }
-                                                    value={ 0 }>
-                                                    Chọn Xã/Phường
-                                                </option>
-                                                { ward &&
-                                                    ward.map((item) => {
-                                                        return (
-                                                            <option
-                                                                data-name={ item.name }
-                                                                title={ item.name }
-                                                                key={ item.code }
-                                                                value={ item.code }>
-                                                                { item.name }
-                                                            </option>
-                                                        );
-                                                    }) }
-                                            </select>
-                                            <div className='mb-3'>
-                                                <label
-                                                    htmlFor={ id + '-detail-address' }
-                                                    className='form-label fw-bolder text-start'>
-                                                    Số nhà, Ấp/Tên đường
-                                                </label>
-                                                <input className='form-control' type='text' id={ id + '-detail-address' } onChange={ (e) => setDetail(e.target.value) } />
-                                            </div>
-                                        </div>
-                                    </form>
+            </section>
+            <div className='row mb-3'>
+                <div className='col-7'>
+                    <section>
+                        <h4>Thông tin người mua hàng</h4>
+                        <div className='row'>
+                            <div className='col-12 mb-3'>
+                                <div className='d-flex gap-3'>
+                                    <input onChange={ (e) => setInfoFisrtName(e.target.value) } value={ user.lastName } placeholder='Tên' className='form-control w-100 p-2'></input>
+                                    <input onChange={ (e) => setInfoLastName(e.target.value) } value={ user.firstName } placeholder='Họ' className='form-control w-100 p-2'></input>
                                 </div>
-                                <div className='col-6'>
-                                    <div className='mb-3'>
-                                        <label
-                                            htmlFor={ id + '-name' }
-                                            className='form-label fw-bolder text-start'>
-                                            Họ Tên
-                                        </label>
-                                        <input required onChange={ (e) => setName(e.target.value) } id={ id + '-name' } type='text' className='form-control' />
-                                    </div>
-                                    <div className='mb-3'>
-                                        <label
-                                            htmlFor={ id + '-phone' }
-                                            className='form-label fw-bolder text-start'>
-                                            Số điện thoại
-                                        </label>
-                                        <input required onChange={ (e) => setPhone(e.target.value) } id={ id + '-phone' } type='tel' className='form-control' />
-                                    </div>
-                                    <div className='mb-3'>
-                                        <label
-                                            htmlFor={ id + '-note' }
-                                            className='form-label fw-bolder text-start'>
-                                            Ghi chú
-                                        </label>
-                                        <textarea required onChange={ (e) => setNote(e.target.value) } id={ id + '-note' } className='form-control' />
-                                    </div>
+                            </div>
+                            <div className='col-12 mb-3'>
+                                <div className='d-flex gap-3'>
+                                    <input onChange={ (e) => setInfoEmail(e.target.value) } value={ user.email } placeholder='Email' className='form-control w-100 p-2'></input>
+                                    <input onChange={ (e) => setInfoPhone(e.target.value) } value={ user.phone } placeholder='Số điện thoại' className='form-control w-100 p-2'></input>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </>
-            ),
-        },
-        {
-            title: 'Kiểm tra thông tin',
-            content: <>
-                <div className='row p-3'>
-                    <div className='col-6 border' >
-                        <h2 className='text-center'>Thông tin vận chuyển</h2>
-                        <div className='mt-3'>
-                            <p className='m-0' style={ { lineHeight: '28px ' } }>Họ và tên: <span className='fw-bolder'>{ name }</span> </p>
-                            <p className='m-0' style={ { lineHeight: '28px ' } }>Số điện thoại:<span className='fw-bolder'> { phone }</span></p>
-                            <p className='m-0' style={ { lineHeight: '28px ' } }>Địa chỉ: <span className='fw-bolder'>{ detail } ,{ nameWard }, { nameDistrict }, { nameCity }</span> </p>
-                            <p className='m-0' style={ { lineHeight: '28px ' } }>Ghi chú: <span className='fw-bolder'>{ note }</span> </p>
+                    </section>
+                    <section>
+                        <h4>Thông tin nhận hàng</h4>
+                        <div className='row'>
+                            <div className='col-12 mb-3'>
+                                <div className='d-flex gap-3'>
+                                    <select
+                                        required
+                                        onChange={ (e) => { setProvinceCode(e.target.value), setNameCity(getValue(e)) } }
+                                        value={ provinceCode }
+                                        className='form-control'
+                                        id={ id + '-provinces' }>
+                                        <option
+                                            key={ 0 }
+                                            value={ 0 }>
+                                            Tỉnh/Thành phố
+                                        </option>
+                                        { listprovinces &&
+                                            listprovinces.map((item) => {
+                                                return (
+                                                    <option
+                                                        data-name={ item.name }
+                                                        key={ item.code }
+                                                        value={ item.code }>
+                                                        { item.name }
+                                                    </option>
+                                                );
+                                            }) }
+                                    </select>
+                                </div>
+                            </div>
+                            <div className='col-12 mb-3'>
+                                <div className='d-flex gap-3'>
+                                    <select
+                                        required
+                                        onChange={ (e) => { setDistrictCode(e.target.value), setNameDistrict(getValue(e)) } }
+                                        value={ districtCode }
+                                        className='form-control'
+                                        id={ id + '-District' }>
+                                        <option
+                                            key={ 0 }
+                                            value={ 0 }>
+                                            Quận/Huyện
+                                        </option>
+                                        { listDistricts &&
+                                            listDistricts.map((item) => {
+                                                return (
+                                                    <option
+                                                        data-name={ item.name }
+                                                        key={ item.code }
+                                                        value={ item.code }>
+                                                        { item.name }
+                                                    </option>
+                                                );
+                                            }) }
+                                    </select>
+                                    <select
+                                        required
+                                        onChange={ (e) => setNameWard(getValue(e)) }
+                                        className='form-control'
+                                        id={ id + '-ward' }>
+                                        <option
+                                            key={ 0 }
+                                            value={ 0 }>
+                                            Chọn Xã/Phường
+                                        </option>
+                                        { listWards &&
+                                            listWards.map((item) => {
+                                                return (
+                                                    <option
+                                                        data-name={ item.name }
+                                                        title={ item.name }
+                                                        key={ item.code }
+                                                        value={ item.code }>
+                                                        { item.name }
+                                                    </option>
+                                                );
+                                            }) }
+                                    </select>
+                                </div>
+                            </div>
+                            <div className='col-12 mb-3'>
+                                <input onChange={ (e) => setDetail(e.target.value) } className='form-control' placeholder='Tên địa chỉ (vd: Văn phòng, Nhà,...)'></input>
+                            </div>
                         </div>
+                    </section>
+                    <section>
+                        <h4>Phương thức thanh toán</h4>
+                        <div className='col-12 mb-3'>
+                            <div className='p-2 border rounded-3'>
+                                <Radio checked>Trả tiền mặt khi nhận hàng</Radio>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <h4>Phương thức vẫn chuyển</h4>
+                        <Radio.Group onChange={ (e) => setMethodShip(e.target.value) }>
+                            <div className='col-12 mb-3'>
+                                <div className='p-2 border rounded-3'>
+                                    <Radio className='w-100' value={ "GH24H" } >Giao hàng trong 24h (Giao giờ hành chính)</Radio>
+                                </div>
+                            </div>
+                            <div className='col-12 mb-3'>
+                                <div className='p-2 border rounded-3'>
+                                    <Radio className='w-100' value={ "GHTC" } >Giao hàng tiêu chuẩn (3 - 6 ngày) (Giao giờ hành chính)</Radio>
+                                </div>
+                            </div>
+                            <div className='col-12 mb-3'>
+                                <div className='p-2 border rounded-3'>
+                                    <Radio className='w-100' value={ "NOW" } >[NOW] Giao hàng nhanh trong vòng 2h</Radio>
+                                </div>
+                            </div>
+                        </Radio.Group>
+                    </section>
+                    <section>
+                        <h4>Ghi chú</h4>
+                        <div>
+                            <textarea onChange={ (e) => setNote(e.target.value) } className='form-contro mb-3 w-100'>
 
-                    </div>
-                    <div className='col-6 border'>
-                        <h2 className='text-center'>Đơn hàng</h2>
+                            </textarea>
+                        </div>
+                    </section>
+                </div>
+                <div className='col-5' >
+                    <div className='shadow border rounded-3 p-3' style={ { position: "sticky", top: "100px" } }>
+                        <h4>Đơn hàng</h4>
                         { cart && cart?.items?.length > 0 && cart.items.map((item, index) => {
                             return (
                                 <>
-                                    <div className='d-flex p-0 mb-3 gap-3   ' key={ index } >
+                                    <div className='d-flex p-0 m-3 gap-3   ' key={ index } >
                                         <img src={ item.img } className='rounded-1' width={ "60px" } height={ "80px" } alt={ item.img }></img>
                                         <div className='d-gird justify-content-between'>
                                             <p className='m-0 p-0'>{ item.name }</p>
@@ -262,72 +286,28 @@ const Checkout = (props) => {
                                 </>
                             )
                         }) }
-                        <div className='text-end mb-3'>
-                            <p className='m-0'>Đơn hàng: { formatCurrency.format(cart.subTotal) }</p>
-                            <p className='m-0'>Ship: { formatCurrency.format(cart.subTotal / 100 * 10) }</p>
-                            <p className='m-0 text-danger fw-bolder'>Tổng: { formatCurrency.format(cart.subTotal + (cart.subTotal / 100 * 10)) }</p>
+                        <hr></hr>
+                        <div className='d-flex justify-content-between mb-3'>
+                            <p>Tổng giá trị đơn hàng</p>
+                            <p>{ formatCurrency.format(cart?.subTotal) }</p>
+                        </div>
+                        <div className='d-flex justify-content-between mb-3'>
+                            <p>Phí vận chyển</p>
+                            <p>{ formatCurrency.format(0) }</p>
+                        </div>
+                        <hr></hr>
+                        <div className='d-flex justify-content-between mb-3'>
+                            <p>Tổng (đã bao gồm VAT)</p>
+                            <p>{ formatCurrency.format(cart?.subTotal) }</p>
+                        </div>
+                        <div>
+                            <button onClick={ handleSubmit } className='w-100 btn-primary-main p-2'>ĐẶT HÀNG</button>
                         </div>
                     </div>
                 </div>
-            </>,
-        },
-    ];
-
-    const items = steps.map((item) => ({
-        key: item.title,
-        title: item.title,
-    }));
-    return (
-        <div className='container'>
-            <div className='mt-4'>
-                <button onClick={ () => navigate('/') } title='Thoát khỏi thanh toán' className='btn btn-outline-dark'><ArrowLeftOutlined /></button>
-
             </div>
-            <div className='container' style={ { marginTop: '70px' } }>
-                <Steps
-                    current={ current }
-                    items={ items }
-                />
-                <div style={ contentStyle }>{ steps[current].content }</div>
-                <div className='d-flex justify-content-end mb-5'
-                    style={ {
-                        marginTop: 24,
-                    } }>
-                    { current < steps.length - 1 && (
-                        <div>
-                            <Button
 
-                                disabled={ enable ? true : false }
-                                type='primary'
-                                onClick={ () => next() }>
-                                Next
-                            </Button>
-                        </div>
 
-                    ) }
-                    { current > 0 && (
-                        <div>
-                            <Button
-                                style={ {
-                                    margin: '0 8px',
-                                } }
-                                onClick={ () => prev() }>
-                                Previous
-                            </Button>
-                        </div>
-                    ) }
-                    { current === steps.length - 1 && (
-                        <div>
-                            <Button
-                                type='primary'
-                                onClick={ () => { message.success('Đặt hàng thành công!'), navigate('/me/order') } }>
-                                Done
-                            </Button>
-                        </div>
-                    ) }
-
-                </div>
-            </div>
         </div>
     );
 };

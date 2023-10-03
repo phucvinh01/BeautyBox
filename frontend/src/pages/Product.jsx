@@ -10,17 +10,22 @@ const Product = () => {
     return (
         <>
             <div className='container'>
-                <div className='d-flex gap-3' style={ { height: "40px" } }>
-                    <Link to={ '/' } className='text-dark'>Home</Link>
-                    <span>&gt;</span>
-                    <p className='text-muted'>Product</p>
-                </div>
+                <Breadcrumb className='mb-3'
+                    items={ [
+                        {
+                            title: <Link to={ '/' }>Trang chủ</Link>,
+                        },
+                        {
+                            title: <span>Sản phẩm</span>,
+                        },
+                    ] }
+                />
 
                 <div className='row'>
                     <div className='col-2'>
 
                     </div>
-                    <div className='col-10'>
+                    <div className='col-10' style={ { minHeight: '100vh' } }>
                         <Products products={ products } user={ user } />
                     </div>
 

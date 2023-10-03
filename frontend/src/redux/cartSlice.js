@@ -56,6 +56,17 @@ const cartSlice = createSlice({
             state.cart.isLoading = false;
             state.cart.error = true;
         },
+        emptyCartStart: (state) => {
+            state.cart.isLoading = true
+        },
+        emptyCartSuccess: (state, action) => {
+            state.cart.isLoading = false;
+            state.cart.data = action.payload;
+        },
+        emptyCartFailed: (state) => {
+            state.cart.isLoading = false;
+            state.cart.error = true;
+        },
     },
 });
 
@@ -74,6 +85,9 @@ export const {
     getCartStart,
     getCartSuccess,
     getCartFailed,
+    emptyCartFailed,
+    emptyCartStart,
+    emptyCartSuccess
 } = cartSlice.actions;
 
 export default cartSlice.reducer

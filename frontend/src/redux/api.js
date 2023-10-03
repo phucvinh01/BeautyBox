@@ -14,13 +14,18 @@ export const login = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
         const res = await axios.post('/v1/auth/login', user)
-        if (res) {
+        if (res.status === 1) {
             dispatch(loginSuccess(res))
             if (res.role === 1) {
                 navigate('/admin')
                 return
             }
             navigate('/')
+        }
+        else {
+            if (res.status === 2) {
+                dispatch(loginFailed(res))
+            }
         }
     }
     catch (err) {

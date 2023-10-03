@@ -55,7 +55,7 @@ const Header = () => {
                 <div style={ { borderBottom: "1px solid #333" } }>
 
                     <strong>
-                        Hello { user?.username } !
+                        Hello { user?.lastName } !
                     </strong>
                 </div>
             ),
@@ -63,7 +63,7 @@ const Header = () => {
         {
             key: '2',
             label: (
-                <Link >
+                <Link to={ '/profile' }>
                     <p className='m-0'>Thông tin tài khoản</p>
                     <small className='text-muted'>Tài khoản, đơn hàng, địa chỉ giao nhận, mật khẩu</small>
                 </Link>
@@ -89,7 +89,7 @@ const Header = () => {
     ];
     return (
         <>
-            <header className='sticky-sm-top sticky-top header bg-white mt-3' hidden={ location.pathname.includes('/checkout') ? true : false }>
+            <header className='sticky-sm-top sticky-top header bg-white mt-3'>
                 <div className='container-fluid'>
                     <div className='row pt-1'>
                         <div className='d-flex align-items-center justify-content-between'>
@@ -113,7 +113,7 @@ const Header = () => {
                                             } }>
                                             <div className='d-flex gap-2 align-items-center'>
                                                 <i className='fa-solid fa-circle-user'></i>
-                                                <span className='mx-1 '>{ user.username }</span>
+                                                <span className='mx-1 '>{ user.lastName }</span>
                                             </div>
                                         </Dropdown>
                                     ) : (
