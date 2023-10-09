@@ -6,11 +6,21 @@ import { getOrderByUser } from '../axios/OrderRequest'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
 import formatCurrency from '../util/formatCurrency'
+import ModalDetailOrder from '../components/ModalDetailOrder/ModalDetailOrder'
 const Order = () => {
 
     const [orders, setOrders] = useState([])
     const [state, setState] = useState([])
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false)
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
     const user = useSelector((state) => state.auth.login.currentUser);
 
 
@@ -21,7 +31,6 @@ const Order = () => {
             setOrders(r.data)
         }
     }
-    console.log(state);
 
     useEffect(() => {
         if (user) {
@@ -38,7 +47,7 @@ const Order = () => {
             title: 'Ngày đặt hàng',
             dataIndex: 'createdAt',
             defaultSortOrder: 'descend',
-            sorter: (a, b) => a.createdAt - b.createdAt,
+            sorter: (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt),
             render: (_, { createdAt }) => (
                 <>
                     { <span>{ moment(createdAt).format('MM/DD/YYYY') }</span> }
@@ -69,9 +78,9 @@ const Order = () => {
             title: 'Xem chi tiết',
             key: 'action',
             render: (_, record) => (
-                <Button onClick={ () => setState(record.cart) } type='text' block icon={ <EyeOutlined /> }>
+                <Button key={ record._id } onClick={ () => { setState(record), showModal() } } type='text' block icon={ <EyeOutlined /> } />
 
-                </Button>
+                //<ModalDetailOrder state={ record } />
             ),
         },
     ];
@@ -102,6 +111,8 @@ const Order = () => {
                     </div>
                 </div>
             </div>
+            <ModalDetailOrder state={ state } isModalOpen={ isModalOpen } handleOk={ handleOk } handleCancel={ handleOk } />
+
         </>
     )
 }

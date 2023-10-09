@@ -1,11 +1,34 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SideBar from '../SideBar'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
 
 const LayoutAdmin = () => {
+    const user = useSelector((state) => state.auth.login.currentUser);
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    /////////////////////////////////////////
+
+
+
+    useEffect(() => {
+        if (!user) {
+            navigate('/')
+        }
+    }, [user])
+
+    const accessToken = user?.accessToken;
+    const id = user?._id;
+
+    const handleLogOut = () => {
+        logout(dispatch, id, navigate, accessToken)
+    }
     return (
         <>
-            <SideBar />
+            <SideBar handleLogOut={ handleLogOut }
+                user={ user }
+            />
             <Outlet />
         </>
 

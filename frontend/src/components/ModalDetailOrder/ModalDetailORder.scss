@@ -1,0 +1,12 @@
+.modal-detail-order{
+    .ant-modal-content {
+    width: 800px !important;
+    padding: 60px !important;
+    border-radius: 0 !important;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%, -10%);
+    border-radius: 20px !important;
+  }
+}

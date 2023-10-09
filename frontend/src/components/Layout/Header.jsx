@@ -73,7 +73,7 @@ const Header = () => {
         {
             key: '3',
             label: (
-                <Link >
+                <Link to={ '/order' }>
                     <p className='m-0'>Lịch sử đặt hàng</p>
                 </Link>
             ),
