@@ -12,7 +12,7 @@ const SlideNewProduct = () => {
 
     const products = useSelector((state) => state.product.products.data);
 
-    const data = products?.slice(10);
+    const data = products?.slice(5);
 
     const settings = {
         infinite: false,
@@ -23,14 +23,14 @@ const SlideNewProduct = () => {
     };
     return (
         <div className='slide-newproduct' >
-            <Slider {...settings}>
+            <Slider { ...settings }>
                 {
                     data?.length && data.map((item, index) => {
                         return (
                             <>
                                 <Product
-                                    key={index}
-                                    {...item}
+                                    key={ index }
+                                    { ...item }
                                 />
                             </>
                         )
@@ -38,7 +38,7 @@ const SlideNewProduct = () => {
                 }
             </Slider>
             <div className='d-flex mb-3'>
-                <Link className='btn btn-outline-dark rounded-3 mx-auto'>Xem tất cả sản phẩm</Link>
+                <Link to={ '/product' } className='btn btn-outline-dark rounded-3 mx-auto'>Xem tất cả sản phẩm</Link>
             </div>
         </div >
     )

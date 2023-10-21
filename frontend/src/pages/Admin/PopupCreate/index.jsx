@@ -12,6 +12,8 @@ const PopupCreate = () => {
     const categories = useSelector((state) => state.category.category.data);
     const brands = useSelector((state) => state.brand.brand.data);
 
+    console.log(brands);
+
     const { TextArea } = Input;
     const id = useId();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,82 +81,97 @@ const PopupCreate = () => {
         <>
             <button
                 className='btn btn-info'
-                onClick={showModal}>
+                onClick={ showModal }>
                 <i className='fa-solid fa-circle-plus'></i>
                 <em className='mx-1'>Create</em>
             </button>
             <Modal
+                width={ 800 }
                 title='Create'
-                open={isModalOpen}
-                footer={null}
-                onOk={handleOk}
-                onCancel={handleCancel}>
+                open={ isModalOpen }
+                footer={ null }
+                onOk={ handleOk }
+                onCancel={ handleCancel }>
                 <hr></hr>
                 <div className='row g-2'>
                     <div className='col-lg-4 col-md-12 col-sm-12'>
                         <div className='mb-3'>
                             <label
-                                htmlFor={id + '-name'}
+                                htmlFor={ id + '-name' }
                                 className='form-label fw-bolder'>
                                 Name
                             </label>
                             <input
-                                onChange={(e) => setName(e.target.value)}
+                                onChange={ (e) => setName(e.target.value) }
                                 type='text'
                                 className='form-control'
-                                id={id + '-name'}></input>
+                                id={ id + '-name' }></input>
                         </div>
                         <div className='mb-3'>
                             <label
-                                htmlFor={id + '-price'}
+                                htmlFor={ id + '-price' }
                                 className='form-label fw-bolder'>
                                 Price
                             </label>
                             <input
-                                onChange={(e) => setPrice(e.target.value)}
+                                onChange={ (e) => setPrice(e.target.value) }
                                 type='number'
                                 className='form-control'
-                                id={id + '-price'}></input>
+                                id={ id + '-price' }></input>
                         </div>
                         <div className='mb-3'>
                             <label
-                                htmlFor={id + '-category'}
+                                htmlFor={ id + '-category' }
                                 className='form-label fw-bolder'>
                                 Category
                             </label>
-                            <Select
-                                onChange={onChange}
+                            {/* <Select
+                                onChange={ onChange }
                                 id='category'
-                                style={{
+                                style={ {
                                     width: '100%',
-                                }}
+                                } }
                                 allowClear
                                 options={
                                     categories.map((item) => {
                                         return (
                                             {
+                                                label: item.name,
                                                 value: item.name,
                                                 key: item.name
                                             }
                                         )
                                     })
                                 }
-                            />
+                            /> */}
+                            <select className='form-control' onChange={ (e) => setCategory(e.target.value) }>
+                                {
+                                    categories.map((item) => {
+                                        return (
+                                            <>
+                                                <option value={ item.name }>{ item.name }</option>
+                                            </>
+
+
+                                        )
+                                    })
+                                }
+                            </select>
                         </div>
                     </div>
                     <div className='col-lg-4 col-md-12 col-sm-12'>
                         <div className='mb-3'>
                             <label
-                                htmlFor={id + '-brand'}
+                                htmlFor={ id + '-brand' }
                                 className='form-label fw-bolder'>
                                 Brand
                             </label>
-                            <Select
-                                onChange={onChangeBrand}
+                            {/* <Select
+                                onChange={ onChangeBrand }
                                 id='brand'
-                                style={{
+                                style={ {
                                     width: '100%',
-                                }}
+                                } }
                                 allowClear
                                 options={
                                     brands.map((item) => {
@@ -166,33 +183,44 @@ const PopupCreate = () => {
                                         )
                                     })
                                 }
-                            />
+                            /> */}
+                            <select className='form-control' onChange={ (e) => setBrand(e.target.value) }>
+                                {
+                                    brands.map((item) => {
+                                        return (
+                                            <>
+                                                <option value={ item.name }>{ item.name }</option>
+                                            </>
+                                        )
+                                    })
+                                }
+                            </select>
                         </div>
                         <div className='mb-3'>
                             <label
-                                htmlFor={id + '-description'}
+                                htmlFor={ id + '-description' }
                                 className='form-label fw-bolder'>
                                 Description
                             </label>
                             <TextArea
-                                onChange={(e) => setDescription(e.target.value)}
-                                style={{
+                                onChange={ (e) => setDescription(e.target.value) }
+                                style={ {
                                     height: 140,
                                     resize: 'none',
-                                }}
+                                } }
                                 type='text'
                                 className='form-control'
-                                id={id + '-description'}></TextArea>
+                                id={ id + '-description' }></TextArea>
                         </div>
                     </div>
                     <div className='col-lg-4 col-md-12 col-sm-12'>
                         <div className='p-0'>
-                            <Upload setImage={setImage} />
+                            <Upload setImage={ setImage } />
                         </div>
                     </div>
                 </div>
                 <div className='d-flex justify-content-end'>
-                    <button disabled={loading ? true : false} className='btn btn-dark' onClick={handleClick}>{loading ? <Spin></Spin> : <>Create</>} </button>
+                    <button disabled={ loading ? true : false } className='btn btn-dark' onClick={ handleClick }>{ loading ? <Spin></Spin> : <>Create</> } </button>
                 </div>
             </Modal>
         </>

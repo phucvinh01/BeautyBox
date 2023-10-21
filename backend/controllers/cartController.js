@@ -1,7 +1,8 @@
 
 const { Cart } = require('../model/cartModel')
 const { Product } = require('../model/productModel')
-const { User } = require('../model/userModel')
+const User = require('../model/user')
+
 const cartController = {
     addToCart: async (req, res) => {
         try {

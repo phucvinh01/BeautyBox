@@ -1,8 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
-const { User } = require('../model/userModel')
 
-
+const { User } = require('../model/user')
 
 let arrRefreshToken = [];
 
@@ -11,30 +10,24 @@ const authController = {
     create: async (req, res) => {
         try {
             const salt = await bcrypt.genSalt(10);
-            const hashed = await bcrypt.hash(req.body.password, salt)
+            const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-            const email = await User.findOne({ email: req.body.email })
-            if (email) {
-                res.json({ status: false, message: "Email đã tồn tài" })
-            }
-            else if (!email) {
-                const newUser = new User({
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    phone: req.body.phone,
-                    email: req.body.email,
-                    password: hashed,
-                });
+            const existingUser = await User.findOne({ email: req.body.email });
 
-                const savedUser = await newUser.save()
-                res.status(200).json({ status: true, message: 'Successfully' })
+            if (existingUser) {
+                return res.status(400).json({ status: false, message: 'Email already exists' });
             }
-            else {
-                return res.status(200).json({ status: false, message: 'Unsuccessfully' })
-
-            }
+            const newUser = new User({
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                phone: req.body.phone,
+                email: req.body.email,
+                password: hashedPassword,
+            });
+            const savedUser = await newUser.save();
+            res.status(200).json({ status: true, message: 'User created successfully', data: savedUser });
         } catch (error) {
-            res.status(500).json({ success: false, message: 'Failed to create!' })
+            res.status(500).json({ status: false, message: 'Failed to create user' });
         }
     },
 
@@ -61,18 +54,16 @@ const authController = {
             if (!password) {
                 return res.status(201).json({ status: 2, message: "Vui lòng nhập Password của bạn" })
             }
-            if (!email && !password) {
-                return res.status(201).json({ status: 2, message: "Thiếu thông tin đăng nhập" })
-
-            }
-            const user = await User.findOne({ email: req.body.email })
+            const user = await User.findOne({ email: email })
+            console.log(await User.findOne({ email: email }));
             if (!user) {
                 return res.status(201).json({ status: 2, message: "Tài khoản email không tồn tại" })
             }
             const validPassword = await bcrypt.compare(
-                req.body.password,
+                password,
                 user.password
             )
+            console.log(validPassword);
             if (!validPassword) {
                 return res.status(201).json({ status: 2, message: "Password không đúng" })
             }
@@ -91,7 +82,7 @@ const authController = {
             }
         }
         catch {
-            res.status(500).json({ status: 3, message: 'Đăng nhập không thành công' })
+            res.status(404).json({ status: 3, message: 'Tên đăng nhập và mật khẩu không đúng' })
         }
     },
 

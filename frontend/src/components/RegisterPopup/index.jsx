@@ -1,5 +1,5 @@
 import React, { useState, useId, useRef, useEffect } from 'react';
-import { Button, Input, Modal, Spin } from 'antd';
+import { Button, Input, Modal, Spin, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux'
 import './register.scss'
@@ -57,7 +57,7 @@ const RegisterPopup = () => {
                 email: email,
             }
             let res = await register(user)
-            if (res.status) {
+            if (res.status === 200) {
                 setTimeout(() => {
                     setLoading(false)
                 }, 2000)
@@ -65,8 +65,10 @@ const RegisterPopup = () => {
                 handleCancel()
             }
             else {
+                message.error("Đăng nhập thất bại")
                 emailRef.current.focus();
                 setError(res.message)
+                setLoading(false)
             }
         }
     };

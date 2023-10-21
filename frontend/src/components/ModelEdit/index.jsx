@@ -114,7 +114,7 @@ const ModalEdit = (props) => {
                                 className='form-label fw-bolder'>
                                 Category
                             </label>
-                            <Select
+                            {/* <Select
                                 value={ category }
                                 onChange={ onChange }
                                 id='category'
@@ -127,7 +127,16 @@ const ModalEdit = (props) => {
                                         key: item.name,
                                     };
                                 }) }
-                            />
+                            /> */}
+                            <select className='form-control' value={ category } onChange={ (e) => setCategory(e.target.value) }>
+                                {
+                                    categories.map((item) => {
+                                        return (
+                                            <><option value={ item.id } >{ item.name }</option></>
+                                        );
+                                    })
+                                }
+                            </select>
                         </div>
                     </div>
                     <div className='col-lg-4 col-md-12 col-sm-12'>
@@ -137,7 +146,7 @@ const ModalEdit = (props) => {
                                 className='form-label fw-bolder'>
                                 Brand
                             </label>
-                            <Select
+                            {/* <Select
                                 value={ brand }
                                 defaultValue={ brand }
                                 onChange={ onChangeBrand }
@@ -151,7 +160,16 @@ const ModalEdit = (props) => {
                                         key: item.name,
                                     };
                                 }) }
-                            />
+                            /> */}
+                            <select className='form-control' value={ brand } onChange={ (e) => setBrand(e.target.value) }>
+                                {
+                                    brands?.map((item) => {
+                                        return (
+                                            <><option value={ item.id } >{ item.name }</option></>
+                                        );
+                                    })
+                                }
+                            </select>
                         </div>
                         <div className='mb-3'>
                             <label

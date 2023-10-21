@@ -1,7 +1,7 @@
 
 const { Cart } = require('../model/cartModel')
 const { Product } = require('../model/productModel')
-const { User } = require('../model/userModel')
+const { User } = require('../model/user')
 const { Order } = require('../model/orderModel')
 const orderController = {
     addOrder: async (req, res) => {
@@ -77,7 +77,43 @@ const orderController = {
                 message: error
             })
         }
+    },
+
+    getTopCustomerOrder: async (req, res) => {
+        try {
+            const order = Order.aggregate([
+                {
+                    $group: {
+                        id: '$userId',
+                        totalItems: { $sum: { $size: '$cart.quantity' } }
+                    }
+                },
+                {
+                    $sort: { totalItems: -1 }
+                },
+                {
+                    $limit: 5
+                }
+            ])
+
+            console.log(order)
+
+            if (order) {
+                res.status(200).json({
+                    status: true,
+                    data: order
+                })
+            }
+        }
+        catch (err) {
+            res.status(200).json({
+                status: false,
+                data: null,
+                message: error
+            })
+        }
     }
+
 }
 
 

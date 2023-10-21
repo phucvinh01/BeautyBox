@@ -72,6 +72,7 @@ const LoginPopup = () => {
             }
             catch (err) {
                 dispatch(loginFailed())
+                setHadError(err.message)
             }
         }
 
@@ -90,6 +91,7 @@ const LoginPopup = () => {
             </button>
             <div className='popup-login'>
                 <Modal
+                    width={ 400 }
                     open={ isModalOpen }
                     footer={ null }
                     onOk={ handleOk }
@@ -124,7 +126,7 @@ const LoginPopup = () => {
                             <p className='text-end'>
                                 <a style={ { color: "blue" } }>Forgot your password?</a>
                             </p>
-                            <span className='text-danger'>{ hadError && hadError.includes('thông') && <span>{ hadError }</span> }</span>
+                            <span className='text-danger'>{ hadError && hadError && <span>{ hadError }</span> }</span>
 
                         </div>
                         <div className='mb-3'>
