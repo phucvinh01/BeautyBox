@@ -77,6 +77,19 @@ const productController = {
             res.status(500).json({ "success": false });
         }
     },
+
+    //Search By Name
+    searchByName: async (req, res) => {
+        try {
+            if (!req.params.name) {
+                res.status(404).json("Không có kết quả");
+            }
+            const products = await Product.find({ "name": { $regex: req.params.name, $options: "i" } });
+            res.status(200).json(products);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
 };
 
 module.exports = productController;

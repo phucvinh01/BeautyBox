@@ -130,7 +130,7 @@ const ModalEdit = (props) => {
                             /> */}
                             <select className='form-control' value={ category } onChange={ (e) => setCategory(e.target.value) }>
                                 {
-                                    categories.map((item) => {
+                                    categories && categories?.map((item) => {
                                         return (
                                             <><option value={ item.id } >{ item.name }</option></>
                                         );
@@ -163,7 +163,7 @@ const ModalEdit = (props) => {
                             /> */}
                             <select className='form-control' value={ brand } onChange={ (e) => setBrand(e.target.value) }>
                                 {
-                                    brands?.map((item) => {
+                                    brands && brands?.map((item) => {
                                         return (
                                             <><option value={ item.id } >{ item.name }</option></>
                                         );

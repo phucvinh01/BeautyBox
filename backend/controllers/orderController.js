@@ -109,7 +109,7 @@ const orderController = {
             res.status(200).json({
                 status: false,
                 data: null,
-                message: error
+                message: err
             })
         }
     }

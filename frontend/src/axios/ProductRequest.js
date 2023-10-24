@@ -26,5 +26,8 @@ const getListNewProduct = () => {
     return Axios.get('/v1/product/${10}')
 }
 
+const postSearchByName = (name) => {
+    return Axios.post(`/v1/product/search/${name} `)
+}
 
-export { getProducts, insertProduct, deleteProduct, getProductByCategory, getListNewProduct, getOneProducts }
+export { getProducts, insertProduct, deleteProduct, getProductByCategory, getListNewProduct, getOneProducts, postSearchByName }

@@ -21,5 +21,8 @@ router.put("/:id", productController.updateProduct);
 //DELETE 
 router.delete("/:id", productController.deleteProduct);
 
+//SEARCH
+router.post("/search/:name", productController.searchByName);
+
 
 module.exports = router;
