@@ -14,7 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Employess from './pages/Admin/pages/Employess'
 import Sales from './pages/Admin/pages/Sales'
-import { getBrandList, getCart, getCategoryList, getProductList } from './redux/api'
+import { getBrandList, getCart, getCategoryList, getDataListCollection, getProductList } from './redux/api'
 import { useDispatch, useSelector } from 'react-redux'
 import About from './pages/About'
 import Category from './pages/Category'
@@ -23,6 +23,7 @@ import { addToCartFailed, getCartFailed } from './redux/cartSlice'
 import LayoutAdmin from './pages/Admin/Layout'
 import Checkout from './pages/Checkout'
 import Profile from './pages/Profile'
+import Distributor from './pages/Admin/pages/Distributor'
 function App() {
 
   const dispatch = useDispatch()
@@ -31,7 +32,7 @@ function App() {
 
   useEffect(() => {
     if (user?.role === 1) {
-      navigate('/admin/home')
+      navigate('/admin/product')
     }
     if (user && user?.role !== 1) {
       getCart(user?._id, dispatch)
@@ -46,6 +47,7 @@ function App() {
     getProductList(dispatch)
     getCategoryList(dispatch)
     getBrandList(dispatch)
+    getDataListCollection(dispatch)
   }, [])
 
   return (
@@ -71,13 +73,12 @@ function App() {
           <Route path="order" element={ <Orders /> } />
           <Route path="*" element={ <ErrorPage /> } />
         </Route>
-
         <Route path='/admin' element={ <LayoutAdmin /> }>
-          <Route path='/admin/home' element={ <Admin /> } />
           <Route path='/admin/product' element={ <ProductAdmin /> } />
           <Route path='/admin/order' element={ <Order /> } />
           <Route path='/admin/employee' element={ <Employess /> } />
           <Route path='/admin/sale' element={ <Sales /> } />
+          <Route path='/admin/distributor' element={ <Distributor /> } />
         </Route>
       </Routes>
 

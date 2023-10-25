@@ -9,10 +9,9 @@ const SideBar = (props) => {
         <>
             <header>
                 <Nav />
-
                 <nav
                     id='main-navbar'
-                    className='navbar navbar-expand-lg navbar-light bg-white fixed-top'>
+                    className='navbar navbar-expand-lg navbar-light bg-white'>
                     <div className='container-fluid'>
                         <button
                             className='navbar-toggler'

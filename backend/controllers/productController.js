@@ -7,9 +7,15 @@ const productController = {
         const newProduct = new Product(req.body)
         try {
             const savedProduct = await newProduct.save();
-            res.status(200).json(savedProduct);
+            res.status(200).json({
+                status: true,
+                data: savedProduct
+            });
         } catch (err) {
-            res.status(500).json(err);
+            res.status(200).json({
+                status: false,
+                data: err
+            });
         }
     },
     //GET ALL
@@ -62,9 +68,15 @@ const productController = {
         try {
             const product = await Product.findById(req.params.id);
             await product.updateOne({ $set: req.body });
-            res.status(200).json("Updated successfully!");
+            res.status(200).json({
+                status: true,
+                data: product
+            });
         } catch (err) {
-            res.status(500).json(err);
+            res.status(200).json({
+                status: false,
+                data: err
+            });
         }
     },
 
@@ -72,9 +84,13 @@ const productController = {
     deleteProduct: async (req, res) => {
         try {
             await Product.findByIdAndDelete(req.params.id);
-            res.status(200).json({ "success": true });
+            res.status(200).json({
+                status: true,
+            });
         } catch (err) {
-            res.status(500).json({ "success": false });
+            res.status(200).json({
+                status: false,
+            });
         }
     },
 
@@ -90,6 +106,22 @@ const productController = {
             res.status(500).json(err);
         }
     },
+
+    updateStatus: async (req, res) => {
+        try {
+            const product = await Product.findById(req.params.id);
+            await product.updateOne({ $set: { status: !product.status } });
+            res.status(200).json({
+                status: true,
+                data: !product.status
+            });
+        } catch (err) {
+            res.status(200).json({
+                status: false,
+                data: err
+            });
+        }
+    }
 };
 
 module.exports = productController;

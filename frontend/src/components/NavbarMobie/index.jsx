@@ -11,12 +11,12 @@ const NavbarMobie = () => {
     };
     return (
         <>
-            <Button style={{
+            <Button style={ {
                 backgroundColor: "transparent", color: "black"
-            }} onClick={showDrawer}>
+            } } onClick={ showDrawer }>
                 <MenuOutlined />
             </Button>
-            <Drawer title="Basic Drawer" placement="right" onClose={onClose} open={open} className='drawer-narbar-mobie'>
+            <Drawer title="Basic Drawer" placement="right" onClose={ onClose } open={ open } className='drawer-narbar-mobie'>
                 <p>Some contents...</p>
                 <p>Some contents...</p>
                 <p>Some contents...</p>

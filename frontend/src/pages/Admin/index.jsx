@@ -27,10 +27,6 @@ const Admin = () => {
     }
     return (
         <>
-            <SideBar handleLogOut={ handleLogOut }
-                user={ user }
-            />
-            <Outlet />
         </>
 
     )

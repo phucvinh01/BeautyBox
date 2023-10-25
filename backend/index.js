@@ -12,7 +12,8 @@ const brandRoute = require("./routes/brand");
 const categoryRoute = require("./routes/category");
 const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
-
+const distributorRoute = require("./routes/distributor")
+const collectionRoute = require("./routes/collection")
 dotenv.config();
 //CONNECT DATABASE
 
@@ -43,6 +44,10 @@ app.use("/v1/category", categoryRoute)
 app.use("/v1/cart", cartRoute)
 
 app.use("/v1/order", orderRoute)
+
+app.use("/v1/distributor", distributorRoute)
+
+app.use("/v1/collection", collectionRoute)
 
 
 app.listen(8000, () => {

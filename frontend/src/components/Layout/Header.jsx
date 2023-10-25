@@ -16,6 +16,7 @@ const Header = () => {
     const cart = useSelector((state) => state.cart.cart.data);
     const [users, setUsers] = useState('');
     const [hideCart, setHideCart] = useState(false);
+    const [categories, setCategories] = useState([])
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -31,7 +32,10 @@ const Header = () => {
 
     useEffect(() => {
         setUsers(user);
-    }, [users]);
+        if (cate) {
+            setCategories(cate?.slice(0, 4))
+        }
+    }, [users, cate]);
 
     const [open, setOpen] = useState(false);
 
@@ -42,7 +46,6 @@ const Header = () => {
         setOpen(false);
     };
 
-    const categories = cate?.slice(0, 4);
 
     const handleLogOut = () => {
         logout(dispatch, id, navigate, accessToken);
@@ -89,7 +92,7 @@ const Header = () => {
     ];
     return (
         <>
-            <header className='sticky-sm-top sticky-top header bg-white mt-3'>
+            <header className='sticky-top header bg-white mt-3'>
                 <div className='container-fluid'>
                     <div className='row pt-1'>
                         <div className='d-flex align-items-center justify-content-between'>

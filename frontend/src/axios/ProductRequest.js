@@ -30,4 +30,8 @@ const postSearchByName = (name) => {
     return Axios.post(`/v1/product/search/${name} `)
 }
 
-export { getProducts, insertProduct, deleteProduct, getProductByCategory, getListNewProduct, getOneProducts, postSearchByName }
+const putUpdateStatus = (id) => {
+    return Axios.put(`/v1/product/updateActive/${id}`)
+}
+
+export { putUpdateStatus, getProducts, insertProduct, deleteProduct, getProductByCategory, getListNewProduct, getOneProducts, postSearchByName }

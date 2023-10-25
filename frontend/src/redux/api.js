@@ -9,6 +9,10 @@ import { getBrand } from '../axios/BrandRequest'
 import { addToCartFailed, addToCartStart, addToCartSuccess, decrementQuantityFailed, decrementQuantityStart, decrementQuantitySuccess, getCartFailed, getCartStart, getCartSuccess, removeItemFailed, removeItemStart, removeItemSuccess } from './cartSlice'
 import { Add, Decrement, Delete, Get } from '../axios/CartRequest'
 import { Axios } from 'axios'
+import { getDistributorFailed, getDistributorStart, getDistributorSuccess } from './distributor'
+import { getDistributorList } from '../axios/DistributorRequest'
+import { getCollectionFailed, getCollectionStart, getCollectionSuccess } from './collection'
+import { getCollectionList } from '../axios/CollectionRequest'
 
 export const login = async (user, dispatch, navigate) => {
     dispatch(loginStart());
@@ -139,5 +143,33 @@ export const RemoveCartItem = async (productId, userId, dispatch) => {
         dispatch(removeItemFailed())
     }
 }
+
+export const getDataListDistributor = async (dispatch) => {
+    dispatch(getDistributorStart());
+    try {
+        const res = await getDistributorList()
+        if (res.status) {
+            dispatch(getDistributorSuccess(res.data))
+        }
+    }
+    catch (err) {
+        dispatch(getDistributorFailed())
+    }
+}
+
+export const getDataListCollection = async (dispatch) => {
+    dispatch(getCollectionStart());
+    try {
+        const res = await getCollectionList()
+        if (res.status) {
+            dispatch(getCollectionSuccess(res.data))
+        }
+    }
+    catch (err) {
+        dispatch(getCollectionFailed())
+    }
+}
+
+
 
 

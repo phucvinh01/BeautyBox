@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import BannerSlide from '../components/BannerSlide'
 import BrandSlide from '../components/BrandSlide'
 import SlideProduct from '../components/SlideProduct'
@@ -21,9 +21,14 @@ const Home = () => {
     ]
 
     const cate = useSelector((state) => state.category.category.data);
+    const [categories, setCategories] = useState([])
 
 
-    const categories = cate?.slice(4);
+    useEffect(() => {
+        if (cate) {
+            setCategories(cate.slice(4))
+        }
+    }, [cate]);
 
     return (
         <>

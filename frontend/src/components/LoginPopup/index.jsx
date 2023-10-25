@@ -58,7 +58,7 @@ const LoginPopup = () => {
                 if (res.status === 1) {
                     dispatch(loginSuccess(res))
                     if (res.role === 1) {
-                        navigate('/admin')
+                        navigate('/admin/product')
                         return
                     }
                     navigate('/')
@@ -91,6 +91,7 @@ const LoginPopup = () => {
             </button>
             <div className='popup-login'>
                 <Modal
+                    className='modal-login'
                     width={ 400 }
                     open={ isModalOpen }
                     footer={ null }

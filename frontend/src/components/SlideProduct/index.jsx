@@ -11,8 +11,12 @@ const SlideNewProduct = () => {
 
 
     const products = useSelector((state) => state.product.products.data);
-
-    const data = products?.slice(5);
+    const [data, setData] = useState([])
+    useEffect(() => {
+        if (products) {
+            setData(products?.slice(5))
+        }
+    }, [products])
 
     const settings = {
         infinite: false,

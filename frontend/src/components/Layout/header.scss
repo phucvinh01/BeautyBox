@@ -8,11 +8,14 @@
   border: none;
   color: rgb(255, 255, 255) !important;
 }
+.sticky-top{
+  z-index: 200;
+}
 .header-menu {
   padding: 4px 0px;
   display: flex;
   color: rgb(255, 255, 255);
-
+  
   .menu-content {
     gap: 20px;
     margin: auto;

@@ -1,22 +1,32 @@
-import { Modal, Radio, Rate, Space } from 'antd'
+import { Button, Modal, Radio, Rate, Space } from 'antd'
 import React, { useState } from 'react'
 import './modaldetai.scss'
 import _ from 'lodash';
 import formatCurrency from '../../util/formatCurrency'
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, getCart } from '../../redux/api';
+import { EyeFilled } from '@ant-design/icons';
 
 const ModalDetail = (props) => {
     const dispatch = useDispatch()
+    const [open, setOpen] = useState(false);
 
     const [quantity, setQuantity] = useState(1);
     const user = useSelector((state) => state.auth.login.currentUser);
 
+    const { state, isAdmin } = props
 
-    const { open, handleOk, onCancel, state } = props
+    const handleOk = () => {
+        setOpen(false)
+    }
 
-    if (open)
-        console.log(user);
+    const onCancel = () => {
+        setOpen(false)
+    }
+
+    const handleShow = () => {
+        setOpen(true)
+    }
 
     const handleAddToCart = () => {
         addToCart(state?._id, user?._id, quantity, dispatch)
@@ -29,15 +39,14 @@ const ModalDetail = (props) => {
 
     return (
         <>
-            <Modal open={ open } onOk={ handleOk } onCancel={ onCancel } className='modal-detail' footer={ false }>
+            <Button icon={ isAdmin && <EyeFilled /> } onClick={ handleShow } className='btn-quick'>{ isAdmin ? "" : "Xem nhanh" }</Button>
+            <Modal width={ 1000 } centered open={ open } onOk={ handleOk } onCancel={ onCancel } className='modal-detail' footer={ false }>
                 <div className='row p-2'>
                     <div className='col-4'>
                         <img className='w-100' src={ state.img } alt='>state'></img>
                     </div>
                     <div className='col-8'>
                         <Space direction='vertical'>
-
-
                             <p className='text-danger fs-16'>{ state.brand }</p>
                             <p className='fs-20'>{ state.name }</p>
                             <Space size={ "large" }>
@@ -46,7 +55,7 @@ const ModalDetail = (props) => {
                                 <p><strong>SKU: </strong>{ state?._id?.match(/[0-9]+/g).join("") }</p>
                             </Space>
                             <Space size={ "large" } align='center' >
-                                <p className='fs-20 fw-bolder'>{ formatCurrency.format(state.price) }</p>
+                                <p className='fs-20 fw-bolder'>{ formatCurrency.format(state.priceSale) }</p>
                                 <p className='fs-18 text-muted' style={ { textDecorationLine: "line-through" } }>{ formatCurrency.format(state.price) }</p>
                                 <div className='tag'>0%</div>
                             </Space>

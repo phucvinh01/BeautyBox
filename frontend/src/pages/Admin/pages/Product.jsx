@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PopupCreate from '../PopupCreate';
 import Products from '../../../components/Products';
 import { useSelector } from 'react-redux';
+import { Space } from 'antd';
+import TableProduct from '../../../components/TableProduct';
 
 
 const ProductAdmin = () => {
@@ -9,14 +11,14 @@ const ProductAdmin = () => {
     const products = useSelector((state) => state.product.products.data);
     return (
         <>
-            <main style={{ marginTop: "58px", minHeight: "100vh" }}>
+            <main >
                 <div className="container pt-4">
-                    <div className='row'>
-                        <div className='col-lg-12 col-md-12 col-sm-6 text-end mb-3' >
+                    <Space direction='vertical'>
+                        <Space>
                             <PopupCreate />
-                        </div>
-                    </div>
-                    <Products products={products} user={user} />
+                        </Space>
+                        <TableProduct />
+                    </Space>
                 </div>
             </main>
         </>
