@@ -26,6 +26,8 @@ router.post("/search/:name", productController.searchByName);
 
 router.put("/updateActive/:id", productController.updateStatus);
 
+router.put("/updateDiscount/:id", productController.updateDiscount);
+
 
 
 module.exports = router;

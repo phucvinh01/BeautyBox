@@ -34,4 +34,8 @@ const putUpdateStatus = (id) => {
     return Axios.put(`/v1/product/updateActive/${id}`)
 }
 
-export { putUpdateStatus, getProducts, insertProduct, deleteProduct, getProductByCategory, getListNewProduct, getOneProducts, postSearchByName }
+const putUpdateDiscount = (id, body) => {
+    return Axios.put(`/v1/product/updateDiscount/${id}`, body)
+}
+
+export { putUpdateDiscount, putUpdateStatus, getProducts, insertProduct, deleteProduct, getProductByCategory, getListNewProduct, getOneProducts, postSearchByName }

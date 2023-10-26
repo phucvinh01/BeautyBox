@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Popconfirm, message } from 'antd';
-import { StopOutlined } from '@ant-design/icons';
+import { ArrowUpOutlined, StopOutlined } from '@ant-design/icons';
 import { putUpdateStatus } from '../../axios/ProductRequest';
 import { getProductList } from '../../redux/api';
 import { useDispatch } from 'react-redux';
@@ -18,12 +18,12 @@ const PopconfirmDelPro = (props) => {
         }
     };
 
-    const { _id } = props
+    const { _id, status } = props
 
     return (
         <>
             <Popconfirm
-                title="Ngưng đăng bán sẩn phẩm"
+                title={ status ? "Ngưng đăng bán sản phẩm" : "Đăng bán sản phẩm" }
                 description={ _id?.match(/[0-9]+/g).join("") }
                 okText="Yes"
                 cancelText="No"
@@ -33,8 +33,11 @@ const PopconfirmDelPro = (props) => {
                         backgroundColor: "red"
                     },
                 } }
-            >
-                <Button danger title='Ẩn sản phẩm trên trang khách hàng' icon={ <StopOutlined /> }></Button>
+            >{
+                    status ? <Button danger title='Ẩn sản phẩm trên trang khách hàng' icon={ <StopOutlined /> }></Button>
+                        : <Button title='Đăng bán sản phẩm' icon={ <ArrowUpOutlined /> }></Button>
+                }
+
             </Popconfirm>
         </>
     )

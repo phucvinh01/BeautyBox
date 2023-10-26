@@ -182,6 +182,9 @@ const PopupCreate = () => {
                                 Số lượng
                             </label>
                             <input
+                                min={ 1 }
+                                max={ 5000 }
+                                defaultValue={ 1 }
                                 value={ stock }
                                 onChange={ (e) => setStock(e.target.value) }
                                 type='number'

@@ -10,23 +10,12 @@ import ModalDetailOrder from '../components/ModalDetailOrder/ModalDetailOrder'
 const Order = () => {
 
     const [orders, setOrders] = useState([])
-    const [state, setState] = useState([])
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    const handleOk = () => {
-        setIsModalOpen(false)
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
+
     const user = useSelector((state) => state.auth.login.currentUser);
 
 
     const getOrder = async (userId) => {
         let r = await getOrderByUser(userId);
-        console.log(r);
         if (r.status) {
             setOrders(r.data)
         }
@@ -78,9 +67,7 @@ const Order = () => {
             title: 'Xem chi tiết',
             key: 'action',
             render: (_, record) => (
-                <Button key={ record._id } onClick={ () => { setState(record), showModal() } } type='text' block icon={ <EyeOutlined /> } />
-
-                //<ModalDetailOrder state={ record } />
+                <ModalDetailOrder state={ record } />
             ),
         },
     ];
@@ -111,7 +98,6 @@ const Order = () => {
                     </div>
                 </div>
             </div>
-            <ModalDetailOrder state={ state } isModalOpen={ isModalOpen } handleOk={ handleOk } handleCancel={ handleOk } />
 
         </>
     )

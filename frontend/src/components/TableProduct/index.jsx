@@ -8,6 +8,7 @@ import { deleteProduct } from '../../axios/ProductRequest';
 import ModalEditProduct from '../ModalEditProduct';
 import formatCurrency from '../../util/formatCurrency';
 import PopconfirmDelPro from '../PopconfirmDelPro';
+import ModalDiscount from '../ModalDiscount';
 
 
 
@@ -59,6 +60,14 @@ const TableProduct = () => {
             ),
         },
         {
+            title: 'Giá bán khuyết mãi',
+            dataIndex: 'price',
+            key: 'price',
+            render: (price) => (
+                <span>{ formatCurrency.format(price) }</span>
+            ),
+        },
+        {
             title: 'Nhà phân phối',
             dataIndex: 'distributor',
             key: 'distributor',
@@ -78,7 +87,8 @@ const TableProduct = () => {
                 <Space size="small">
                     <ModalEditProduct state={ record } />
                     <ModalDetail state={ record } isAdmin={ true } />
-                    <PopconfirmDelPro _id={ record._id } />
+                    <PopconfirmDelPro _id={ record._id } status={ record.status } />
+                    <ModalDiscount state={ record } />
                 </Space>
             ),
         },
@@ -86,7 +96,7 @@ const TableProduct = () => {
 
     return (
         <>
-            <Table columns={ columns } dataSource={ data } />
+            <Table columns={ columns } dataSource={ data && data } />
         </>
 
     )

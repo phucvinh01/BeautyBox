@@ -1,15 +1,20 @@
-const User = require('../model/user')
-
+const { User } = require('../model/user')
 
 
 const UserController = {
 
     getAll: async (req, res) => {
         try {
-            const users = await User.find();
-            res.status(200).json(users);
+            const data = await User.find({})
+            res.status(200).json({
+                status: true,
+                data: data,
+            });
         } catch (err) {
-            res.status(500).json(err);
+            res.status(500).json({
+                status: false,
+                erorrs: err,
+            });
         }
     },
 };

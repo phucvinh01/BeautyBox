@@ -9,5 +9,10 @@ const getOrderByUser = (userId) => {
 }
 
 
+const getAllOrder = () => {
+    return Axios.get(`/v1/order/`)
+}
 
-export { postNewOrder, getOrderByUser }
+
+
+export { postNewOrder, getOrderByUser, getAllOrder }

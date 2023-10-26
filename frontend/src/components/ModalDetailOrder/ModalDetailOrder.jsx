@@ -6,14 +6,21 @@ import formatCurrency from '../../util/formatCurrency'
 
 const ModalDetailOrder = (props) => {
 
-    const { state, isModalOpen, handleOk, handleCancel } = props
-    if (isModalOpen) {
-        console.log(state);
+    const { state } = props
 
-    }
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false)
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
     return (
         <>
+            <Button onClick={ () => showModal() } type='text' block icon={ <EyeOutlined /> } />
             <Modal className='modal-detail-order' title={ <h2>Thông tin đơn hàng</h2> } open={ isModalOpen } onOk={ handleOk } onCancel={ handleCancel }>
                 <div className='row'>
                     <div className='col-4'>

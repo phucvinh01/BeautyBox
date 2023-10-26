@@ -121,7 +121,23 @@ const productController = {
                 data: err
             });
         }
-    }
+    },
+
+
+    updateDiscount: async (req, res) => {
+        try {
+            const product = await Product.findById(req.params.id);
+            await product.updateOne({ $set: { price: req.body.price, discount: req.body.discount } });
+            res.status(200).json({
+                status: true,
+            });
+        } catch (err) {
+            res.status(200).json({
+                status: false,
+                data: err
+            });
+        }
+    },
 };
 
 module.exports = productController;
