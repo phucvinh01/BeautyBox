@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { Button, Space } from 'antd';
 import TableProduct from '../../../components/TableProduct';
 import { CSVLink } from 'react-csv'
-import { ExportOutlined } from '@ant-design/icons';
+import { ExportOutlined, DownloadOutlined } from '@ant-design/icons';
 
 
 const ProductAdmin = () => {
@@ -38,12 +38,12 @@ const ProductAdmin = () => {
                     <Space direction='vertical'>
                         <Space>
                             <PopupCreate />
-                            <Button type='primary' size='middle' icon={ <ExportOutlined /> } >
+                            <Button size='middle' icon={ <DownloadOutlined /> } >
                                 <CSVLink filename='Danh sách sản phẩm'
                                     data={ dataExport }
                                     asyncOnClick={ true }
                                     onClick={ getDataExport }
-                                >Xuất danh sách nhân viên</CSVLink>
+                                >Download</CSVLink>
                             </Button>
                         </Space>
                         <TableProduct />

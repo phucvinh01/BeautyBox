@@ -6,6 +6,7 @@ import brandReducer from './brandSlice'
 import cartReducer from "./cartSlice"
 import distributor from "./distributor"
 import collection from "./collection"
+import emp from './empSlice'
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
     brand: brandReducer,
     cart: cartReducer,
     distributor: distributor,
-    collection: collection
+    collection: collection,
+    emp: emp,
 })
 
 export default rootReducer

@@ -18,17 +18,9 @@ const LayoutAdmin = () => {
         }
     }, [user])
 
-    const accessToken = user?.accessToken;
-    const id = user?._id;
-
-    const handleLogOut = () => {
-        logout(dispatch, id, navigate, accessToken)
-    }
     return (
         <>
-            <SideBar handleLogOut={ handleLogOut }
-                user={ user }
-            />
+            <SideBar />
             <Outlet />
         </>
 

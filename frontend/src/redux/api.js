@@ -13,6 +13,8 @@ import { getDistributorFailed, getDistributorStart, getDistributorSuccess } from
 import { getDistributorList } from '../axios/DistributorRequest'
 import { getCollectionFailed, getCollectionStart, getCollectionSuccess } from './collection'
 import { getCollectionList } from '../axios/CollectionRequest'
+import { getEmpFailed, getEmpStart, getEmpSuccess } from './empSlice'
+import { getAllEmp } from '../axios/EmpRequest'
 
 export const login = async (user, dispatch, navigate) => {
     dispatch(loginStart());
@@ -169,6 +171,20 @@ export const getDataListCollection = async (dispatch) => {
         dispatch(getCollectionFailed())
     }
 }
+
+export const getDataEmp = async (dispatch) => {
+    dispatch(getEmpStart());
+    try {
+        const res = await getAllEmp()
+        if (res.status) {
+            dispatch(getEmpSuccess(res.data))
+        }
+    }
+    catch (err) {
+        dispatch(getEmpFailed())
+    }
+}
+
 
 
 

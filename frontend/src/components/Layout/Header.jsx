@@ -56,7 +56,6 @@ const Header = () => {
             key: '1',
             label: (
                 <div style={ { borderBottom: "1px solid #333" } }>
-
                     <strong>
                         Hello { user?.lastName } !
                     </strong>
@@ -108,7 +107,6 @@ const Header = () => {
                                 <div className='d-flex gap-0 justify-content-end gap-1' style={ { cursor: "pointer" } }>
                                     { user ? (
                                         <Dropdown
-
                                             placement="bottom"
                                             trigger={ ['click'] }
                                             menu={ {
@@ -125,7 +123,6 @@ const Header = () => {
                                     <div hidden={ hideCart ? true : false }>
                                         <Badge count={ cart?.items?.length } size='small'>
                                             <button
-
                                                 className='btn'
                                                 type='link'
                                                 title='cart'
@@ -152,15 +149,14 @@ const Header = () => {
                                 className='collapse navbar-collapse'
                                 id='navbarSupportedContent'>
                                 <ul className='navbar-nav me-auto mb-2 mb-lg-0 mx-3'>
-                                    <li className='nav-item px-3' key={ "product" }>
+                                    <li className='nav-item px-3' key={ 1 }>
                                         <NavLink
-                                            key={ "product" }
                                             className='btn border px-4 btn-category'
                                             to={ '/product' }>
                                             Tất cả sản phấm
                                         </NavLink>
                                     </li>
-                                    <li className='nav-item px-3' key={ "brand" }>
+                                    <li className='nav-item px-3' key={ 2 }>
                                         <NavLink
                                             key={ "brand" }
                                             className='btn border px-4 btn-category'

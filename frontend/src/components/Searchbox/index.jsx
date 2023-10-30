@@ -5,8 +5,9 @@ import { SearchOutlined, SmileOutlined } from '@ant-design/icons'
 import { debounce, set } from 'lodash';
 import { postSearchByName } from '../../axios/ProductRequest';
 import DataListSearch from '../DataListSearch';
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { listDataSearch } from '../../util/data';
+import Item from 'antd/es/list/Item';
 const SearchBox = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -52,30 +53,37 @@ const SearchBox = () => {
 
     };
     const menu = (
-        <Menu title={ searchResults ? "Kết quả" : "Tìm kiếm hot nhất" }>
-            { searchResults?.length > 0 ? (
-                searchResults?.map((result) => (
-                    <Menu.Item key={ result.id }>
-                        <Space>
-                            <img src={ result.img } width={ 60 }></img>
-                            <p>{ result.name }</p>
-                        </Space>
-                    </Menu.Item>
-                ))
-            ) : (
-                <>
-                    <Menu.Item key={ 0 } disabled>Tìm kiếm hot nhất</Menu.Item>
-                    {
-                        listDataSearch?.map((result) => (
-                            <Menu.Item key={ result.id }>{ result.name }</Menu.Item>
-                        ))
+        <>
+            <div>
+                { searchResults?.length > 0 ?
+                    searchResults?.map((result) => {
+                        return (
+                            <>
+                                <div key={ result.id }>
+                                    <Space>
+                                        <img src={ result.img } width={ 60 }></img>
+                                        <p>{ result.name }</p>
+                                    </Space>
+                                </div>
+                            </>
+
+                        )
+                    })
+                    :
+                    listDataSearch?.map((result) => {
+                        return (
+                            <div className='p-1'>
+                                <NavLink className={ "text-dark" } key={ result.id } to={ result.path } >{ result.name }</NavLink>
+                            </div>
+                        )
                     }
+                    )
+                }
+            </div>
+        </>
+    )
 
-                </>
 
-            ) }
-        </Menu>
-    );
     const handleClear = () => {
         setSearchTerm('');
         setIsCleared(true);
@@ -86,7 +94,6 @@ const SearchBox = () => {
             <div className="wrap">
                 <Dropdown
                     trigger={ ['click'] }
-                    open={ open }
                     overlay={ menu }
                 >
                     <Input ref={ inputRef } onFocus={ handleFocus } onBlur={ () => setOpen(!open) } list="searchResults" value={ searchTerm } onChange={ handleChange } prefix={ <SearchOutlined /> } suffix={ searchTerm && <span style={ { cursor: "pointer" } } onClick={ handleClear }>X</span> } placeholder="What are you looking for?" />

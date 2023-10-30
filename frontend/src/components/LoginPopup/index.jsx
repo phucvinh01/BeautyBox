@@ -46,7 +46,6 @@ const LoginPopup = () => {
         else if (!email) {
             setHadError("Vui lòng điền Email của bạn")
             emailRef.current.focus();
-
             return
 
         }
@@ -57,10 +56,6 @@ const LoginPopup = () => {
                 console.log(res);
                 if (res.status === 1) {
                     dispatch(loginSuccess(res))
-                    if (res.role === 1) {
-                        navigate('/admin/product')
-                        return
-                    }
                     navigate('/')
                 }
                 else {

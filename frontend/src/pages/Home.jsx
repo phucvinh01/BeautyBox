@@ -6,6 +6,7 @@ import Banner2 from '../components/BannerSlide-2';
 import { useSelector } from 'react-redux';
 import { Card, Col, Row } from 'antd';
 import './Home.scss'
+import { Link } from 'react-router-dom';
 const Home = () => {
 
     const banner1 = [
@@ -71,17 +72,20 @@ const Home = () => {
                             categories && categories.length > 0 && categories.map((item, index) => {
                                 return (
                                     <Col span={ 3 }>
-                                        <Card
-                                            hoverable
-                                            style={ {
-                                                width: 130,
-                                                padding: 10,
-                                                marginBottom: 10
-                                            } }
-                                            cover={ <img alt="example" src={ item.logo } /> }
-                                        >
-                                            <p className="d-block" style={ { fontSize: 12, height: 20 } }>{ item.name }</p>
-                                        </Card>
+                                        <Link to={ `/category/${item.path}` }>
+                                            <Card
+                                                hoverable
+                                                style={ {
+                                                    width: 130,
+                                                    padding: 10,
+                                                    marginBottom: 10
+                                                } }
+                                                cover={ <img alt="example" src={ item.logo } /> }
+                                            >
+                                                <p className="d-block" style={ { fontSize: 12, height: 20 } }>{ item.name }</p>
+                                            </Card>
+                                        </Link>
+
                                     </Col>
 
                                 )

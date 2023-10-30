@@ -24,6 +24,7 @@ import LayoutAdmin from './pages/Admin/Layout'
 import Checkout from './pages/Checkout'
 import Profile from './pages/Profile'
 import Distributor from './pages/Admin/pages/Distributor'
+import Login from './pages/Admin/pages/Login'
 function App() {
 
   const dispatch = useDispatch()
@@ -31,14 +32,11 @@ function App() {
   const user = useSelector((state) => state.auth.login.currentUser);
 
   useEffect(() => {
-    if (user?.role === 1) {
-      navigate('/admin/product')
-    }
-    if (user && user?.role !== 1) {
-      getCart(user?._id, dispatch)
-    }
-    if (!user) {
+    if (user && user?.account) {
       dispatch(getCartFailed)
+    }
+    if (user) {
+      getCart(user?._id, dispatch)
     }
   }, [user])
 
@@ -73,6 +71,7 @@ function App() {
           <Route path="order" element={ <Orders /> } />
           <Route path="*" element={ <ErrorPage /> } />
         </Route>
+        <Route path="login-manager" element={ <Login /> } />
         <Route path='/admin' element={ <LayoutAdmin /> }>
           <Route path='/admin/product' element={ <ProductAdmin /> } />
           <Route path='/admin/order' element={ <Order /> } />

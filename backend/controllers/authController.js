@@ -55,7 +55,6 @@ const authController = {
                 return res.status(201).json({ status: 2, message: "Vui lòng nhập Password của bạn" })
             }
             const user = await User.findOne({ email: email })
-            console.log(await User.findOne({ email: email }));
             if (!user) {
                 return res.status(201).json({ status: 2, message: "Tài khoản email không tồn tại" })
             }

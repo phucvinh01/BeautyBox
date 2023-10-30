@@ -46,7 +46,7 @@ const Order = () => {
         <main>
             <div className='container'>
                 <Space>
-                    <Button type='primary' size='middle' icon={ <ExportOutlined /> } >
+                    <Button size='middle' icon={ <ExportOutlined /> } >
                         <CSVLink filename='Danh sách sản phẩm'
                             data={ dataExport }
                             asyncOnClick={ true }

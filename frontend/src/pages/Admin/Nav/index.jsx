@@ -1,7 +1,10 @@
 import React from 'react';
 import NavItem from '../NavItem';
+import { useSelector } from 'react-redux';
 
 const Nav = () => {
+    const user = useSelector((state) => state.auth.login.currentUser);
+
     return (
         <>
             <nav
@@ -21,13 +24,16 @@ const Nav = () => {
                             href={ '/admin/order' }
 
                         />
+                        {
+                            user.account.role > 1 && <NavItem
+                                icon={ 'fas fa-users fa-fw me-3' }
+                                title={ 'Nhân viên' }
+                                href={ '/admin/employee' }
 
-                        <NavItem
-                            icon={ 'fas fa-users fa-fw me-3' }
-                            title={ 'Nhân viên' }
-                            href={ '/admin/employee' }
+                            />
+                        }
 
-                        />
+
                         <NavItem
                             href={ '/admin/distributor' }
                             icon={ 'fa-solid fa-building-circle-arrow-right me-3' }

@@ -1,6 +1,7 @@
 import React from 'react'
 import Product from '../Product'
 import { useSelector } from 'react-redux';
+import { Empty } from 'antd';
 
 const Products = (props) => {
 
@@ -10,7 +11,7 @@ const Products = (props) => {
             <div className='container'>
                 <div className='row'>
                     {
-                        products && products.length > 0 && products.map((product) => {
+                        products && products.length > 0 ? products.map((product) => {
                             return (
                                 <Product
                                     key={ product._id }
@@ -18,7 +19,7 @@ const Products = (props) => {
                                     user={ user }
                                 />
                             )
-                        })
+                        }) : <div style={ { height: 400 } } className='d-flex justify-content-center align-items-center'> <Empty /></div>
                     }
                 </div>
             </div>
