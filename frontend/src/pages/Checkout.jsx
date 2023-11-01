@@ -54,18 +54,19 @@ const Checkout = (props) => {
         else {
             const shippingInfor = `${detail}, ${nameWard}, ${nameDistrict}, ${nameCity}`
             let r = await postNewOrder(cart, user._id, shippingInfor, note, cart.subTotal, methodShip)
-            let l = await Empty(user._id)
-            if (l.code === 200) {
-                dispatch(emptyCartSuccess(l.data))
+            if (r.status) {
+                let l = await Empty(user._id)
+                if (l.code === 200) {
+                    dispatch(emptyCartSuccess(l.data))
+                    message.success("Đặt hàng thành công")
+                    navigate('/order')
+                }
             }
-            if (!r.status) {
+            else {
                 message.error("Đặt hàng thất bại")
                 return
             }
-            else {
-                message.success("Đặt hàng thành công")
-                navigate('/order')
-            }
+
         }
     }
 

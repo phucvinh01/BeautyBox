@@ -25,6 +25,7 @@ import Checkout from './pages/Checkout'
 import Profile from './pages/Profile'
 import Distributor from './pages/Admin/pages/Distributor'
 import Login from './pages/Admin/pages/Login'
+import Detail from './pages/Detail'
 function App() {
 
   const dispatch = useDispatch()
@@ -69,6 +70,7 @@ function App() {
           <Route path='checkout/:id' element={ <Checkout /> } />
           <Route path="profile" element={ <Profile /> } />
           <Route path="order" element={ <Orders /> } />
+          <Route path="product/:slug" element={ <Detail /> } />
           <Route path="*" element={ <ErrorPage /> } />
         </Route>
         <Route path="login-manager" element={ <Login /> } />

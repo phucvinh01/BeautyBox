@@ -27,7 +27,7 @@ const Home = () => {
 
     useEffect(() => {
         if (cate) {
-            setCategories(cate?.slice(4))
+            setCategories(cate.length > 0 && cate?.slice(4))
         }
     }, [cate]);
 

@@ -1,6 +1,17 @@
 const productController = require("../controllers/productController");
-
+const multer = require('multer');
 const router = require("express").Router();
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // Đường dẫn lưu trữ cho file upload
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname); // Tên file sẽ được giữ nguyên
+    }
+});
+
+const upload = multer({ storage });
 
 //CRETAE
 router.post("/", productController.create);
@@ -27,7 +38,15 @@ router.post("/search/:name", productController.searchByName);
 router.put("/updateActive/:id", productController.updateStatus);
 
 router.put("/updateDiscount/:id", productController.updateDiscount);
+//Insert many
+router.post("/insertMany", upload.single('file'), productController.insertManyFromJSON);
 
+router.get("/product/:slug", productController.searchBySlug);
+//GET SALE BY PRODUCT
+router.get("/sales/product", productController.statisticSaleByProduct)
 
+router.get("/sales/month", productController.statisticSaleByMonth)
+
+router.get("/sale/get-least-most", productController.getLeastAndMost)
 
 module.exports = router;

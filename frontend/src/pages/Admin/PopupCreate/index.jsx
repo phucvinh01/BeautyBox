@@ -33,12 +33,19 @@ const PopupCreate = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        const popup = () => {
-            document.querySelector('.ant-modal-content')?.classList.add('popup');
-        };
-        if (isModalOpen) {
-            popup();
+        if (!isModalOpen) {
+            setName("")
+            setPriceIn(0)
+            setPriceSale(0)
+            setCategory("")
+            setBrand("")
+            setDescription("")
+            setImage("")
+            setDistrobutor("")
+            setStock(0)
+            setCollection("")
         }
+
     }, [isModalOpen]);
 
     const showModal = () => {

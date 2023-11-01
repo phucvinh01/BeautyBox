@@ -1,0 +1,86 @@
+.detail {
+  .detal-order__method {
+    padding: 10px;
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box padding-box,
+      linear-gradient(
+          90deg,
+          rgb(255, 212, 0) 0%,
+          rgb(199, 49, 48) 50.52%,
+          rgb(102, 54, 149) 99.61%
+        )
+        border-box border-box;
+
+    border-radius: 20px;
+  }
+  .input-quantity {
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 20px;
+
+    .btn.disabled,
+    .btn:disabled,
+    fieldset:disabled .btn {
+      pointer-events: stroke;
+      border: none;
+
+      &:hover {
+        cursor: no-drop;
+      }
+    }
+  }
+
+  input {
+    width: 30px;
+    text-align: center;
+    border: none;
+  }
+
+  .fs-16 {
+    font-size: 16px;
+  }
+  .fs-18 {
+    font-size: 18px;
+  }
+
+  .fs-20 {
+    font-size: 20px;
+  }
+
+  .fs-14 {
+    font-size: 14px;
+  }
+
+  .tag {
+    display: inline-block;
+    height: 19px;
+    width: auto;
+    background-color: rgb(199, 49, 48);
+    border-radius: 3px 4px 4px 3px;
+    border-left: 1px solid rgb(199, 49, 48);
+    margin-left: 19px;
+    position: relative;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 0px 10px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      transform-origin: left top;
+      transform: rotate(45deg);
+      background: rgb(199, 49, 48);
+      top: -1px;
+      left: 1px;
+      height: 15px;
+      width: 15px;
+      border-radius: 3px;
+    }
+  }
+  .rate {
+    .anticon svg {
+    display: inline-block;
+    font-size: 30px !important;
+}
+  }
+}

@@ -1,5 +1,7 @@
 const { Category } = require("../model/categoryModel");
 const { Product } = require("../model/productModel");
+const fs = require('fs');
+const { Order } = require('../model/orderModel')
 
 const productController = {
     //create
@@ -138,6 +140,254 @@ const productController = {
             });
         }
     },
-};
+    generateSlug: (name) => {
+        // const slug = name.toLowerCase().replace(/ /g, '-');
+        // const specialChars = "[^0-9a-zA-Z\\p{M}]+";
+        // const normalizedSlug = slug.normalize("NFD").replace(new RegExp(specialChars, "g"), "");
+        // return normalizedSlug;
+
+        const slug = name.toLowerCase();
+        // const specialChars = "[^0-9a-zA-Z\\p{M}]";
+        // const normalizedSlug = slug.normalize("NFD").replace(new RegExp(specialChars, "g"), "");
+        // return normalizedSlug.replace(/ /g, "-");
+        const specialChars = "[^0-9a-zA-Z\\p{M}]";
+        const normalizedSlug = slug.normalize("NFD").replace(new RegExp(specialChars, "g"), "");
+        return normalizedSlug.replace(/ /g, "-");
+
+        // text = text.replace(/[^a-zA-Z0-9]+/g, '-');
+        // text = text.toLowerCase();
+        // text = text.replace('--', '-');
+        // text = text.trim('-');
+        // return text;
+
+    },
+    insertManyFromJSON: async (req, res) => {
+        try {
+            const filePath = req.file.path;
+
+            const fileContent = fs.readFileSync(filePath, 'utf-8');
+
+            const products = JSON.parse(fileContent);
+
+            const productsWithSlug = products.map((product) => {
+                product.slug = productController.generateSlug(product.name);
+                return product;
+            });
+
+            await Product.insertMany(productsWithSlug);
+
+            res.json({ success: true });
+        } catch (error) {
+            console.error('Lỗi khi insertMany:', error);
+            res.status(500).json({ error: 'Lỗi khi insertMany.' });
+        }
+    },
+    searchBySlug: async (req, res) => {
+        try {
+            const product = await Product.findOne({ slug: req.params.slug });
+            if (!product) {
+                return res.status(404).json({ success: false, message: 'Product not found.' });
+            }
+            res.status(200).json({ success: true, data: product });
+        } catch (error) {
+            res.status(500).json({ message: 'Server error.' });
+        }
+    },
+
+    findById: async (id) => {
+        const product = await Product.findOne({ _id: id })
+        return product;
+    },
+
+    // statisticSaleByProduct: async (req, res) => {
+    //     try {
+    //         const orders = await Order.find({ status: 1 }).populate('cart.items.product');
+
+    //         const arr = [];
+
+    //         const revenueByProduct = {
+    //             "name": "",
+    //             "revenue": 0,
+    //             "id": "",
+    //             "quantity": 0
+    //         };
+
+    //         orders.forEach((order) => {
+    //             order.cart.items.forEach(async (item) => {
+    //                 const productId = item.productId;
+    //                 console.log(productId);
+    //                 const pro = await productController.findById(productId);
+    //                 console.log(pro);
+    //                 const quantity = item.quantity;
+    //                 const sellingPrice = pro.price;
+    //                 console.log(sellingPrice);
+    //                 const revenue = quantity * sellingPrice;
+    //                 console.log(revenue);
+    //                 if (revenueByProduct) {
+    //                     revenueByProduct.revenue += revenue;
+    //                     revenueByProduct.quantity += quantity;
+    //                     revenueByProduct.name = pro.name;
+    //                     revenueByProduct.id = pro._id;
+    //                     console.log(revenueByProduct);
+    //                     arr.push(revenueByProduct)
+
+    //                 } else {
+    //                     revenueByProduct[productId] = revenue;
+    //                     console.log(revenueByProduct);
+
+    //                 }
+    //             });
+    //         });
+    //         console.log(revenueByProduct);
+    //         res.status(200).json({ success: true, data: arr });
+
+    //     } catch (error) {
+    //         res.status(200).json({ success: false, data: error });
+
+    //     }
+    fetchData: async (order, accumulator) => {
+        for (const item of order.cart.items) {
+            const productId = item.productId;
+            const pro = await productController.findById(productId);
+            const quantity = item.quantity;
+            const sellingPrice = pro.price;
+            const revenue = quantity * sellingPrice;
+
+            const productRevenue = {
+                "name": pro.name,
+                "revenue": revenue,
+                "id": pro._id,
+                "quantity": quantity,
+                "slug": pro.slug,
+            };
+
+            const existingItemIndex = accumulator.findIndex((item) => item.slug === productRevenue.slug);
+            console.log(existingItemIndex);
+            console.log(accumulator);
+
+            if (existingItemIndex === -1) {
+                accumulator.push(productRevenue);
+            } else {
+                accumulator[existingItemIndex].quantity += quantity;
+                accumulator[existingItemIndex].revenue += revenue;
+            }
+        }
+    },
+    fetchAllData: async (orders) => {
+        const accumulator = [];
+        for (const order of orders) {
+            await productController.fetchData(order, accumulator);
+        }
+        return accumulator;
+    },
+
+    statisticSaleByProduct: async (req, res) => {
+        try {
+            const orders = await Order.find({ status: 1 }).populate('cart.items.product');
+            const arr = await productController.fetchAllData(orders);
+            res.status(200).json({ success: true, data: arr });
+        } catch (error) {
+            res.status(200).json({ success: false, data: error });
+        }
+    },
+
+    statisticSaleByMonth: async (req, res) => {
+        try {
+            const orders = await Order.find({ status: 1 });
+            const revenueByMonthYear = {};
+
+            orders.forEach((order) => {
+                const month = order.createdAt.getMonth() + 1;
+                const year = order.createdAt.getFullYear();
+                const monthYearKey = `${month}-${year}`;
+
+                if (revenueByMonthYear[monthYearKey]) {
+                    revenueByMonthYear[monthYearKey] += order.totalPrice;
+                } else {
+                    revenueByMonthYear[monthYearKey] = order.totalPrice;
+                }
+            });
+
+            res.status(200).json({ success: true, data: revenueByMonthYear });
+        } catch (error) {
+            res.status(200).json({ success: false, data: error });
+        }
+    },
+    getMostSoldProduct: async () => {
+        try {
+            const mostSoldProduct = await Order.aggregate([
+                { $unwind: "$cart.items" },
+                {
+                    $group: {
+                        _id: "$cart.items.productId",
+                        totalQuantity: { $sum: "$cart.items.quantity" },
+                        quantity: { $first: "$cart.items.quantity" }, // Số lượng sản phẩm trong mục đầu tiên
+                    },
+                },
+                { $sort: { totalQuantity: -1 } },
+                { $limit: 1 },
+            ]);
+
+            if (mostSoldProduct.length > 0) {
+                const productId = mostSoldProduct[0]._id;
+                const product = await Product.findById(productId);
+                const mostSoldQuantity = mostSoldProduct[0].totalQuantity;
+                const data = {
+                    product: product,
+                    quantity: mostSoldQuantity
+                }
+                return data;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            throw error;
+        }
+    },
+    getLeastSoldProduct: async () => {
+        try {
+            const leastSoldProduct = await Order.aggregate([
+                { $unwind: "$cart.items" },
+                {
+                    $group: {
+                        _id: "$cart.items.productId",
+                        totalQuantity: { $sum: "$cart.items.quantity" },
+                        quantity: { $first: "$cart.items.quantity" }, // Số lượng sản phẩm trong mục đầu tiên
+                    },
+                },
+                { $sort: { totalQuantity: 1 } },
+                { $limit: 1 },
+            ]);
+
+            if (leastSoldProduct.length > 0) {
+                const productId = leastSoldProduct[0]._id;
+                const product = await Product.findById(productId);
+                const leastSoldQuantity = leastSoldProduct[0].totalQuantity;
+                const data = {
+                    product: product,
+                    quantity: leastSoldQuantity
+                } // Thêm trường quantity vào đối tượng product
+                return data;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getLeastAndMost: async (req, res) => {
+        try {
+            const mostSoldProduct = await productController.getMostSoldProduct();
+            const leastSoldProduct = await productController.getLeastSoldProduct();
+            res.status(200).json({ success: true, data: { mostSoldProduct, leastSoldProduct } });
+        }
+        catch {
+            res.status(200).json({ success: false, data: { mostSoldProduct: null, leastSoldProduct: null } });
+        }
+    }
+
+
+}
 
 module.exports = productController;

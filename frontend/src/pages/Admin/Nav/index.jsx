@@ -13,6 +13,12 @@ const Nav = () => {
                 <div className='position-sticky'>
                     <div className='list-group list-group-flush mx-3 mt-4'>
                         <NavItem
+                            icon={ 'fa-solid fa-chart-line fa-fw me-3' }
+                            title={ 'Doanh thu' }
+                            href={ '/admin/sale' }
+
+                        />
+                        <NavItem
                             icon={ 'fa-brands fa-product-hunt fa-fw me-3' }
                             title={ 'Sản Phẩm' }
                             href={ '/admin/product' }
@@ -25,7 +31,7 @@ const Nav = () => {
 
                         />
                         {
-                            user.account.role > 1 && <NavItem
+                            user?.account?.role > 1 && <NavItem
                                 icon={ 'fas fa-users fa-fw me-3' }
                                 title={ 'Nhân viên' }
                                 href={ '/admin/employee' }

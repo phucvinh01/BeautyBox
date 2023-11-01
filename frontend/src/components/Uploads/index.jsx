@@ -39,16 +39,16 @@ function Upload(props) {
     return (
         <>
 
-            <div style={{ height: "232px" }}>
-                {error && <><p>{error}</p></>}
-                {preview && <img id='imgUpload' className='rounded-2 z-3 position-absolute' style={{ height: "232px", width: "210px" }} src={preview} />}
+            <div style={ { height: "232px" } }>
+                { error && <><p>{ error }</p></> }
+                { preview && <img id='imgUpload' className='rounded-2 z-3 position-absolute' style={ { height: "232px", width: "210px" } } src={ preview } /> }
             </div>
             <input id='inputFile' type="file" className='w-100'
-                onChange={(event) => {
+                onChange={ (event) => {
                     // setImage(event.target.files[0])
                     handleUpload(event.target.files[0], event.target.files[0].type)
 
-                }}
+                } }
 
             />
 

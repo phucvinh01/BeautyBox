@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { Decimal128 } = mongoose.Schema.Types;
 const productSchema = new mongoose.Schema(
     {
         name: {
@@ -49,10 +48,12 @@ const productSchema = new mongoose.Schema(
             type: Boolean,
             default: true
         },
+        slug: {
+            type: String
+        },
         collections: [
             {
-                type: mongoose.Types.ObjectId,
-                ref: "Review",
+                type: String,
             },
         ],
         reviews: [
@@ -65,6 +66,7 @@ const productSchema = new mongoose.Schema(
     { timestamps: true }
 
 );
+
 
 
 let Product = mongoose.model("product", productSchema);

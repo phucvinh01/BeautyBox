@@ -12,9 +12,7 @@ const orderController = {
             const totalPrice = req.body.totalPrice
             const note = req.body.note
             const methodShip = req.body.methodShip
-            console.log("check userId", userId);
             let user = await User.findById(userId)
-            console.log("check user order", user);
             if (!user) {
                 res.status(200).json({ status: false, message: "user not found" })
             }
@@ -28,15 +26,25 @@ const orderController = {
                     methodShip: methodShip
                 }
                 let order = new Order(orderData)
-                if (order.save()) {
+                console.log(order.cart.items);
+                for (let i = 0; i < cart.items.length; i++) {
+                    let product = await Product.findById(cart.items[i].productId)
+                    console.log(product);
+                    if (product.in_stock >= cart.items[i].quantity) {
+                        product.in_stock -= cart.items[i].quantity
+                        await product.save()
+                    } else {
+                        return res.status(200).json({ status: false, message: "Product not in stock" })
+                    }
+                }
+                const savedOrder = await order.save()
+                if (savedOrder) {
                     res.status(200).json({ status: true, message: "Successfull" })
                 }
             }
-
-
         }
         catch (err) {
-            res.status(200).json({ status: false, message: 'Unsuccessfull' })
+            res.status(200).json({ status: false, message: err })
         }
 
     },

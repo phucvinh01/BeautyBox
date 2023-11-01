@@ -54,16 +54,19 @@ const SearchBox = () => {
     };
     const menu = (
         <>
-            <div>
+            <div className='bg-white p-3'>
                 { searchResults?.length > 0 ?
                     searchResults?.map((result) => {
                         return (
                             <>
-                                <div key={ result.id }>
-                                    <Space>
-                                        <img src={ result.img } width={ 60 }></img>
-                                        <p>{ result.name }</p>
-                                    </Space>
+                                <div key={ result.id } >
+                                    <Link className='text-dark' to={ `/product/${result.slug}` } >
+                                        <Space >
+                                            <img src={ result.img } width={ 60 }></img>
+                                            <p>{ result.name }</p>
+                                        </Space>
+                                    </Link>
+
                                 </div>
                             </>
 
@@ -72,7 +75,7 @@ const SearchBox = () => {
                     :
                     listDataSearch?.map((result) => {
                         return (
-                            <div className='p-1'>
+                            <div className='p-2 '>
                                 <NavLink className={ "text-dark" } key={ result.id } to={ result.path } >{ result.name }</NavLink>
                             </div>
                         )

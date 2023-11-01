@@ -14,7 +14,7 @@ const SlideNewProduct = () => {
     const [data, setData] = useState([])
     useEffect(() => {
         if (products) {
-            setData(products?.slice(5))
+            setData(products.length > 0 && products?.slice(5))
         }
     }, [products])
 
@@ -31,12 +31,12 @@ const SlideNewProduct = () => {
                 {
                     data?.length && data.map((item, index) => {
                         return (
-                            <>
+                            <div key={ index }>
                                 <Product
                                     key={ index }
                                     { ...item }
                                 />
-                            </>
+                            </div>
                         )
                     })
                 }

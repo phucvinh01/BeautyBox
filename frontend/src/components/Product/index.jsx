@@ -98,7 +98,7 @@ const Product = (props) => {
                     </div>
                     <div
                         className='btn-quick'>
-                        <ModalDetail state={ props } />
+                        <ModalDetail state={ props } isAdmin={ false } />
                     </div>
                 </Card>
             </div>

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PopupCreate from '../PopupCreate';
 import Products from '../../../components/Products';
-import { useSelector } from 'react-redux';
-import { Button, Space } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Space, Spin, Upload, message } from 'antd';
 import TableProduct from '../../../components/TableProduct';
 import { CSVLink } from 'react-csv'
-import { ExportOutlined, DownloadOutlined } from '@ant-design/icons';
-
-
+import { ExportOutlined, DownloadOutlined, FileAddFilled, UploadOutlined, ImportOutlined, SelectOutlined } from '@ant-design/icons';
+import Axios from '../../../axios/Axios'
+import axios from 'axios';
+import { useDropzone } from 'react-dropzone';
+import { getProductList } from '../../../redux/api';
 const ProductAdmin = () => {
     const products = useSelector((state) => state.product.products.data);
     //console.log(products);
@@ -31,6 +33,48 @@ const ProductAdmin = () => {
             done()
         }
     }
+
+    const dispatch = useDispatch()
+    const [uploadedFile, setUploadedFile] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleFileUpload = async (file) => {
+
+    };
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        accept: '.json',
+        onDrop: (acceptedFiles) => {
+            setUploadedFile(acceptedFiles[0]);
+        }
+    });
+
+    const handleChange = (event) => {
+        const file = event.target.files[0];
+        setUploadedFile(file);
+    };
+
+    const handleUpload = async (file) => {
+        setIsLoading(true)
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+            const response = await Axios.post('/v1/product/insertMany', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            if (response.success) {
+                message.success("Thêm thành công")
+                setUploadedFile(null)
+                getProductList(dispatch);
+                setIsLoading(false)
+            }
+        } catch (error) {
+            message.error('Lỗi khi thêm dữ liệu:', error);
+            setIsLoading(false)
+        }
+    };
     return (
         <>
             <main >
@@ -45,6 +89,22 @@ const ProductAdmin = () => {
                                     onClick={ getDataExport }
                                 >Download</CSVLink>
                             </Button>
+                            <div { ...getRootProps() }>
+                                <input { ...getInputProps() } type='file' className='form-control' accept="application/json" onChange={ handleChange } />
+                                <Button icon={ <SelectOutlined /> } type='text'>
+                                    { uploadedFile ? uploadedFile.name : 'Kéo và thả tệp JSON vào đây...' }
+                                </Button>
+                            </div>
+                            <Button disabled={ !uploadedFile ? true : false } onClick={ () => handleUpload(uploadedFile) }>
+                                <UploadOutlined /> { isLoading ? <Spin /> : "Tải lên" }
+                            </Button>
+
+                            {/* <Space>
+                                <input type='file' onChange={ (event) => setUploadedFile(event.target.files[0]) } />
+                                {
+                                    uploadedFile && <Button onClick={ handleUpload } icon={ <ImportOutlined /> }>Tải lên</Button>
+                                }
+                            </Space> */}
                         </Space>
                         <TableProduct />
                     </Space>
