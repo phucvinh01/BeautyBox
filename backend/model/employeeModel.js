@@ -7,7 +7,8 @@ const EmployeeSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -41,6 +42,11 @@ const EmployeeSchema = new mongoose.Schema({
         lastLogin: {
             type: Date
         },
+    },
+    CICard: {
+        type: String,
+        required: true,
+        unique: true
     }
 });
 

@@ -9,7 +9,6 @@ const EmployeeController = {
             const email = req.body.email;
             const password = req.body.password;
             const Emp = await Employee.findOne({ email: email })
-            console.log(Emp);
             if (!Emp) {
                 return res.status(201).json({ Ok: false, message: 'Email không tồn tại' });
             }
@@ -79,6 +78,56 @@ const EmployeeController = {
         } catch (error) {
             res.status(400).json({
                 status: false,
+                message: error
+            });
+        }
+    },
+    editEmployee: async (req, res) => {
+        try {
+            const id = req.params.id
+            const body = req.body
+            const emp = await Employee.findById(id)
+            const editEmp = await emp.updateOne(body)
+            if (editEmp) {
+                res.status(201).json({
+                    status: true,
+                    data: editEmp
+                });
+            }
+            else {
+                res.status(400).json({
+                    status: false,
+                    message: 'Employee not created'
+                });
+            }
+        } catch (error) {
+            res.status(400).json({
+                status: false,
+                message: error
+            });
+        }
+    },
+    editAccountActive: async (req, res) => {
+        try {
+            const id = req.params.id
+            const body = req.body
+            const emp = await Employee.findById(id)
+            const editEmp = await emp.updateOne(body)
+            if (editEmp) {
+                res.status(201).json({
+                    success: true,
+                    data: editEmp
+                });
+            }
+            else {
+                res.status(400).json({
+                    success: false,
+                    message: 'Employee not created'
+                });
+            }
+        } catch (error) {
+            res.status(400).json({
+                success: false,
                 message: error
             });
         }

@@ -2,7 +2,9 @@ import React, { useRef, useState } from 'react';
 import { Button, Input, Space, Table, Tag } from 'antd';
 import { useSelector } from 'react-redux';
 import moment from 'moment'
-import { ClearOutlined, EditFilled, HistoryOutlined, SearchOutlined } from '@ant-design/icons';
+import { BlockOutlined, ClearOutlined, EditFilled, HistoryOutlined, SearchOutlined } from '@ant-design/icons';
+import ModalEditEmp from '../ModalEditEmp';
+import ComfirmUpdateActiveAccount from '../ComfirmUpdateActiveAccount';
 
 
 const TableEmp = () => {
@@ -83,7 +85,7 @@ const TableEmp = () => {
     });
 
     const shouldRenderRow = (record) => {
-        return +record.account.role < 2;
+        return +record.account?.role !== 2;
     };
 
     const columns = [
@@ -111,6 +113,11 @@ const TableEmp = () => {
             key: 'address',
         },
         {
+            title: 'CCCD',
+            dataIndex: 'CICard',
+            key: 'CICard',
+        },
+        {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
@@ -126,24 +133,26 @@ const TableEmp = () => {
             title: 'Chức vụ',
             dataIndex: 'account',
             key: 'account',
-            render: (account) => <p>{ account.role >= 2 ? "Admin" : "Nhân viên" }</p>,
+            render: (account) => <p>{ account?.role >= 2 ? "Admin" : "Nhân viên" }</p>,
 
         },
         {
             title: 'Trạng thái tài khoản',
             dataIndex: 'account',
             key: 'account',
-            render: (account) => <p>{ account.isActive ? "Còn hoạt động" : "Khóa" }</p>,
+            render: (account) => <p>{ account?.isActive ? "Còn hoạt động" : "Khóa" }</p>,
 
         },
         {
             title: 'Action',
             key: 'action',
             render: (_, record) => (
-                <Space>
-                    <Button icon={ <EditFilled /> } />
-                    <Button icon={ <HistoryOutlined /> }></Button>
+                record.account.role < 2 && <Space>
+                    <ModalEditEmp data={ record } />
+                    <ComfirmUpdateActiveAccount id={ record._id } />
                 </Space>
+
+
             ),
         },
     ];

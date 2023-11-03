@@ -4,6 +4,10 @@ const router = require("express").Router();
 
 //CRETAE
 router.post("/create-emp", EmployeeController.createEmployee);
+//EDIT
+router.post("/edit-emp/:id", EmployeeController.editEmployee);
+//EDIT ACCOUNT
+router.post("/edit-active/:id", EmployeeController.editAccountActive);
 //GET
 router.get("/", EmployeeController.getAllEmp);
 //LOGIN

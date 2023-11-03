@@ -185,8 +185,9 @@ const productController = {
     searchBySlug: async (req, res) => {
         try {
             const product = await Product.findOne({ slug: req.params.slug });
+            console.log(product);
             if (!product) {
-                return res.status(404).json({ success: false, message: 'Product not found.' });
+                return res.status(200).json({ success: false, message: 'Product not found.' });
             }
             res.status(200).json({ success: true, data: product });
         } catch (error) {
@@ -283,9 +284,20 @@ const productController = {
 
     statisticSaleByProduct: async (req, res) => {
         try {
-            const orders = await Order.find({ status: 1 }).populate('cart.items.product');
-            const arr = await productController.fetchAllData(orders);
-            res.status(200).json({ success: true, data: arr });
+            const data = await Order.aggregate([
+                { $unwind: '$cart.items' },
+                {
+                    $group: {
+                        _id: '$cart.items.productId',
+                        productName: { $first: '$cart.items.name' },
+                        productImg: { $first: '$cart.items.img' },
+                        totalQuantity: { $sum: '$cart.items.quantity' },
+                        totalSale: { $sum: '$cart.items.total' },
+
+                    },
+                },
+            ])
+            res.status(200).json({ success: true, data: data });
         } catch (error) {
             res.status(200).json({ success: false, data: error });
         }
@@ -295,20 +307,23 @@ const productController = {
         try {
             const orders = await Order.find({ status: 1 });
             const revenueByMonthYear = {};
-
+            const data = {}
             orders.forEach((order) => {
                 const month = order.createdAt.getMonth() + 1;
                 const year = order.createdAt.getFullYear();
                 const monthYearKey = `${month}-${year}`;
 
+
                 if (revenueByMonthYear[monthYearKey]) {
                     revenueByMonthYear[monthYearKey] += order.totalPrice;
+                    data.price += order.totalPrice;
                 } else {
                     revenueByMonthYear[monthYearKey] = order.totalPrice;
+                    data.price = order.totalPrice;
                 }
             });
 
-            res.status(200).json({ success: true, data: revenueByMonthYear });
+            res.status(200).json({ success: true, data: data });
         } catch (error) {
             res.status(200).json({ success: false, data: error });
         }
@@ -375,7 +390,6 @@ const productController = {
             throw error;
         }
     },
-
     getLeastAndMost: async (req, res) => {
         try {
             const mostSoldProduct = await productController.getMostSoldProduct();
@@ -385,9 +399,124 @@ const productController = {
         catch {
             res.status(200).json({ success: false, data: { mostSoldProduct: null, leastSoldProduct: null } });
         }
+    },
+
+    sumQuantityProductSale: async (req, res) => {
+        try {
+            const result = await Order.aggregate([
+                { $unwind: '$cart.items' },
+                { $group: { _id: null, totalQuantity: { $sum: '$cart.items.quantity' } } },
+            ]);
+            res.status(200).json({ success: true, data: result });
+        } catch (err) {
+            res.status(200).json({ success: false, data: err });
+        }
+    },
+
+    getSaleEachMonth: async (req, res) => {
+        try {
+            const result = await Order.aggregate([
+                {
+                    $group: {
+                        _id: {
+                            $dateToString: { format: '%Y-%m', date: '$createdAt' },
+                        },
+                        totalRevenue: { $sum: '$totalPrice' },
+                    },
+                },
+                { $sort: { '_id': 1 } },
+            ])
+            res.status(200).json({ success: true, data: result });
+
+        } catch (error) {
+            res.status(200).json({ success: false, data: error });
+
+        }
+    },
+
+    getSaleByMonthYear: async (req, res) => {
+        try {
+            const month = req.body.month
+            const year = req.body.year
+
+            const startDate = new Date(year, month - 1, 1);
+            const endDate = new Date(year, month, 0);
+
+            const result = await Order.aggregate([
+                {
+                    $match: {
+                        createdAt: { $gte: startDate, $lte: endDate }, // Lọc theo thời gian từ ngày đầu tháng đến ngày cuối tháng
+                    },
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalRevenue: { $sum: '$totalPrice' }, // Tính tổng doanh thu
+                    },
+                },
+            ])
+            res.status(200).json({ success: true, data: result });
+
+        } catch (error) {
+            res.status(200).json({ success: false, data: error });
+
+        }
+    },
+
+    getSalesStatistics: async (req, res) => {
+        try {
+
+
+            const month = req.query.month;
+            const year = req.query.year;
+
+            const startDate = new Date(year, month - 1, 1);
+            const endDate = new Date(year, month, 0);
+
+            const data = await Order.aggregate([
+                { $unwind: '$cart.items' },
+                {
+                    $group: {
+                        _id: '$cart.items.productId',
+                        productName: { $first: '$cart.items.name' },
+                        productImg: { $first: '$cart.items.img' },
+                        totalQuantity: { $sum: '$cart.items.quantity' },
+                        totalSale: { $sum: '$cart.items.total' },
+                    },
+                },
+            ])
+
+            const result = await Order.aggregate([
+                {
+                    $match: {
+                        createdAt: { $gte: startDate, $lte: endDate },
+                    },
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalRevenue: { $sum: '$totalPrice' },
+                    },
+                },
+            ])
+
+            const totalQuantityResult = await Order.aggregate([
+                { $unwind: '$cart.items' },
+                { $group: { _id: null, totalQuantity: { $sum: '$cart.items.quantity' } } },
+            ]);
+
+            res.status(200).json({
+                success: true,
+                data: {
+                    productStats: data,
+                    totalRevenue: result[0].totalRevenue,
+                    totalQuantity: totalQuantityResult[0].totalQuantity,
+                },
+            });
+        } catch (error) {
+            res.status(200).json({ success: false, data: error });
+        }
     }
-
-
 }
 
 module.exports = productController;

@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, message } from 'antd';
-import { InsertRowLeftOutlined, PlusCircleFilled, SaveOutlined } from '@ant-design/icons';
-import { postCreateEmp } from '../../axios/EmpRequest';
+import { EditFilled, InsertRowLeftOutlined, PlusCircleFilled, SaveOutlined } from '@ant-design/icons';
+import { postCreateEmp, postEditEmp } from '../../axios/EmpRequest';
 import { getDataEmp } from '../../redux/api';
 import { useDispatch } from 'react-redux';
-const ModalCreateEmp = () => {
+import moment from 'moment'
+const ModalEditEmp = (props) => {
+
+    const { data } = props
 
     const dispatch = useDispatch()
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [id, setId] = useState("")
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setpassword] = useState("")
@@ -20,12 +24,24 @@ const ModalCreateEmp = () => {
     const [cICard, setCICard] = useState("")
     const [isFull, setIsFull] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    useEffect(() => {
+        setId(data._id)
+        setName(data.name)
+        setEmail(data.email)
+        setDateOfBirth(moment(data.dateOfBirth).format("YYYY-MM-DD"))
+        setHireDay(moment(data.hireDay).format("YYYY-MM-DD"))
+        setAddress(data.address)
+        setRole(data.account.role)
+        setPhone(data.phone)
+        setCICard(data.CICard)
+        setpassword(data.password)
+    }, [isModalOpen])
 
     useEffect(() => {
-        if (name && email, password, dateOfBirth, hireDay, address, role, phone) {
+        if (name && email, dateOfBirth, hireDay, address, role, phone) {
             setIsFull(true)
         }
-    }, [name, email, password, dateOfBirth, hireDay, address, role, phone])
+    }, [name, email, dateOfBirth, hireDay, address, role, phone])
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -36,12 +52,12 @@ const ModalCreateEmp = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+
     const handleSave = async () => {
         setIsLoading(true)
         let body = {
             name: name,
             email: email,
-            password: password,
             dateOfBirth: dateOfBirth,
             hireDay: hireDay,
             address: address,
@@ -53,16 +69,14 @@ const ModalCreateEmp = () => {
             phone: phone
         }
         console.log(body);
-        let r = await postCreateEmp(body)
-        console.log(r);
+        let r = await postEditEmp(id, body)
         if (r.status === 400) {
-            message.error(`Thêm nhân viên ${name} thất bại`)
+            message.error(`Chỉnh sửa nhân viên ${name} thất bại`)
             setIsLoading(false)
             return
-
         }
         else {
-            message.success(`Thêm nhân viên ${name} thành công`)
+            message.success(`Chỉnh sửa viên ${name} thành công`)
             setIsLoading(false)
             getDataEmp(dispatch)
             handleCancel()
@@ -70,11 +84,11 @@ const ModalCreateEmp = () => {
     }
     return (
         <>
-            <Button icon={ <PlusCircleFilled /> } onClick={ showModal }>
-                Thêm một nhân viên
+            <Button icon={ <EditFilled /> } onClick={ showModal }>
             </Button>
-            <Modal footer={ null } centered title="Thêm một nhân viên" open={ isModalOpen } onOk={ handleOk } onCancel={ handleCancel }>
+            <Modal footer={ null } centered title="Chỉnh sửa thông tin nhân viên" open={ isModalOpen } onOk={ handleOk } onCancel={ handleCancel }>
                 <div className='row'>
+                    <p >Mã nhân viên: <span className='text-danger'>{ id }</span></p>
                     <div className='col-lg-6 col-sm-12'>
                         <div className='mb-3'>
                             <label>Tên nhân viên</label>
@@ -104,7 +118,7 @@ const ModalCreateEmp = () => {
                         </div>
                         <div className='mb-3'>
                             <label>Mật khẩu</label>
-                            <input className='form-control' type='password' value={ password } onChange={ (e) => setpassword(e.target.value) } />
+                            <input disabled className='form-control' type='password' value={ password } onChange={ (e) => setpassword(e.target.value) } />
                         </div>
                         <div className='mb-3'>
                             <label>Chức vụ</label>
@@ -124,10 +138,10 @@ const ModalCreateEmp = () => {
                     </div>
                 </div>
                 <div className='d-flex justify-content-end'>
-                    <Button disabled={ !isFull ? true : false } loading={ isLoading ? true : false } onClick={ handleSave } icon={ <SaveOutlined /> } style={ { color: "white", backgroundColor: "black" } }>Thêm</Button>
+                    <Button disabled={ !isFull ? true : false } loading={ isLoading ? true : false } onClick={ handleSave } icon={ <SaveOutlined /> } style={ { color: "white", backgroundColor: "black" } }>Lưu</Button>
                 </div>
             </Modal>
         </>
     );
 };
-export default ModalCreateEmp;
+export default ModalEditEmp;

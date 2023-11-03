@@ -57,7 +57,7 @@ const RegisterPopup = () => {
                 email: email,
             }
             let res = await register(user)
-            if (res.status === 200) {
+            if (res && res.success) {
                 setTimeout(() => {
                     setLoading(false)
                 }, 2000)

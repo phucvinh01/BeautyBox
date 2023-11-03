@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import moment from 'moment'
 import formatCurrency from '../util/formatCurrency'
 import ModalDetailOrder from '../components/ModalDetailOrder/ModalDetailOrder'
+import { Helmet } from 'react-helmet'
 const Order = () => {
 
     const [orders, setOrders] = useState([])
@@ -74,6 +75,9 @@ const Order = () => {
     return (
         <>
             <div className='container  my-3'>
+                <Helmet>
+                    <title>Profile | Order</title>
+                </Helmet>
                 <div className='row'>
                     <div className='col-4'>
 

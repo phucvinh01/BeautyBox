@@ -2,6 +2,7 @@ import React, { useId } from 'react'
 import { Breadcrumb, Button, Card, Form, Input, message, Space } from 'antd';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 const Profile = () => {
     const user = useSelector((state) => state.auth.login.currentUser);
     const [form] = Form.useForm();
@@ -19,6 +20,9 @@ const Profile = () => {
     };
     return (
         <>
+            <Helmet>
+                <title>Profile | { user.lastName }</title>
+            </Helmet>
             <div className='container my-3'>
                 <div className='row'>
                     <div className='col-4'>

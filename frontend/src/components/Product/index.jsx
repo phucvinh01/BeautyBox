@@ -78,13 +78,29 @@ const Product = (props) => {
                             style={ { height: '200px' } }
                         />
                     }>
+                    {
+                        props?.discount > 0 && <div className='card-info-discount'>
+                            { props?.discount }%
+                        </div>
+                    }
+
                     <div className='card-content p-0 text-center'>
                         <div className='card-content-inner'>
                             <p className=''>{ props?.brand }</p>
                             <p className='card-content__decsrciption'>{ props?.name }</p>
-                            <p className='card-content__price'>
-                                { formatCurrency.format(props?.priceSale) }
-                            </p>
+                            <Space>
+                                {
+                                    props?.discount > 0 ? <><p className='card-content__price'>
+                                        { formatCurrency.format(props?.price) }
+                                    </p>
+                                        <p className='text-muted' style={ { "textDecorationLine": 'line-through' } }>
+                                            { formatCurrency.format(props?.priceSale) }
+                                        </p></> : <p className='card-content__price'>
+                                        { formatCurrency.format(props?.price) }
+                                    </p>
+                                }
+
+                            </Space>
                             { props?.user?.role !== 1 && (
                                 <div className='d-flex justify-content-center align-items-center gap-2'>
                                     <Rate

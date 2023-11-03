@@ -4,6 +4,7 @@ import { getProductByCategory } from '../axios/ProductRequest';
 import { useSelector } from 'react-redux';
 import Products from '../components/Products'
 import { Breadcrumb } from 'antd';
+import { Helmet } from 'react-helmet';
 
 const Category = () => {
 
@@ -25,6 +26,9 @@ const Category = () => {
 
     return (
         <>
+            <Helmet>
+                <title>Beauty Box | Thể loại</title>
+            </Helmet>
             <div className='container '>
                 <Breadcrumb className='mb-3'
                     items={ [

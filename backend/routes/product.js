@@ -49,4 +49,12 @@ router.get("/sales/month", productController.statisticSaleByMonth)
 
 router.get("/sale/get-least-most", productController.getLeastAndMost)
 
+router.get("/sale/count-quantity", productController.sumQuantityProductSale)
+
+router.get("/sale/eachMonth", productController.getSaleEachMonth)
+
+router.get("/sale/dailyMonth", productController.getSalesStatistics)
+
+
+
 module.exports = router;

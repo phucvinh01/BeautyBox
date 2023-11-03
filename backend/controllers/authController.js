@@ -25,9 +25,9 @@ const authController = {
                 password: hashedPassword,
             });
             const savedUser = await newUser.save();
-            res.status(200).json({ status: true, message: 'User created successfully', data: savedUser });
+            res.status(200).json({ success: true, message: 'User created successfully', data: savedUser });
         } catch (error) {
-            res.status(500).json({ status: false, message: 'Failed to create user' });
+            res.status(500).json({ success: false, message: 'Failed to create user' });
         }
     },
 

@@ -3,12 +3,16 @@ import Products from '../components/Products'
 import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 const Product = () => {
 
     const user = useSelector((state) => state.auth.login.currentUser);
     const products = useSelector((state) => state.product.products.data);
     return (
         <>
+            <Helmet>
+                <title>Beauty Box | Tất cả sản phẩm</title>
+            </Helmet>
             <div className='container'>
                 <Breadcrumb className='mb-3'
                     items={ [

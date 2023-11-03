@@ -60,6 +60,7 @@ const PopupCreate = () => {
 
     const handleClick = async () => {
         setLoading(true)
+
         let res = await cloudinary(image)
         if (res.statusText === "OK") {
             let result = await Axios.post('/v1/product/', {

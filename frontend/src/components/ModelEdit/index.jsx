@@ -1,4 +1,4 @@
-import { Input, Modal, Select, Spin } from 'antd';
+import { Input, Modal, Select, Spin, message } from 'antd';
 import React, { useEffect, useId, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Upload from '../Uploads';
@@ -11,6 +11,7 @@ import './modalEdit.scss'
 
 const ModalEdit = (props) => {
     const { handleCancel, openEdit, state } = props;
+    const distributors = useSelector((state) => state.distributor.distributor.data);
 
     const categories = useSelector((state) => state.category.category.data);
     const brands = useSelector((state) => state.brand.brand.data);
@@ -48,25 +49,45 @@ const ModalEdit = (props) => {
 
     const handleSubmit = async () => {
         setLoading(true);
-        let res = await cloudinary(image);
-        if (res.statusText === 'OK') {
+        if (image === state.img) {
             let result = await Axios.put('/v1/product/' + _id, {
                 name: name,
                 price: price,
                 description: description,
-                img: res.data.secure_url,
+                img: image,
                 brand: brand,
                 category: category,
             });
             if (result) {
-                toast.success('Update successful....');
+                message.error('Thêm sản phẩm thất bại');
                 handleCancel('EDIT');
                 getProductList(dispatch);
             }
-        } else {
-            toast.error('Insert Failed......');
         }
-        setLoading(false);
+        else {
+            let res = await cloudinary(image);
+            if (res.statusText === 'OK') {
+                let result = await Axios.put('/v1/product/' + _id, {
+                    name: name,
+                    price: price,
+                    description: description,
+                    img: res.data.secure_url,
+                    brand: brand,
+                    category: category,
+                });
+                if (result) {
+                    toast.success('Cập nhật sản phâmr thành công');
+                    handleCancel('EDIT');
+                    getProductList(dispatch);
+                }
+            } else {
+                message.error('Thêm sản phẩm thất bại');
+                setLoading(false);
+
+            }
+            setLoading(false);
+        }
+
     };
 
     return (

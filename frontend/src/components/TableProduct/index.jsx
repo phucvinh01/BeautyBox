@@ -42,6 +42,9 @@ const TableProduct = () => {
             dataIndex: 'in_stock',
             key: 'in_stock',
             sorter: (a, b) => a.in_stock - b.in_stock,
+            render: (in_stock) => (
+                +in_stock <= 50 ? <span className='text-danger animate__animated animate__flash'>{ in_stock }</span> : <span className='text-dark'>{ in_stock }</span>
+            ),
         },
         {
             title: 'Giá nhập',

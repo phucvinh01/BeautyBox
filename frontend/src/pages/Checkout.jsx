@@ -11,6 +11,7 @@ import { Breadcrumb, Radio } from 'antd';
 import { postNewOrder } from '../axios/OrderRequest'
 import { Empty } from '../axios/CartRequest';
 import { emptyCartSuccess } from '../redux/cartSlice';
+import { Helmet } from 'react-helmet';
 const Checkout = (props) => {
     const cart = useSelector((state) => state.cart.cart.data);
     const user = useSelector((state) => state.auth.login.currentUser);
@@ -113,6 +114,9 @@ const Checkout = (props) => {
     }, []);
     return (
         <div className='container mt-3'>
+            <Helmet>
+                <title> Thanh toán</title>
+            </Helmet>
             <Breadcrumb className='mb-3'
                 items={ [
                     {

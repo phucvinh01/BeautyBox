@@ -33,7 +33,7 @@ const TableOrder = (prop) => {
     console.log(moment().format('YYYY-MM-DD'));
 
     const rowClassName = (record) => {
-        return record.createdAt === moment().format('YYYY-MM-DD') ? 'highlight-row' : '';
+        return moment(record.createdAt).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD') ? 'highlight-row' : '';
     };
 
     const columns = [
@@ -73,7 +73,7 @@ const TableOrder = (prop) => {
             sorter: (a, b) => a.totalPrice - b.totalPrice,
             render: (_, { totalPrice }) => (
                 <>
-                    { <p className='text-danger text-end'>{ formatCurrency.format(totalPrice) }</p> }
+                    { <span className='text-danger'>{ formatCurrency.format(totalPrice) }</span> }
                 </>
             )
         },
@@ -82,7 +82,7 @@ const TableOrder = (prop) => {
             dataIndex: 'status',
             render: (_, { status }) => (
                 <>
-                    { status === 1 ? <span>Chờ xác nhận</span> : <span>Đang giao hàng</span> }
+                    { status === 0 ? <span>Chờ xác nhận</span> : <span>Đã xác nhận</span> }
                 </>
             )
         },
@@ -98,8 +98,10 @@ const TableOrder = (prop) => {
             key: 'action',
             render: (_, record) => (
                 <Space>
-                    <Button title='Check đã xác nhận đơn hàng' icon={ <CheckCircleFilled /> } />
-                    <Button title='Hủy đơn hàng' icon={ <CloseOutlined /> } />
+                    {
+                        record.status === 0 && <Button title='Check đã xác nhận đơn hàng' icon={ <CheckCircleFilled /> } />
+                    }
+                    <Button danger title='Hủy đơn hàng' icon={ <CloseOutlined /> } />
                 </Space>
             ),
         },
