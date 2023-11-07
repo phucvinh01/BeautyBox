@@ -5,6 +5,7 @@ import formatCurrency from '../../util/formatCurrency';
 import Axios from '../../axios/Axios'
 import ModalDetailOrder from '../ModalDetailOrder/ModalDetailOrder';
 import { CheckCircleFilled, CloseOutlined } from '@ant-design/icons';
+import ConfirmStatusOrder from '../ComfirmStatusOrder';
 
 
 const TableOrder = (prop) => {
@@ -99,7 +100,7 @@ const TableOrder = (prop) => {
             render: (_, record) => (
                 <Space>
                     {
-                        record.status === 0 && <Button title='Check đã xác nhận đơn hàng' icon={ <CheckCircleFilled /> } />
+                        record.status === 0 && <ConfirmStatusOrder />
                     }
                     <Button danger title='Hủy đơn hàng' icon={ <CloseOutlined /> } />
                 </Space>

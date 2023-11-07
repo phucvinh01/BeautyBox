@@ -32,7 +32,7 @@ const Header = () => {
 
     useEffect(() => {
         setUsers(user);
-        if (cate) {
+        if (cate && cate.length > 0) {
             setCategories(cate?.slice(0, 4))
         }
     }, [users, cate]);

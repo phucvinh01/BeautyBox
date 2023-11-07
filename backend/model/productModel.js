@@ -9,6 +9,9 @@ const productSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        brand: {
+            type: String,
+        },
         priceSale: {
             type: Number,
             required: true,
@@ -28,8 +31,16 @@ const productSchema = new mongoose.Schema(
             required: true,
         },
         discount: {
-            type: Number,
-            default: 0
+            number: {
+                type: Number,
+                default: 0
+            },
+            timeBegin: {
+                type: Date
+            },
+            timeEnd: {
+                type: Date
+            }
         },
         in_stock: {
             type: Number

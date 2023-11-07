@@ -129,7 +129,7 @@ const productController = {
     updateDiscount: async (req, res) => {
         try {
             const product = await Product.findById(req.params.id);
-            await product.updateOne({ $set: { price: req.body.price, discount: req.body.discount } });
+            await product.updateOne({ $set: { "price": req.body.price, "discount": req.body.discount } });
             res.status(200).json({
                 status: true,
             });
@@ -165,18 +165,23 @@ const productController = {
         try {
             const filePath = req.file.path;
 
+            //console.log(filePath);
+
             const fileContent = fs.readFileSync(filePath, 'utf-8');
 
             const products = JSON.parse(fileContent);
+
 
             const productsWithSlug = products.map((product) => {
                 product.slug = productController.generateSlug(product.name);
                 return product;
             });
 
-            await Product.insertMany(productsWithSlug);
+            const data = await Product.insertMany(productsWithSlug);
 
-            res.json({ success: true });
+            console.log("check data", data);
+
+            res.status(200).json({ success: true, data: data });
         } catch (error) {
             console.error('Lỗi khi insertMany:', error);
             res.status(500).json({ error: 'Lỗi khi insertMany.' });

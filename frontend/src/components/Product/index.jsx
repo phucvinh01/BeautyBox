@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Card, Rate, Button, Modal, Space } from 'antd';
+import { Card, Rate, Button, Modal, Space, Statistic } from 'antd';
 const { Meta } = Card;
 import './product.scss';
 import formatCurrency from '../../util/formatCurrency';
@@ -11,6 +11,7 @@ import { getProductList } from '../../redux/api';
 import { useDispatch, useSelector } from 'react-redux';
 import ModalEdit from '../ModelEdit';
 import ModalDetail from '../ModalDetail';
+const { Countdown } = Statistic;
 const Product = (props) => {
     const sumRating = _.sumBy(props.reviews && props.reviews, 'rating');
     const avg = _.round(sumRating / (props.reviews && props.reviews.length));
@@ -79,8 +80,8 @@ const Product = (props) => {
                         />
                     }>
                     {
-                        props?.discount > 0 && <div className='card-info-discount'>
-                            { props?.discount }%
+                        props?.discount?.number > 0 && <div className='card-info-discount'>
+                            { props?.discount?.number }%
                         </div>
                     }
 
@@ -116,6 +117,10 @@ const Product = (props) => {
                         className='btn-quick'>
                         <ModalDetail state={ props } isAdmin={ false } />
                     </div>
+                    {/* <div>
+                        <p>Thời gian còn lại</p>
+                        <Countdown title="Countdown" value={ props?.discount?.timeEnd } />
+                    </div> */}
                 </Card>
             </div>
         </>

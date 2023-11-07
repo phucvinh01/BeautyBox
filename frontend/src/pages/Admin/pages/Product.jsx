@@ -43,10 +43,13 @@ const ProductAdmin = () => {
     };
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        accept: '.json',
+        accept: 'application/json',
         onDrop: (acceptedFiles) => {
-            setUploadedFile(acceptedFiles[0]);
-        }
+            if (acceptedFiles.length > 0) {
+                const file = acceptedFiles[0];
+                setUploadedFile(file);
+            }
+        },
     });
 
     const handleChange = (event) => {
@@ -57,7 +60,10 @@ const ProductAdmin = () => {
     const handleUpload = async (file) => {
         setIsLoading(true)
         const formData = new FormData();
+        console.log(formData);
         formData.append('file', file);
+        console.log(file);
+        console.log(formData);
         try {
             const response = await Axios.post('/v1/product/insertMany', formData, {
                 headers: {

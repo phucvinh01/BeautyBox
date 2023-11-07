@@ -9,6 +9,11 @@ const EmployeeController = {
             const email = req.body.email;
             const password = req.body.password;
             const Emp = await Employee.findOne({ email: email })
+
+            if (!Emp.account.isActive) {
+                return res.status(201).json({ Ok: false, message: 'Tài khoản đã bị khóa' });
+            }
+
             if (!Emp) {
                 return res.status(201).json({ Ok: false, message: 'Email không tồn tại' });
             }
@@ -110,9 +115,10 @@ const EmployeeController = {
     editAccountActive: async (req, res) => {
         try {
             const id = req.params.id
-            const body = req.body
+            const isActive = req.body.isActive
             const emp = await Employee.findById(id)
-            const editEmp = await emp.updateOne(body)
+            const editEmp = await emp.updateOne({ "account.isActive": isActive })
+            console.log(editEmp);
             if (editEmp) {
                 res.status(201).json({
                     success: true,

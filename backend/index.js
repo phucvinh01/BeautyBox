@@ -15,12 +15,14 @@ const orderRoute = require("./routes/order");
 const distributorRoute = require("./routes/distributor")
 const collectionRoute = require("./routes/collection")
 const empRoute = require("./routes/emp")
+
+const { task } = require('./task/discountScheduler')
 dotenv.config();
 //CONNECT DATABASE
 
 const connect = async () => {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/Store');
+    await mongoose.connect('mongodb://127.0.0.1:27017/Store', { useNewUrlParser: true, useUnifiedTopology: true });
     console.log("MongoDB database connected");
   } catch (err) {
     console.log("MongoDB database connected failed");
@@ -51,6 +53,8 @@ app.use("/v1/distributor", distributorRoute)
 app.use("/v1/collection", collectionRoute)
 
 app.use("/v1/emp", empRoute)
+
+task.start()
 
 
 

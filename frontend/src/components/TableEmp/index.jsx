@@ -147,9 +147,9 @@ const TableEmp = () => {
             title: 'Action',
             key: 'action',
             render: (_, record) => (
-                record.account.role < 2 && <Space>
+                record.account?.role < 2 && <Space>
                     <ModalEditEmp data={ record } />
-                    <ComfirmUpdateActiveAccount id={ record._id } />
+                    <ComfirmUpdateActiveAccount id={ record._id } isActive={ record.account?.isActive } />
                 </Space>
 
 

@@ -58,7 +58,7 @@ const ModalDetail = (props) => {
                             <Space size={ "large" } align='center' >
                                 <p className='fs-20 fw-bolder'>{ formatCurrency.format(state.price) }</p>
                                 <p className='fs-18 text-muted' style={ { textDecorationLine: "line-through" } }>{ formatCurrency.format(state.priceSale) }</p>
-                                <div className='tag'>{ state.discount }%</div>
+                                <div className='tag'>{ state.discount?.number }%</div>
                             </Space>
                             <div className='detal-order__method mb-3 fs-14'>
                                 <h6>Hình thức mua hàng</h6>

@@ -12,7 +12,8 @@ router.get("/", orderController.getAll);
 //GET ONE
 router.get("/:id", orderController.getById);
 
-//GET TOP 5
+//CONFRIM
+router.put("/confrim-order/:id", orderController.updateConfirmOrderAndSentEmail)
 
 router.get("/get-top-5-user", orderController.getTopCustomerOrder)
 
