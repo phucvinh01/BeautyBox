@@ -15,6 +15,10 @@ import { getCollectionFailed, getCollectionStart, getCollectionSuccess } from '.
 import { getCollectionList } from '../axios/CollectionRequest'
 import { getEmpFailed, getEmpStart, getEmpSuccess } from './empSlice'
 import { getAllEmp } from '../axios/EmpRequest'
+import { getOrderFailed, getOrderStart, getOrderSuccess } from './orderSlice'
+import { getAllOrder } from '../axios/OrderRequest'
+import { getReviewFailed, getReviewStart, getReviewSuccess } from './reviewSlice'
+import { getReviewByProductId } from '../axios/ReviewRequest'
 
 export const login = async (user, dispatch, navigate) => {
     dispatch(loginStart());
@@ -182,6 +186,33 @@ export const getDataEmp = async (dispatch) => {
     }
     catch (err) {
         dispatch(getEmpFailed())
+    }
+}
+
+export const getOrder = async (dispatch) => {
+    dispatch(getOrderStart());
+    try {
+        const res = await getAllOrder()
+        if (res.status) {
+            dispatch(getOrderSuccess(res.data))
+        }
+    }
+    catch (err) {
+        dispatch(getOrderFailed())
+    }
+}
+
+export const getReview = async (dispatch, id) => {
+    dispatch(getReviewStart());
+    try {
+        const res = await getReviewByProductId(id)
+        console.log(res);
+        if (res.success) {
+            dispatch(getReviewSuccess(res.data))
+        }
+    }
+    catch (err) {
+        dispatch(getReviewFailed())
     }
 }
 

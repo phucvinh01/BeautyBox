@@ -4,23 +4,17 @@ import { CSVLink } from 'react-csv'
 import { ExportOutlined } from '@ant-design/icons';
 import { getAllOrder } from '../../../axios/OrderRequest';
 import TableOrder from '../../../components/TableOrder';
+import { useDispatch } from 'react-redux'
+import { getOrder } from '../../../redux/api';
 const Order = () => {
     const [dataExport, setdataExport] = useState([])
-    const [data, setData] = useState([])
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        getDataOrder()
+        getOrder(dispatch)
     }, [])
 
-    const getDataOrder = async () => {
-        let r = await getAllOrder()
-        if (r.status) {
-            setData(r.data)
-        }
-        else {
-            message.error("Lấy danh sách order thất bại")
-        }
-    }
+
 
     const getDataExport = (event, done) => {
         let r = []
@@ -55,7 +49,7 @@ const Order = () => {
                     </Button>
                 </Space>
                 <section className='mt-3'>
-                    <TableOrder data={ data } />
+                    <TableOrder />
                 </section>
             </div>
 

@@ -13,6 +13,10 @@ const getAllOrder = () => {
     return Axios.get(`/v1/order/`)
 }
 
+const putConfirmOrder = (id) => {
+    return Axios.put(`/v1/order/confrim-order/${id}`)
+}
 
 
-export { postNewOrder, getOrderByUser, getAllOrder }
+
+export { postNewOrder, getOrderByUser, getAllOrder, putConfirmOrder }

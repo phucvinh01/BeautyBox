@@ -131,7 +131,8 @@ const orderController = {
 
         try {
             let id = req.params.id;
-
+            const imageWidth = 300;
+            const imageHeight = 200;
             const updateOrder = await Order.findOneAndUpdate({ _id: id }, { 'status': 1 })
 
             if (updateOrder) {
@@ -143,23 +144,32 @@ const orderController = {
 
             const user = await User.findById(updateOrder.userId)
 
-            console.log(user);
 
             const transporter = nodemailer.createTransport({
-                host: 'smtp.elasticemail.com',
-                port: 2525,
+                // host: 'smtp.elasticemail.com',
+                // port: 2525,
+                // auth: {
+                //     user: 'beautyboxsetmail@gmail.com',
+                //     pass: 'B2ACF07570768953B98E811D78A0F9BB18AD',
+                // },
+                host: 'smtp-mail.outlook.com',
+                port: 587,
+                secure: false, // true nếu sử dụng cổng 465
                 auth: {
-                    user: 'beautyboxsetmail@gmail.com',
-                    pass: 'B2ACF07570768953B98E811D78A0F9BB18AD',
+                    user: 'omogo2002@gmail.com',
+                    pass: '2001200636Th4_'
                 },
+                tls: {
+                    ciphers: 'SSLv3'
+                }
             });
 
             const mailOptions = {
-                from: 'beautyboxsentmail@gmail.com',
-                to: 'omogo2002@gmail.com',
+                from: 'omogo2002@gmail.com',
+                to: user.email,
                 subject: 'Xác nhận đơn hàng',
                 html: `<div>
-                    <h1>Xin chào ${user.email} }</h1>
+                    <h1>Xin chào ${user.email} </h1>
                     <h3>Đơn hàng đặt của bạn được đã được xác nhận, chúng tôi sẽ tiến hành soạn đơn và gữi cho nhà vận chuyển</h3>
                     <p>Cảm ơn bạn đã mua hàng tại cửa hàng</p>
                     <h4>Thông tin đơn hàng</h4>
@@ -167,8 +177,8 @@ const orderController = {
                     ${updateOrder.cart.items?.map((item) => {
                     return `
                         <div>
-                            <img src="${item.img}" alt="img" />
-                            <span>Tên sản phẩm: ${item.name}</span><br />
+                            <img width="${imageWidth}" height="${imageHeight}" src="${item.img}" alt="${item.img}" />
+                            <p>Tên sản phẩm: ${item.name}</p><br />
                             <p>Số lượng: ${item.quantity}</p>
                             <strong>Giá: ${item.price}</strong>
                         </div>

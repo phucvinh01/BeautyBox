@@ -1,4 +1,5 @@
 const productController = require("../controllers/productController");
+const reviewController = require("../controllers/reviewController")
 const multer = require('multer');
 const router = require("express").Router();
 
@@ -55,6 +56,9 @@ router.get("/sale/eachMonth", productController.getSaleEachMonth)
 
 router.get("/sale/dailyMonth", productController.getSalesStatistics)
 
+router.post("/create-review/", reviewController.createReview)
+
+router.get("/review/:id", reviewController.getReviewByProduct)
 
 
 module.exports = router;

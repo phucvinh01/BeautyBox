@@ -60,7 +60,7 @@ const Order = () => {
             dataIndex: 'status',
             render: (_, { status }) => (
                 <>
-                    { status === 1 ? <span>Chờ xác nhận</span> : <span>Đang giao hàng</span> }
+                    { status === 0 ? <span>Chờ xác nhận</span> : <span>Đang giao hàng</span> }
                 </>
             )
         },

@@ -6,10 +6,12 @@ import Axios from '../../axios/Axios'
 import ModalDetailOrder from '../ModalDetailOrder/ModalDetailOrder';
 import { CheckCircleFilled, CloseOutlined } from '@ant-design/icons';
 import ConfirmStatusOrder from '../ComfirmStatusOrder';
+import { useSelector } from 'react-redux';
 
 
 const TableOrder = (prop) => {
 
+    const data = useSelector((state) => state.order.order.data);
     const [userList, setUserList] = useState([])
 
     useEffect(() => {
@@ -29,7 +31,6 @@ const TableOrder = (prop) => {
     }
 
 
-    const { data } = prop
 
     console.log(moment().format('YYYY-MM-DD'));
 
@@ -50,7 +51,6 @@ const TableOrder = (prop) => {
         {
             title: 'Ngày đặt hàng',
             dataIndex: 'createdAt',
-            defaultSortOrder: 'descend',
             sorter: (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt),
             render: (_, { createdAt }) => (
                 <>
@@ -70,7 +70,6 @@ const TableOrder = (prop) => {
         {
             title: 'Trị giá',
             dataIndex: 'totalPrice',
-            defaultSortOrder: 'descend',
             sorter: (a, b) => a.totalPrice - b.totalPrice,
             render: (_, { totalPrice }) => (
                 <>
@@ -100,7 +99,7 @@ const TableOrder = (prop) => {
             render: (_, record) => (
                 <Space>
                     {
-                        record.status === 0 && <ConfirmStatusOrder />
+                        record.status === 0 && <ConfirmStatusOrder id={ record._id } />
                     }
                     <Button danger title='Hủy đơn hàng' icon={ <CloseOutlined /> } />
                 </Space>

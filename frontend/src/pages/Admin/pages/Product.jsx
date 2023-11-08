@@ -11,6 +11,11 @@ import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import { getProductList } from '../../../redux/api';
 const ProductAdmin = () => {
+
+    useEffect(() => {
+        getProductList(dispatch)
+    }, [])
+
     const products = useSelector((state) => state.product.products.data);
     //console.log(products);
     const [dataExport, setdataExport] = useState([])
