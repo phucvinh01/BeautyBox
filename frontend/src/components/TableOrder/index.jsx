@@ -101,7 +101,7 @@ const TableOrder = (prop) => {
                     {
                         record.status === 0 && <ConfirmStatusOrder id={ record._id } />
                     }
-                    <Button danger title='Hủy đơn hàng' icon={ <CloseOutlined /> } />
+                    {/* <Button danger title='Hủy đơn hàng' icon={ <CloseOutlined /> } /> */ }
                 </Space>
             ),
         },

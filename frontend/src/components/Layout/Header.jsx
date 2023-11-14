@@ -100,27 +100,31 @@ const Header = () => {
                                     className='w-100'
                                     src='https://image.hsv-tech.io/300x0/bbx/common/50a26167-9341-4be8-8aba-9682d3b4a916.webp'></img>
                             </div>
-                            <div className='col-lg-6 hidden-sm'>
+                            <div className='col-lg-6 search'>
                                 <SearchBox />
                             </div>
-                            <div className='col-lg-2 hidden-sm'>
+                            <div className='col-lg-2 '>
                                 <div className='d-flex gap-0 justify-content-end gap-1' style={ { cursor: "pointer" } }>
                                     { user ? (
-                                        <Dropdown
-                                            placement="bottom"
-                                            trigger={ ['click'] }
-                                            menu={ {
-                                                items,
-                                            } }>
-                                            <div className='d-flex gap-2 align-items-center'>
-                                                <i className='fa-solid fa-circle-user'></i>
-                                                <span className='mx-1 '>{ user.lastName }</span>
-                                            </div>
-                                        </Dropdown>
+                                        <div >
+                                            <Dropdown
+                                                placement="bottom"
+                                                trigger={ ['click'] }
+                                                menu={ {
+                                                    items,
+                                                } }>
+                                                <div className='d-flex gap-2 align-items-center'>
+                                                    <i className='fa-solid fa-circle-user'></i>
+                                                    <span className='mx-1 '>{ user.lastName }</span>
+                                                </div>
+                                            </Dropdown>
+                                        </div>
                                     ) : (
-                                        <LoginPopup />
+                                        <div className='login'>
+                                            <LoginPopup />
+                                        </div>
                                     ) }
-                                    <div hidden={ hideCart ? true : false }>
+                                    <div hidden={ hideCart ? true : false } className='cart'>
                                         <Badge count={ cart?.items?.length } size='small'>
                                             <button
                                                 className='btn'

@@ -43,10 +43,10 @@ const ModalDetail = (props) => {
             <Button icon={ isAdmin && <EyeFilled /> } onClick={ handleShow } className='btn-quick'>{ isAdmin ? "" : "Xem nhanh" }</Button>
             <Modal width={ 1000 } centered open={ open } onOk={ handleOk } onCancel={ onCancel } className='modal-detail' footer={ false }>
                 <div className='row p-2'>
-                    <div className='col-4'>
+                    <div className='col-lg-4 col-md-12 col-sm-12'>
                         <img className='w-100' src={ state.img } alt='>state'></img>
                     </div>
-                    <div className='col-8'>
+                    <div className='col-lg-8 col-md-12 col-sm-12'>
                         <Space direction='vertical'>
                             <p className='text-danger fs-16'>{ state.brand }</p>
                             <p className='fs-20'>{ state.name }</p>

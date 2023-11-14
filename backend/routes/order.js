@@ -17,4 +17,9 @@ router.put("/confrim-order/:id", orderController.updateConfirmOrderAndSentEmail)
 
 router.get("/get-top-5-user", orderController.getTopCustomerOrder)
 
+
+router.post("/vnpay/create-payment", orderController.createPayment)
+
+router.get('/vnpay_return', orderController.getUrlReturn)
+
 module.exports = router;

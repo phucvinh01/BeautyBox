@@ -37,10 +37,10 @@ const Home = () => {
                 {/* banener */ }
                 <section>
                     <div className='row'>
-                        <div className='col-8'>
+                        <div className='col-lg-8 col-md-6 col-sm-12'>
                             <BannerSlide />
                         </div>
-                        <div className='col-4'>
+                        <div className='col-lg-4 col-md-6 col-sm-12'>
                             <div className='mb-2 rounded'>
                                 <img className='rounded w-100' src='https://image.hsv-tech.io/1920x0/bbx/common/63f285de-8b04-4ff7-b7ee-820cbd34db9a.webp' ></img>
                             </div>
@@ -65,7 +65,7 @@ const Home = () => {
                     </div>
                 </section>
 
-                <section>
+                <section className='list-cate'>
                     <h3 className='text-center'>DANH MỤC NỔI BẬT</h3>
                     <Row>
                         {

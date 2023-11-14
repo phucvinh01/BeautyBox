@@ -4,20 +4,9 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 const Profile = () => {
+
     const user = useSelector((state) => state.auth.login.currentUser);
-    const [form] = Form.useForm();
     const id = useId()
-    const onFinish = () => {
-        message.success('Submit success!');
-    };
-    const onFinishFailed = () => {
-        message.error('Submit failed!');
-    };
-    const onFill = () => {
-        form.setFieldsValue({
-            url: 'https://taobao.com/',
-        });
-    };
     return (
         <>
             <Helmet>

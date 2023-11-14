@@ -64,3 +64,9 @@
   .box-gmail-input:hover {
     border: 2px solid white;
   }
+
+  @media only screen and (max-width: 600px) {
+  .box-gmail-input {
+    width: 100%;
+  }
+}

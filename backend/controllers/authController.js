@@ -87,7 +87,6 @@ const authController = {
 
     refresh: async (req, res) => {
 
-
         const refeshToken = req.cookies.refreshToken
 
         if (!refeshToken) {

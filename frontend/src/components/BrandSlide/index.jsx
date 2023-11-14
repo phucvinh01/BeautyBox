@@ -13,17 +13,43 @@ const BrandSlider = () => {
         slidesToScroll: 4,
         speed: 1000,
         cssEase: "linear",
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    initialSlide: 1
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
     };
 
     return (
         <div className='mb-3'>
             <div className='brand-slide'>
-                <Slider {...settings}>
+                <Slider { ...settings }>
                     {
                         brands?.length > 0 && brands.map((item, index) => {
                             return (
-                                <div key={index} className='slide-brand-item'>
-                                    <img src={item.logo}></img>
+                                <div key={ index } className='slide-brand-item '>
+                                    <img className='w-100' src={ item.logo }></img>
                                 </div>
                             )
                         })

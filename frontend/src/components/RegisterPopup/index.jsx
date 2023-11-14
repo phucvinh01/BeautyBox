@@ -81,6 +81,7 @@ const RegisterPopup = () => {
                 Register
             </button>
             <Modal
+                width={ 500 }
                 className='register-form'
                 open={ isModalOpen }
                 footer={ null }

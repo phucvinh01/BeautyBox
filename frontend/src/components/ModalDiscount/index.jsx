@@ -13,21 +13,27 @@ const ModalDiscount = (props) => {
     const dispatch = useDispatch()
     const timeBeginRef = useRef()
     const timeEndRef = useRef()
+    const inputNumberRef = useRef()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [discount, setDiscount] = useState(0)
     const [timeBegin, setTimeBegin] = useState("")
     const [timeEnd, setTimeEnd] = useState("")
     const [priceDiscout, setPriceDiscount] = useState(0)
     const [pirceSale, setPriceSale] = useState(0)
+    const [priceIn, setPriceIn] = useState(0)
+    const [disabled, setDisable] = useState(false)
 
     useEffect(() => {
         if (isModalOpen) {
             setPriceDiscount(state.price)
             setDiscount(state.discount.number)
             setPriceSale(state.priceSale)
+            setPriceIn(state.priceIn)
             setTimeBegin(moment(state.discount?.timeBegin).format('YYYY-MM-DDTHH:mm'))
             setTimeEnd(moment(state.discount?.timeEnd).format('YYYY-MM-DDTHH:mm'))
         }
+
+
 
     }, [isModalOpen])
 
@@ -78,6 +84,12 @@ const ModalDiscount = (props) => {
     const handleChange = (value) => {
         setDiscount(value)
         setPriceDiscount(pirceSale - (pirceSale * (value / 100)))
+        if (priceDiscout < priceIn) {
+            message.error("Giá khuyến mãi phải lớn hơn giá nhập")
+            setPriceDiscount(priceIn)
+            inputNumberRef.current.max = discount
+            return
+        }
     }
     return (
         <>
@@ -93,8 +105,8 @@ const ModalDiscount = (props) => {
                             <span className='text-danger'>SKU: { state._id.match(/[0-9]+/g).join("") }</span>
                         </Space>
                         <Space direction='vertical'>
-                            <p>Giá nhập: { formatCurrency.format(state.priceIn) }</p>
-                            <p>Giá bán: { formatCurrency.format(state.priceSale) }</p>
+                            <p>Giá nhập: { formatCurrency.format(priceIn) }</p>
+                            <p>Giá bán: { formatCurrency.format(pirceSale) }</p>
                             <p>Giá khuyến mãi: <input readOnly className='fs-5 border-0 input-readonly' value={ formatCurrency.format(priceDiscout) }></input></p>
                         </Space>
                     </div>
@@ -102,6 +114,7 @@ const ModalDiscount = (props) => {
                         <div className='mb-3'>
                             <label>Khuyến mãi</label>
                             <InputNumber
+                                ref={ inputNumberRef }
                                 size='small'
                                 className='form-control'
                                 min={ 0 }

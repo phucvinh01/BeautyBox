@@ -1,8 +1,10 @@
 import React, { useEffect, useId, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, message, Select, Steps, theme } from 'antd';
+import { Button, Card, message, Select, Space, Steps, theme } from 'antd';
 import { ListProvinces } from '../axios/VnProvinces';
-import Axios from 'axios';
+import Axios from '../axios/Axios';
+import axios from 'axios';
+
 import { isEmpty } from 'lodash';
 import formatCurrency from '../util/formatCurrency';
 import { Link, useNavigate } from 'react-router-dom';
@@ -28,12 +30,10 @@ const Checkout = (props) => {
         prefixCls: 'my-message',
     });
 
-    const [current, setCurrent] = useState(0);
     const [listprovinces, setListProvinces] = useState([]);
     const [listDistricts, setListDistricts] = useState([]);
     const [listWards, setListWards] = useState([]);
     const [provinceCode, setProvinceCode] = useState(0);
-    const [ward, setWards] = useState('');
     const [districtCode, setDistrictCode] = useState(0);
 
     const [nameCity, setNameCity] = useState("");
@@ -47,10 +47,24 @@ const Checkout = (props) => {
     const [methodShip, setMethodShip] = useState('')
     const [note, setNote] = useState("");
 
+    const [methodPayment, setMethodPayment] = useState("")
+
 
     const handleSubmit = async () => {
         if (!nameCity && !nameDistrict && !nameWard && !detail) {
             message.error("Thiếu thông tin giao hàng")
+        }
+        if (methodPayment === 'VNPAY') {
+            try {
+                const response = await Axios.post('/v1/order/vnpay/create-payment', {
+                    amount: cart?.subTotal, // Số tiền thanh toán (đơn vị VNĐ)
+                    description: 'Payment description',
+                });
+                console.log(response);
+                window.location.href = response.paymentUrl;
+            } catch (error) {
+                console.log(error);
+            }
         }
         else {
             const shippingInfor = `${detail}, ${nameWard}, ${nameDistrict}, ${nameCity}`
@@ -83,20 +97,20 @@ const Checkout = (props) => {
     };
 
     const getDistricts = async (provinceCode) => {
-        let res = await Axios.get(
+        let res = await axios.get(
             `https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`
         );
         if (res) {
-            setListDistricts(res.data.districts);
+            setListDistricts(res.data?.districts);
         }
     };
 
     const getWards = async (districtCode) => {
-        let res = await Axios.get(
+        let res = await axios.get(
             `https://provinces.open-api.vn/api/d/${districtCode}?depth=2`
         );
         if (res) {
-            setListWards(res.data.wards);
+            setListWards(res.data?.wards);
         }
     };
 
@@ -239,7 +253,12 @@ const Checkout = (props) => {
                         <h4>Phương thức thanh toán</h4>
                         <div className='col-12 mb-3'>
                             <div className='p-2 border rounded-3'>
-                                <Radio checked>Trả tiền mặt khi nhận hàng</Radio>
+                                <Radio.Group onChange={ (e) => setMethodPayment(e.target.value) }>
+                                    <Space direction='vertical'>
+                                        <Radio value={ "COD" } checked>Trả tiền mặt khi nhận hàng</Radio>
+                                        <Radio value={ "VNPAY" } >Thanh toán online VNPAY</Radio>
+                                    </Space>
+                                </Radio.Group>
                             </div>
                         </div>
                     </section>

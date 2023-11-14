@@ -11,11 +11,11 @@ const Footer = () => {
       <div className='container'>
         <section>
           <div className='box-gmail row'>
-            <div className='col-6'>
+            <div className='col-lg-6 col-md-12 col-sm-12'>
               <h4>NHẬN BẢN TIN LÀM ĐẸP</h4>
               <p>Đừng bỏ lỡ hàng ngàn sản phẩm và chương trình siêu hấp dẫn</p>
             </div>
-            <div className='col-6'>
+            <div className='col-lg-6 col-md-12 col-sm-12'>
               <div className='box-gmail-input mx-auto'>
                 <input placeholder='Điền email của bạn' type='email' autoComplete='null'></input>
                 <button>THEO DÕI</button>
