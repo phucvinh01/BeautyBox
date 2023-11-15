@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Button, InputNumber, Modal, Select, Space, message } from 'antd';
-import { PercentageOutlined } from '@ant-design/icons';
+import { MinusOutlined, PercentageOutlined, PlusCircleFilled, PlusOutlined } from '@ant-design/icons';
 import formatCurrency from '../../util/formatCurrency';
 import { putUpdateDiscount } from '../../axios/ProductRequest';
 import { getProductList } from '../../redux/api';
@@ -11,9 +11,11 @@ const ModalDiscount = (props) => {
 
     const { state } = props
     const dispatch = useDispatch()
-    const timeBeginRef = useRef()
-    const timeEndRef = useRef()
-    const inputNumberRef = useRef()
+    const timeBeginRef = useRef(null)
+    const timeEndRef = useRef(null)
+    const buttonRef = useRef()
+    const inputRef = useRef(null)
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [discount, setDiscount] = useState(0)
     const [timeBegin, setTimeBegin] = useState("")
@@ -21,7 +23,8 @@ const ModalDiscount = (props) => {
     const [priceDiscout, setPriceDiscount] = useState(0)
     const [pirceSale, setPriceSale] = useState(0)
     const [priceIn, setPriceIn] = useState(0)
-    const [disabled, setDisable] = useState(false)
+    const [disabled, setDisabled] = useState(false)
+    const [disabledButtonMinus, setDisabledButtonMinus] = useState(false)
 
     useEffect(() => {
         if (isModalOpen) {
@@ -74,23 +77,35 @@ const ModalDiscount = (props) => {
         else {
             message.error('Cập nhật giảm giá thất bại');
         }
-
         setIsModalOpen(false);
     };
     const handleCancel = () => {
         setIsModalOpen(false);
     };
 
-    const handleChange = (value) => {
-        setDiscount(value)
-        setPriceDiscount(pirceSale - (pirceSale * (value / 100)))
-        if (priceDiscout < priceIn) {
-            message.error("Giá khuyến mãi phải lớn hơn giá nhập")
-            setPriceDiscount(priceIn)
-            inputNumberRef.current.max = discount
+    useEffect(() => {
+        if (discount === 0) {
+            setDisabledButtonMinus(true)
+        }
+
+        if (discount) {
+            setPriceDiscount(pirceSale - (discount / 100 * pirceSale))
+            setDisabledButtonMinus(false)
+        }
+        if (priceIn > priceDiscout) {
+            message.error("Giá khuyến mãi đang nhỏ hơn giá nhập")
+            setDisabled(true)
+            setPriceDiscount(pirceSale)
+            setDiscount(0)
+            inputRef.current.style.borderColor = 'red'
             return
         }
-    }
+        else {
+            setDisabled(false)
+        }
+
+    }, [discount, priceDiscout])
+
     return (
         <>
             <Button style={ { backgroundColor: "black", color: "white" } } title='Cập nhập khuyết mãi' onClick={ showModal } icon={ <PercentageOutlined /> }>
@@ -113,17 +128,12 @@ const ModalDiscount = (props) => {
                     <div className='col-6'>
                         <div className='mb-3'>
                             <label>Khuyến mãi</label>
-                            <InputNumber
-                                ref={ inputNumberRef }
-                                size='small'
-                                className='form-control'
-                                min={ 0 }
-                                max={ 100 }
-                                value={ discount }
-                                formatter={ (value) => `${value}%` }
-                                parser={ (value) => value.replace('%', '') }
-                                onChange={ (value) => handleChange(value) }
-                            />
+                            <Space>
+                                <Button disabled={ disabledButtonMinus } onClick={ () => setDiscount(+discount - 1) } icon={ <MinusOutlined /> }></Button>
+                                <input ref={ inputRef } className='form-control' min={ 0 } type='number' value={ discount } onChange={ (e) => setDiscount(e.target.value) } />
+                                <Button disabled={ disabled } onClick={ () => setDiscount(+discount + 1) } icon={ <PlusOutlined /> }></Button>
+                            </Space>
+
                         </div>
                         <div className='mb-3'>
                             <label>Giờ bắt đầu</label>

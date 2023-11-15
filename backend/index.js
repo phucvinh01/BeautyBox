@@ -19,10 +19,10 @@ const empRoute = require("./routes/emp")
 const { task } = require('./task/discountScheduler')
 dotenv.config();
 //CONNECT DATABASE
-
+const passDb = process.env.passDb
 const connect = async () => {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/Store', { useNewUrlParser: true, useUnifiedTopology: true });
+    await mongoose.connect(`mongodb+srv://nguyenphucvinh1920:${passDb}@cluster-vinhhandsome.ty9md6b.mongodb.net/Store`, { useNewUrlParser: true, useUnifiedTopology: true });
     console.log("MongoDB database connected");
   } catch (err) {
     console.log("MongoDB database connected failed");

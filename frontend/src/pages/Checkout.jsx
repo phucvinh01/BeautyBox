@@ -256,7 +256,7 @@ const Checkout = (props) => {
                                 <Radio.Group onChange={ (e) => setMethodPayment(e.target.value) }>
                                     <Space direction='vertical'>
                                         <Radio value={ "COD" } checked>Trả tiền mặt khi nhận hàng</Radio>
-                                        <Radio value={ "VNPAY" } >Thanh toán online VNPAY</Radio>
+                                        <Radio value={ "VNPAY" } disabled >Thanh toán online VNPAY (Tính năng đang được phát triển)</Radio>
                                     </Space>
                                 </Radio.Group>
                             </div>

@@ -11,6 +11,7 @@ import { getProductList } from '../../redux/api';
 import { useDispatch, useSelector } from 'react-redux';
 import ModalEdit from '../ModelEdit';
 import ModalDetail from '../ModalDetail';
+import moment from 'moment';
 const { Countdown } = Statistic;
 const Product = (props) => {
     const sumRating = _.sumBy(props.reviews && props.reviews, 'rating');
@@ -26,6 +27,7 @@ const Product = (props) => {
             toast.error('Delete failed.......');
         }
     };
+
 
     return (
         <>
@@ -80,7 +82,7 @@ const Product = (props) => {
                         />
                     }>
                     {
-                        props?.discount?.number > 0 && <div className='card-info-discount'>
+                        props?.discount?.number > 0 && moment(moment(props?.discount?.timeBegin).format('yyyy-MM-ddThh:mm')).isAfter(moment().format('yyyy-MM-ddThh:mm')) && <div className='card-info-discount'>
                             { props?.discount?.number }%
                         </div>
                     }
