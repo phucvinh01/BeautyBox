@@ -173,8 +173,8 @@ const orderController = {
                 port: 587,
                 secure: false, // true nếu sử dụng cổng 465
                 auth: {
-                    user: 'omogo2002@gmail.com',
-                    pass: '2001200636Th4_'
+                    user: process.env.userEmail,
+                    pass: process.env.passEmail
                 },
                 tls: {
                     ciphers: 'SSLv3'
