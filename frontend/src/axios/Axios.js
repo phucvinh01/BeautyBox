@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const apiUrl = process.env.REACT_APP_API_URL;
 const instance = axios.create({
-    baseURL: 'http://127.0.0.1:8000',
+    baseURL: apiUrl,
 });
 instance.interceptors.response.use(function (response) {
     return response.data ? response.data : { statusCode: response.status, headers: response.headers }

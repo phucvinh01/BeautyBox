@@ -56,9 +56,9 @@ app.use("/v1/emp", empRoute)
 
 task.start()
 
+const PORT = 8000
 
-
-app.listen(8000, () => {
+app.listen(PORT, () => {
   connect()
-  console.log("Server is running...");
+  console.log("Server is running...", PORT);
 });
