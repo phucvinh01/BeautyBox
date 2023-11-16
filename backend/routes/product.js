@@ -60,5 +60,7 @@ router.post("/create-review/", reviewController.createReview)
 
 router.get("/review/:id", reviewController.getReviewByProduct)
 
+router.get("/sale/get-sum-cost", productController.getCost)
+
 
 module.exports = router;

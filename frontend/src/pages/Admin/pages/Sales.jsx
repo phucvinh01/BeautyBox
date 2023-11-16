@@ -96,6 +96,16 @@ const Sales = () => {
                                 } }
                             />
                         </Card>
+                        <Card bordered={ false }>
+                            <Statistic
+                                title="Lợi nhuận"
+                                value={ salesData.sumProfit[0]?.totalProfit }
+                                valueStyle={ {
+                                    color: '#3f8600',
+                                } }
+                                suffix="VND"
+                            />
+                        </Card>
                     </Space>
                 </div>
 

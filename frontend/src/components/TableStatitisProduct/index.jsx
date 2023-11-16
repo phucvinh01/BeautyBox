@@ -37,12 +37,20 @@ const columns = [
             <span>{ formatCurrency.format(totalSale) }</span>
         ),
     },
+    {
+        title: 'Lợi nhuận',
+        dataIndex: 'total',
+        key: 'total',
+        sorter: (a, b) => a.total - b.total,
+        render: (total) => (
+            <span className='text-success'>{ formatCurrency.format(total) }</span>
+        ),
+    },
 ];
 
 const TableStatitisProduct = (props) => {
 
     const { data } = props
-
     return (
         <>
             <Table columns={ columns } dataSource={ data && data } />

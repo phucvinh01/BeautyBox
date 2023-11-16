@@ -24,6 +24,7 @@ const cartController = {
                     cart.items[indexFound].price = productDetails.price
                     cart.items[indexFound].img = productDetails.img
                     cart.items[indexFound].name = productDetails.name
+                    cart.items[indexFound].priceIn = productDetails.priceIn
                     cart.subTotal = cart.items.map(item => item.total).reduce((acc, curr) => acc + curr);
                 }
                 //----Check if Quantity is Greater than 0 then add item to items Array ----
@@ -34,6 +35,7 @@ const cartController = {
                         price: productDetails.price,
                         img: productDetails.img,
                         name: productDetails.name,
+                        priceIn: productDetails.priceIn,
                         total: parseInt(productDetails.price * quantity).toFixed(2),
                     })
                     cart.subTotal = cart.items.map(item => item.total).reduce((acc, curr) => acc + curr);
@@ -58,6 +60,7 @@ const cartController = {
                         total: parseInt(productDetails.price * quantity),
                         img: productDetails.img,
                         price: productDetails.price,
+                        priceIn: productDetails.priceIn,
                         name: productDetails.name,
 
                     }],

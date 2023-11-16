@@ -20,6 +20,9 @@ let ItemSchema = new Schema(
             required: true,
             min: [1, "Quantity can not be less then 1."],
         },
+        priceIn: {
+            type: Number,
+        },
         price: {
             type: Number,
             required: true,

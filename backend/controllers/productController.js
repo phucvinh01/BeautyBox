@@ -475,6 +475,8 @@ const productController = {
             const month = req.query.month;
             const year = req.query.year;
 
+            console.log(month, year);
+
             const startDate = new Date(year, month - 1, 1);
             const endDate = new Date(year, month, 0);
 
@@ -486,10 +488,42 @@ const productController = {
                         productName: { $first: '$cart.items.name' },
                         productImg: { $first: '$cart.items.img' },
                         totalQuantity: { $sum: '$cart.items.quantity' },
+                        totalCost: { $sum: { $multiply: ['$cart.items.quantity', '$cart.items.priceIn'] } },
                         totalSale: { $sum: '$cart.items.total' },
                     },
                 },
+                {
+                    $addFields: {
+                        total: { $subtract: ['$totalSale', '$totalCost'] },
+                    },
+                },
             ])
+            // const data = await Order.aggregate([
+            //     { $unwind: '$cart.items' },
+            //     {
+            //         $lookup: {
+            //             from: 'products', // Tên bảng "products"
+            //             localField: 'cart.items.productId',
+            //             foreignField: '_id',
+            //             as: 'product',
+            //         },
+            //     },
+            //     {
+            //         $unwind: '$product',
+            //     },
+            //     {
+            //         $group: {
+            //             _id: '$cart.items.productId',
+            //             productName: { $first: '$product.name' },
+            //             productImg: { $first: '$product.img' },
+            //             totalQuantity: { $sum: '$cart.items.quantity' },
+            //             totalSale: { $sum: '$cart.items.total' },
+            //             totalCost: { $sum: { $multiply: ['$product.in_stock', '$product.priceIn'] } },
+            //             inStock: { $first: '$product.in_stock' },
+            //             profit: { $sum: { $subtract: ['$cart.items.total', { $multiply: ['$product.in_stock', '$product.cost'] }] } },
+            //         },
+            //     },
+            // ]);
 
             const result = await Order.aggregate([
                 {
@@ -505,6 +539,32 @@ const productController = {
                 },
             ])
 
+            const sumProfit = await Order.aggregate([
+                {
+                    $unwind: "$cart.items" // Tách các mục trong giỏ hàng thành các bản ghi riêng biệt
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalSales: { $sum: { $multiply: ["$cart.items.price", "$cart.items.quantity"] } },
+                        totalProfit: { $sum: { $multiply: [{ $subtract: ["$cart.items.price", "$cart.items.priceIn"] }, "$cart.items.quantity"] } }
+                    }
+                },
+                {
+                    $addFields: {
+                        total: { $subtract: ['$totalSale', '$totalProfit'] },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        totalSales: 1,
+                        totalProfit: 1,
+                        total: 1,
+                    }
+                }
+            ]);
+
             const totalQuantityResult = await Order.aggregate([
                 { $unwind: '$cart.items' },
                 { $group: { _id: null, totalQuantity: { $sum: '$cart.items.quantity' } } },
@@ -515,12 +575,33 @@ const productController = {
                 data: {
                     productStats: data,
                     totalRevenue: result[0].totalRevenue,
+                    sumProfit: sumProfit,
                     totalQuantity: totalQuantityResult[0].totalQuantity,
                 },
             });
         } catch (error) {
             res.status(200).json({ success: false, data: error });
         }
+    },
+
+    getCost: async (req, res) => {
+        const sumCost = await Product.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    totalCost: { $sum: "$priceIn" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    totalCost: 1
+                }
+            }
+        ]);
+        console.log(sumCost);
+        res.status(200).json({ success: true, data: sumCost });
+
     }
 }
 
