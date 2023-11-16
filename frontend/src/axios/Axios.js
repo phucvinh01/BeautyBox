@@ -1,5 +1,5 @@
 import axios from 'axios'
-const apiUrl = process.env.VERCEL_APP_HOST;
+const apiUrl = process.env.VERCEL_URL;
 const instance = axios.create({
     baseURL: apiUrl,
 });
