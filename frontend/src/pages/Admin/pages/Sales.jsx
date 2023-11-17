@@ -58,6 +58,8 @@ const Sales = () => {
         getRevenueData()
     }, [])
 
+    console.log(salesData);
+
     return (
         <main>
             <div className='container'>
@@ -99,7 +101,7 @@ const Sales = () => {
                         <Card bordered={ false }>
                             <Statistic
                                 title="Lợi nhuận"
-                                value={ salesData.sumProfit[0]?.totalProfit }
+                                value={ salesData.sumProfit }
                                 valueStyle={ {
                                     color: '#3f8600',
                                 } }

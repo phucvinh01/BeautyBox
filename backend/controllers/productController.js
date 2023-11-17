@@ -29,7 +29,6 @@ const productController = {
             res.status(500).json(err);
         }
     },
-
     //get by id
     getById: async (req, res) => {
         try {
@@ -125,7 +124,6 @@ const productController = {
         }
     },
 
-
     updateDiscount: async (req, res) => {
         try {
             const product = await Product.findById(req.params.id);
@@ -140,6 +138,7 @@ const productController = {
             });
         }
     },
+
     generateSlug: (name) => {
         // const slug = name.toLowerCase().replace(/ /g, '-');
         // const specialChars = "[^0-9a-zA-Z\\p{M}]+";
@@ -161,6 +160,7 @@ const productController = {
         // return text;
 
     },
+
     insertManyFromJSON: async (req, res) => {
         try {
             const filePath = req.file.path;
@@ -187,6 +187,7 @@ const productController = {
             res.status(500).json({ error: 'Lỗi khi insertMany.' });
         }
     },
+
     searchBySlug: async (req, res) => {
         try {
             const product = await Product.findOne({ slug: req.params.slug });
@@ -204,7 +205,6 @@ const productController = {
         const product = await Product.findOne({ _id: id })
         return product;
     },
-
     // statisticSaleByProduct: async (req, res) => {
     //     try {
     //         const orders = await Order.find({ status: 1 }).populate('cart.items.product');
@@ -279,6 +279,7 @@ const productController = {
             }
         }
     },
+
     fetchAllData: async (orders) => {
         const accumulator = [];
         for (const order of orders) {
@@ -333,6 +334,7 @@ const productController = {
             res.status(200).json({ success: false, data: error });
         }
     },
+
     getMostSoldProduct: async () => {
         try {
             const mostSoldProduct = await Order.aggregate([
@@ -364,6 +366,7 @@ const productController = {
             throw error;
         }
     },
+
     getLeastSoldProduct: async () => {
         try {
             const leastSoldProduct = await Order.aggregate([
@@ -395,6 +398,7 @@ const productController = {
             throw error;
         }
     },
+
     getLeastAndMost: async (req, res) => {
         try {
             const mostSoldProduct = await productController.getMostSoldProduct();
@@ -575,7 +579,7 @@ const productController = {
                 data: {
                     productStats: data,
                     totalRevenue: result[0].totalRevenue,
-                    sumProfit: sumProfit,
+                    sumProfit: sumProfit[0].totalProfit,
                     totalQuantity: totalQuantityResult[0].totalQuantity,
                 },
             });

@@ -79,13 +79,13 @@ const Order = () => {
                     <title>Profile | Order</title>
                 </Helmet>
                 <div className='row'>
-                    <div className='col-4'>
+                    <div className='col-lg-4 col-md-4 col-sm-12'>
 
                         <img className='w-100 rounded-3' height={ 400 } src='https://i.pinimg.com/564x/4f/34/d2/4f34d2dad8546b06aeb42f8e067ef733.jpg'>
 
                         </img>
                     </div>
-                    <div className='col-8'>
+                    <div className='col-lg-8 col-md-8 col-sm-12'>
                         <Breadcrumb className='mb-3'
                             items={ [
                                 {

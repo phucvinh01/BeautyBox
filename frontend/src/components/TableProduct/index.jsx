@@ -13,7 +13,9 @@ import ModalDiscount from '../ModalDiscount';
 
 
 
-const TableProduct = () => {
+const TableProduct = (props) => {
+
+    const { dataFilter } = props
 
     const data = useSelector((state) => state.product.products.data);
 
@@ -99,7 +101,7 @@ const TableProduct = () => {
 
     return (
         <>
-            <Table columns={ columns } dataSource={ data && data } />
+            <Table columns={ columns } dataSource={ dataFilter ? dataFilter : data } />
         </>
 
     )

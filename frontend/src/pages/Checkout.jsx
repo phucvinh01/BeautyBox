@@ -146,7 +146,7 @@ const Checkout = (props) => {
 
             </section>
             <div className='row mb-3'>
-                <div className='col-7'>
+                <div className='col-lg-7 col-md-7 col-sm-12'>
                     <section>
                         <h4>Thông tin người mua hàng</h4>
                         <div className='row'>
@@ -291,7 +291,7 @@ const Checkout = (props) => {
                         </div>
                     </section>
                 </div>
-                <div className='col-5' >
+                <div className='col-lg-5 col-md-5 col-sm-12' >
                     <div className='shadow border rounded-3 p-3' style={ { position: "sticky", top: "100px" } }>
                         <h4>Đơn hàng</h4>
                         { cart && cart?.items?.length > 0 && cart.items.map((item, index) => {

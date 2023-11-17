@@ -93,13 +93,13 @@ const Product = (props) => {
                             <p className='card-content__decsrciption'>{ props?.name }</p>
                             <Space>
                                 {
-                                    props?.discount > 0 ? <><p className='card-content__price'>
+                                    moment(moment(props.discount?.timeBegin).format('yyyy-MM-ddThh:mm')).isSameOrAfter(moment().format('yyyy-MM-ddThh:mm')) && props?.discount > 0 ? <><p className='card-content__price'>
                                         { formatCurrency.format(props?.price) }
                                     </p>
                                         <p className='text-muted' style={ { "textDecorationLine": 'line-through' } }>
                                             { formatCurrency.format(props?.priceSale) }
                                         </p></> : <p className='card-content__price'>
-                                        { formatCurrency.format(props?.price) }
+                                        { formatCurrency.format(props?.priceSale) }
                                     </p>
                                 }
 

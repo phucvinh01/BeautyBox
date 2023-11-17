@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const DropdownAdmin = () => {
     const user = useSelector((state) => state.auth.login.currentUser);
-    console.log(user);
+
 
     const dispatch = useDispatch()
     const navigate = useNavigate()

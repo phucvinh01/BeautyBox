@@ -48,10 +48,10 @@ const Detail = () => {
             </Helmet>
             <main className='container'>
                 <div className='row p-2 detail'>
-                    <div className='col-5'>
+                    <div className='col-lg-5 col-md-5 col-sm-12'>
                         <img className='w-100' src={ products.img } alt='>products'></img>
                     </div>
-                    <div className='col-7'>
+                    <div className='col-lg-7 col-md-7 col-sm-12'>
                         <div className='container mt-4'>
                             <Space direction='vertical'>
                                 <Breadcrumb
@@ -106,10 +106,10 @@ const Detail = () => {
                     </section>
                     <div className='container'>
                         <div className='row p-3'>
-                            <div className='col-5'>
+                            <div className='col-lg-5 col-md-5 col-sm-12'>
                                 <h2>Giới thiệu</h2>
                             </div>
-                            <div className='col-7'>
+                            <div className='col-lg-7 col-md-7 col-sm-12'>
                                 <Space size={ 'middle' } direction='vertical'>
                                     <p className='fs-16' style={ { textAlign: "justify" } }>
                                         { products.description }
@@ -130,7 +130,7 @@ const Detail = () => {
                     </section>
                     <div className='container'>
                         <div className='row p-3'>
-                            <div className='col-5 p-4'>
+                            <div className='col-lg-5 col-md-5 col-sm-12 p-4'>
                                 <div className='d-flex justify-content-between mb-3'>
                                     <h4>{ reivews?.length } ĐÁNH GIÁ</h4>
                                     <ModalCreateReview products={ products } />
@@ -166,7 +166,7 @@ const Detail = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='col-7'>
+                            <div className='col-lg-7 col-md-7 col-sm-12'>
                                 <ReviewBox />
                             </div>
                         </div>

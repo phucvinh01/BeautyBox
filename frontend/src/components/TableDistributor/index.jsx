@@ -1,7 +1,9 @@
 import React from 'react';
-import { Button, Space, Table, Tag } from 'antd';
+import { Button, Divider, Space, Table, Tag } from 'antd';
 import { useSelector } from 'react-redux';
 import { EyeOutlined, FundViewOutlined, StopFilled } from '@ant-design/icons';
+import TableProduct from '../TableProduct';
+import ModalProductDistributor from '../ModalProductDistributor';
 const columns = [
     {
         title: 'Tên nhà phân phối',
@@ -36,7 +38,7 @@ const columns = [
         render: (_, record) => (
             <Space size="small">
                 <Button title='Ngưng hợp tác' icon={ <StopFilled /> } />
-                <Button title="Xem các sản phẩm" icon={ <EyeOutlined /> } />
+                <ModalProductDistributor name={ record.name } />
             </Space>
         ),
     },
@@ -49,7 +51,9 @@ const TableDistributor = () => {
     const data = useSelector((state) => state.distributor.distributor.data);
 
     return (
-        <Table columns={ columns } dataSource={ data } />
+        <>
+            <Table columns={ columns } dataSource={ data } />
+        </>
     )
 }
 export default TableDistributor;

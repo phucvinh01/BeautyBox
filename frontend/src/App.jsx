@@ -36,6 +36,9 @@ function App() {
     if (user && user?.account) {
       dispatch(getCartFailed)
     }
+    if (user && user?.account?.role > 1) {
+      navigate('/admin/product')
+    }
     if (user) {
       getCart(user?._id, dispatch)
     }
