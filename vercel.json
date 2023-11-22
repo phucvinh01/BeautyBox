@@ -5,7 +5,7 @@
     { "src": "backend/package.json", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "backend/$1" },
+    { "src": "/(.*)", "dest": "backend/$1" },
     { "src": "/(.*)", "dest": "frontend/$1" }
   ]
 }
