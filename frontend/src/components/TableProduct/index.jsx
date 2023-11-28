@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Space, Table, Tag } from 'antd';
 import { useSelector } from 'react-redux';
-import { EditOutlined, EyeOutlined, StopOutlined } from '@ant-design/icons'
+import { ArrowUpOutlined, DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined, StopOutlined } from '@ant-design/icons'
 import ModalEdit from '../ModelEdit';
 import ModalDetail from '../ModalDetail';
 import { deleteProduct } from '../../axios/ProductRequest';
@@ -9,15 +9,22 @@ import ModalEditProduct from '../ModalEditProduct';
 import formatCurrency from '../../util/formatCurrency';
 import PopconfirmDelPro from '../PopconfirmDelPro';
 import ModalDiscount from '../ModalDiscount';
+import PopupDeleteProduct from '../PopupDeleteProduct';
 
 
 
 
 const TableProduct = (props) => {
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [products, setProducts] = useState([]);
 
     const { dataFilter } = props
-
     const data = useSelector((state) => state.product.products.data);
+
+    useEffect(() => {
+        setProducts(dataFilter ? dataFilter : data);
+        setFilteredProducts(products.filter(product => !product.isDelete));
+    }, [dataFilter, data]);
 
     const columns = [
         {
@@ -89,19 +96,26 @@ const TableProduct = (props) => {
             title: 'Action',
             key: 'action',
             render: (_, record) => (
-                <Space size="small">
-                    <ModalEditProduct state={ record } />
-                    <ModalDetail state={ record } isAdmin={ true } />
-                    <PopconfirmDelPro _id={ record._id } status={ record.status } />
-                    <ModalDiscount state={ record } />
+                <Space direction='vertical'>
+                    <Space size="small">
+                        <ModalDetail state={ record } isAdmin={ true } />
+                        <ModalEditProduct state={ record } />
+                        <Button title='Thêm số lượng sản phẩm' icon={ <PlusOutlined /> }></Button>
+                    </Space>
+                    <Space size="small">
+                        <PopupDeleteProduct _id={ record._id } />
+                        <PopconfirmDelPro _id={ record._id } status={ record.status } />
+                        <ModalDiscount state={ record } />
+                    </Space>
                 </Space>
+
             ),
         },
     ];
 
     return (
         <>
-            <Table columns={ columns } dataSource={ dataFilter ? dataFilter : data } />
+            <Table columns={ columns } dataSource={ filteredProducts } />
         </>
 
     )

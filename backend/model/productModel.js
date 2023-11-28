@@ -62,6 +62,10 @@ const productSchema = new mongoose.Schema(
         slug: {
             type: String
         },
+        isDelete: {
+            type: Boolean,
+            default: false
+        },
         collections: [
             {
                 type: String,

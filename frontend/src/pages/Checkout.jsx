@@ -47,7 +47,7 @@ const Checkout = (props) => {
     const [methodShip, setMethodShip] = useState('')
     const [note, setNote] = useState("");
 
-    const [methodPayment, setMethodPayment] = useState("")
+    const [methodPayment, setMethodPayment] = useState("COD")
 
 
     const handleSubmit = async () => {
@@ -152,14 +152,14 @@ const Checkout = (props) => {
                         <div className='row'>
                             <div className='col-12 mb-3'>
                                 <div className='d-flex gap-3'>
-                                    <input onChange={ (e) => setInfoFisrtName(e.target.value) } value={ user.lastName } placeholder='Tên' className='form-control w-100 p-2'></input>
-                                    <input onChange={ (e) => setInfoLastName(e.target.value) } value={ user.firstName } placeholder='Họ' className='form-control w-100 p-2'></input>
+                                    <input disabled onChange={ (e) => setInfoFisrtName(e.target.value) } value={ user.lastName } placeholder='Tên' className='form-control w-100 p-2'></input>
+                                    <input disabled onChange={ (e) => setInfoLastName(e.target.value) } value={ user.firstName } placeholder='Họ' className='form-control w-100 p-2'></input>
                                 </div>
                             </div>
                             <div className='col-12 mb-3'>
                                 <div className='d-flex gap-3'>
-                                    <input onChange={ (e) => setInfoEmail(e.target.value) } value={ user.email } placeholder='Email' className='form-control w-100 p-2'></input>
-                                    <input onChange={ (e) => setInfoPhone(e.target.value) } value={ user.phone } placeholder='Số điện thoại' className='form-control w-100 p-2'></input>
+                                    <input disabled onChange={ (e) => setInfoEmail(e.target.value) } value={ user.email } placeholder='Email' className='form-control w-100 p-2'></input>
+                                    <input disabled onChange={ (e) => setInfoPhone(e.target.value) } value={ user.phone } placeholder='Số điện thoại' className='form-control w-100 p-2'></input>
                                 </div>
                             </div>
                         </div>
@@ -253,9 +253,9 @@ const Checkout = (props) => {
                         <h4>Phương thức thanh toán</h4>
                         <div className='col-12 mb-3'>
                             <div className='p-2 border rounded-3'>
-                                <Radio.Group onChange={ (e) => setMethodPayment(e.target.value) }>
+                                <Radio.Group defaultValue={ 'COD' } onChange={ (e) => setMethodPayment(e.target.value) }>
                                     <Space direction='vertical'>
-                                        <Radio value={ "COD" } checked>Trả tiền mặt khi nhận hàng</Radio>
+                                        <Radio value={ "COD" } checked={ true }>Trả tiền mặt khi nhận hàng</Radio>
                                         <Radio value={ "VNPAY" } disabled >Thanh toán online VNPAY (Tính năng đang được phát triển)</Radio>
                                     </Space>
                                 </Radio.Group>
@@ -264,10 +264,10 @@ const Checkout = (props) => {
                     </section>
                     <section>
                         <h4>Phương thức vẫn chuyển</h4>
-                        <Radio.Group onChange={ (e) => setMethodShip(e.target.value) }>
+                        <Radio.Group defaultValue={ 'GH24H' } onChange={ (e) => setMethodShip(e.target.value) }>
                             <div className='col-12 mb-3'>
                                 <div className='p-2 border rounded-3'>
-                                    <Radio className='w-100' value={ "GH24H" } >Giao hàng trong 24h (Giao giờ hành chính)</Radio>
+                                    <Radio checked={ true } className='w-100' value={ "GH24H" } >Giao hàng trong 24h (Giao giờ hành chính)</Radio>
                                 </div>
                             </div>
                             <div className='col-12 mb-3'>

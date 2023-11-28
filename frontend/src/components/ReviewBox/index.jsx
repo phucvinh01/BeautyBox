@@ -9,7 +9,7 @@ const ReviewBox = () => {
     return (
         <>
             {
-                reivews.length > 0 ? <>
+                reivews?.length > 0 ? <>
                     {
                         reivews.map((item, index) => {
                             return (

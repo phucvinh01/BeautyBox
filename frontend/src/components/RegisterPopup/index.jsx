@@ -6,7 +6,10 @@ import './register.scss'
 import { register } from '../../axios/AuthRequest';
 import { toast } from 'react-toastify';
 
-const RegisterPopup = () => {
+const RegisterPopup = (props) => {
+
+    const { handleClose } = props
+
     const id = useId();
     const inputRef = useRef(null);
     const emailRef = useRef(null);
@@ -22,6 +25,9 @@ const RegisterPopup = () => {
     const [error, setError] = useState('')
     const [errorEmail, setErrorEmail] = useState('')
 
+    useEffect(() => {
+        handleClose()
+    }, [isModalOpen])
 
     const showModal = () => {
         setIsModalOpen(true);

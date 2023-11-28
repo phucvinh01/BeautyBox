@@ -18,51 +18,10 @@ const Product = (props) => {
     const avg = _.round(sumRating / (props.reviews && props.reviews.length));
     const dispatch = useDispatch();
 
-    const handleDelete = async (id) => {
-        let res = await deleteProduct(id);
-        if (res.success) {
-            toast.success('Deleted.......');
-            getProductList(dispatch);
-        } else {
-            toast.error('Delete failed.......');
-        }
-    };
-
+    console.log(props?.discount?.number > 0 && moment(moment(props?.discount?.timeBegin).format('yyyy-MM-ddThh:mm')).isAfter(moment().format('yyyy-MM-ddThh:mm')));
 
     return (
         <>
-            {/* <Modal
-                open={ open }
-                onOk={ handleOk }
-                onCancel={ () => handleCancel('DEL') }
-                footer={ false }>
-                <strong className='text-danger'>Delete?</strong>
-                <p>
-                    Bạn có chắc muốn xóa <strong>{ props.name }</strong>?
-                </p>
-                <div className='d-flex p-3 gap-3 justify-content-end'>
-                    <button
-                        className='btn btn-info'
-                        onClick={ handleCancel }>
-                        Hủy
-                    </button>
-                    <button
-                        className='btn btn-danger'
-                        onClick={ () => handleDelete(props._id) }>
-                        Xóa
-                    </button>
-                </div>
-            </Modal>
-
-            <ModalDetail
-                open={ openDetail }
-                onOk={ handleOk }
-                onCancel={ () => handleCancel('DETAIL') }
-                footer={ false }
-                state={ stateProduct }
-                user={ props.user && props.user }
-            /> */}
-
             <div
                 className='col-lg-3 col-md-6 col-sm-12 mb-3' hidden={ props.status ? false : true }
                 key={ props._id }>
@@ -82,7 +41,7 @@ const Product = (props) => {
                         />
                     }>
                     {
-                        props?.discount?.number > 0 && moment(moment(props?.discount?.timeBegin).format('yyyy-MM-ddThh:mm')).isAfter(moment().format('yyyy-MM-ddThh:mm')) && <div className='card-info-discount'>
+                        props?.discount?.number > 0 && <div className='card-info-discount'>
                             { props?.discount?.number }%
                         </div>
                     }
@@ -92,31 +51,21 @@ const Product = (props) => {
                             <p className=''>{ props?.brand }</p>
                             <p className='card-content__decsrciption'>{ props?.name }</p>
                             <Space>
-                                {
-                                    moment(moment(props.discount?.timeBegin).format('yyyy-MM-ddThh:mm')).isSameOrAfter(moment().format('yyyy-MM-ddThh:mm')) && props?.discount > 0 ? <><p className='card-content__price'>
-                                        { formatCurrency.format(props?.price) }
-                                    </p>
-                                        <p className='text-muted' style={ { "textDecorationLine": 'line-through' } }>
-                                            { formatCurrency.format(props?.priceSale) }
-                                        </p></> : <p className='card-content__price'>
+                                { props?.discount?.number > 0 ? <><p className='card-content__price'>
+                                    { formatCurrency.format(props?.price) }
+                                </p>
+                                    <p className='text-muted' style={ { "textDecorationLine": 'line-through' } }>
                                         { formatCurrency.format(props?.priceSale) }
-                                    </p>
+                                    </p></> : <p className='card-content__price'>
+                                    { formatCurrency.format(props?.priceSale) }
+                                </p>
                                 }
 
                             </Space>
-                            { props?.user?.role !== 1 && (
-                                <div className='d-flex justify-content-center align-items-center gap-2'>
-                                    <Rate
-                                        disabled
-                                        value={ avg ? avg : 0 }
-                                    />
-                                    <p>({ props.reviews && props.reviews.length })</p>
-                                </div>
-                            ) }
                         </div>
                     </div>
                     <div
-                        className='btn-quick'>
+                        className='btn-quick mb-3'>
                         <ModalDetail state={ props } isAdmin={ false } />
                     </div>
                     {/* <div>

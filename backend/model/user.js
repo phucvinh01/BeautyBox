@@ -22,6 +22,9 @@ const userSchema = Schema({
         required: true,
         unique: true,
     },
+    codeReset: {
+        type: String,
+    },
     role: {
         type: Number,
         required: false,

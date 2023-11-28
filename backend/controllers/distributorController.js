@@ -57,8 +57,12 @@ const brandController = {
     //DELETE Distributor
     deleteDistributor: async (req, res) => {
         try {
-            await Distributor.findByIdAndDelete(req.params.id);
-            res.status(200).json({ "success": true });
+            const r = await Distributor.findById(req.params.id);
+            await r.updateOne({ $set: { isActive: !r.isActive } });
+            res.status(200).json({
+                status: true,
+                data: !r.isActive
+            });
         } catch (err) {
             res.status(500).json({ "success": false });
         }

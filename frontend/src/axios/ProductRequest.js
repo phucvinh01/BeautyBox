@@ -14,7 +14,6 @@ const insertProduct = (product) => {
 
 const deleteProduct = (id) => {
     return Axios.delete(`/v1/product/${id}`)
-
 }
 
 const getProductByCategory = (path) => {

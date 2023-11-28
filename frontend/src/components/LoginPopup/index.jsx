@@ -7,6 +7,7 @@ import { login } from '../../redux/api';
 import RegisterPopup from '../RegisterPopup';
 import { loginFailed, loginSuccess } from '../../redux/authSlice';
 import Axios from '../../axios/Axios';
+import ModalSentCodePass from '../ModalSentCodePass';
 const LoginPopup = () => {
     const id = useId();
     const passwordtRef = useRef(null);
@@ -26,7 +27,7 @@ const LoginPopup = () => {
     const handleOk = () => {
         setIsModalOpen(false);
     };
-    const handleCancel = () => {
+    const handleClose = () => {
         setIsModalOpen(false);
     };
 
@@ -91,7 +92,7 @@ const LoginPopup = () => {
                     open={ isModalOpen }
                     footer={ null }
                     onOk={ handleOk }
-                    onCancel={ handleCancel }>
+                    onCancel={ handleClose }>
                     <div className='login-content'>
                         <img src='https://image.hsv-tech.io/300x0/bbx/common/50a26167-9341-4be8-8aba-9682d3b4a916.webp'></img>
                     </div>
@@ -120,7 +121,7 @@ const LoginPopup = () => {
                             ></input>
                             <span className='text-danger'>{ hadError && hadError.includes('Password') && <span>{ hadError }</span> }</span>
                             <p className='text-end'>
-                                <a style={ { color: "blue" } }>Forgot your password?</a>
+                                <ModalSentCodePass handleClose={ handleClose } />
                             </p>
                             <span className='text-danger'>{ hadError && hadError && <span>{ hadError }</span> }</span>
 
@@ -135,7 +136,7 @@ const LoginPopup = () => {
                     </div>
                     <hr></hr>
                     <div className='mb-3'>
-                        <RegisterPopup />
+                        <RegisterPopup handleClose={ handleClose } />
                     </div>
                 </Modal>
             </div>

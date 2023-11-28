@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { EyeOutlined, FundViewOutlined, StopFilled } from '@ant-design/icons';
 import TableProduct from '../TableProduct';
 import ModalProductDistributor from '../ModalProductDistributor';
+import PopupUpdateSttDitributor from '../PopupUpdateSttDitributor';
 const columns = [
     {
         title: 'Tên nhà phân phối',
@@ -37,7 +38,7 @@ const columns = [
         key: 'action',
         render: (_, record) => (
             <Space size="small">
-                <Button title='Ngưng hợp tác' icon={ <StopFilled /> } />
+                <PopupUpdateSttDitributor _id={ record._id } status={ record.isActive } />
                 <ModalProductDistributor name={ record.name } />
             </Space>
         ),

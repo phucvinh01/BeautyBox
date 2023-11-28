@@ -67,7 +67,6 @@ const Header = () => {
             label: (
                 <Link to={ '/profile' }>
                     <p className='m-0'>Thông tin tài khoản</p>
-                    <small className='text-muted'>Tài khoản, đơn hàng, địa chỉ giao nhận, mật khẩu</small>
                 </Link>
             ),
             icon: <IdcardOutlined className='fs-3' />,

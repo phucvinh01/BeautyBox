@@ -84,7 +84,7 @@ const productController = {
     //DELETE Product
     deleteProduct: async (req, res) => {
         try {
-            await Product.findByIdAndDelete(req.params.id);
+            await Product.findOneAndUpdate({ "_id": req.params.id }, { "isDelete": true });
             res.status(200).json({
                 status: true,
             });
