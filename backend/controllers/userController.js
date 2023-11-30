@@ -1,5 +1,6 @@
 const { User } = require('../model/user')
 const nodemailer = require('nodemailer');
+const bcrypt = require('bcrypt')
 
 
 const UserController = {
@@ -42,7 +43,7 @@ const UserController = {
             const min = 100000;
             const max = 999999;
             const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-
+            //console.log("check 1", randomNumber);
             const user = await User.findOne({ email: req.body.email });
             if (user) {
                 await user.updateOne({ $set: { codeReset: randomNumber } });
@@ -68,6 +69,7 @@ const UserController = {
                     <p>Cảm ơn bạn đã mua hàng tại cửa hàng</p>
                     <p><strong>${randomNumber}</strong></p>`
                 };
+                //console.log("check 2", randomNumber);
 
                 // Gửi email
                 transporter.sendMail(mailOptions, function (error, info) {
@@ -77,6 +79,8 @@ const UserController = {
                         console.log('Email sent:', info.response);
                     }
                 });
+                //console.log("check 3", randomNumber);
+
                 res.status(200).json({
                     status: true,
                     data: randomNumber,
@@ -99,7 +103,11 @@ const UserController = {
 
     getCheckCode: async (req, res) => {
         try {
-            const check = await User.findOne({ email: req.body.email, codeReset: req.body.otp })
+
+            const email = req.query.email;
+            const otp = req.query.otp;
+            const check = await User.findOne({ email: email, codeReset: otp })
+            console.log(check);
             if (check) {
                 res.status(200).json({
                     status: true,
@@ -122,8 +130,14 @@ const UserController = {
 
     updatePassword: async (req, res) => {
         try {
-            const check = await User.findOne({ email: req.body.email, codeReset: req.body.otp })
-            const update = check.updateOne({ $set: { password: req.body.password } });
+            const salt = await bcrypt.genSalt(10);
+            const email = req.body.email;
+            const otp = req.body.otp;
+            const password = req.body.password
+            const hashedPassword = await bcrypt.hash(password, salt);
+            const check = await User.findOne({ email: email, codeReset: otp })
+            const update = await check.updateOne({ $set: { password: hashedPassword } });
+            console.log("check update", update);
             if (update) {
                 res.status(200).json({
                     status: true,

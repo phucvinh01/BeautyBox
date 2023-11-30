@@ -32,16 +32,6 @@ const orderController = {
                     methodShip: methodShip
                 }
                 let order = new Order(orderData)
-                console.log(order.cart.items);
-                for (let i = 0; i < cart.items.length; i++) {
-                    let product = await Product.findById(cart.items[i].productId)
-                    if (product.in_stock >= cart.items[i].quantity) {
-                        product.in_stock -= cart.items[i].quantity
-                        await product.save()
-                    } else {
-                        return res.status(200).json({ status: false, message: "Product not in stock" })
-                    }
-                }
                 const savedOrder = await order.save()
                 if (savedOrder) {
                     res.status(200).json({ status: true, message: "Successfull" })
@@ -144,31 +134,29 @@ const orderController = {
     },
 
     updateConfirmOrderAndSentEmail: async (req, res) => {
-
-
         try {
             let id = req.params.id;
             const imageWidth = 300;
             const imageHeight = 200;
             const updateOrder = await Order.findOneAndUpdate({ _id: id }, { 'status': 1 })
-
+            for (let i = 0; i < updateOrder.cart.items.length; i++) {
+                let product = await Product.findById(updateOrder.cart.items[i].productId)
+                if (product.in_stock >= updateOrder.cart.items[i].quantity) {
+                    product.in_stock -= updateOrder.cart.items[i].quantity
+                    await product.save()
+                } else {
+                    return res.status(200).json({ status: false, message: "Product not in stock" })
+                }
+            }
             if (updateOrder) {
                 res.status(200).json({
                     success: true,
                     data: updateOrder
                 })
             }
-
             const user = await User.findById(updateOrder.userId)
 
-
             const transporter = nodemailer.createTransport({
-                // host: 'smtp.elasticemail.com',
-                // port: 2525,
-                // auth: {
-                //     user: 'beautyboxsetmail@gmail.com',
-                //     pass: 'B2ACF07570768953B98E811D78A0F9BB18AD',
-                // },
                 host: 'smtp-mail.outlook.com',
                 port: 587,
                 secure: false, // true nếu sử dụng cổng 465

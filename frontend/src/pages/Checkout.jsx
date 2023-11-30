@@ -44,7 +44,7 @@ const Checkout = (props) => {
     const [infoLasttName, setInfoLastName] = useState('')
     const [infoPhone, setInfoPhone] = useState('')
     const [infoEmail, setInfoEmail] = useState('')
-    const [methodShip, setMethodShip] = useState('')
+    const [methodShip, setMethodShip] = useState('GH24H')
     const [note, setNote] = useState("");
 
     const [methodPayment, setMethodPayment] = useState("COD")

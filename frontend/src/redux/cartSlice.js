@@ -20,6 +20,7 @@ const cartSlice = createSlice({
         },
         getCartFailed: (state) => {
             state.cart.isLoading = false;
+            state.cart.data = null
             state.cart.error = true;
         },
         addToCartStart: (state) => {

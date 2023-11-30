@@ -34,7 +34,7 @@ function App() {
 
   useEffect(() => {
     if (user && user?.account) {
-      dispatch(getCartFailed)
+      dispatch(getCartFailed())
     }
     if (user && user?.account?.role > 1) {
       navigate('/admin/product')

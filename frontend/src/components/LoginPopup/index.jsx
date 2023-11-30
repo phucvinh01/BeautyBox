@@ -123,8 +123,6 @@ const LoginPopup = () => {
                             <p className='text-end'>
                                 <ModalSentCodePass handleClose={ handleClose } />
                             </p>
-                            <span className='text-danger'>{ hadError && hadError && <span>{ hadError }</span> }</span>
-
                         </div>
                         <div className='mb-3'>
                             <button className='login-btn__submit'

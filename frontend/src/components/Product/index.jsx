@@ -18,7 +18,6 @@ const Product = (props) => {
     const avg = _.round(sumRating / (props.reviews && props.reviews.length));
     const dispatch = useDispatch();
 
-    console.log(props?.discount?.number > 0 && moment(moment(props?.discount?.timeBegin).format('yyyy-MM-ddThh:mm')).isAfter(moment().format('yyyy-MM-ddThh:mm')));
 
     return (
         <>

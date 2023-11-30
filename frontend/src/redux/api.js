@@ -49,6 +49,7 @@ export const logout = async (dispatch, id, navigate, token) => {
     try {
         const res = await axios.post('/v1/auth/logout')
         dispatch(logoutSuccess(res))
+        dispatch(getCartFailed())
         navigate('/')
     }
     catch (err) {

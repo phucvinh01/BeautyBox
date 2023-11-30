@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Space, message } from 'antd';
 import { SaveOutlined, SendOutlined } from '@ant-design/icons'
-import { updateCodeReset } from '../../axios/AuthRequest';
+import { getCheckCode, updateCodeReset, updatePassword } from '../../axios/AuthRequest';
 import OtpInput from 'react-otp-input';
 const ModalSentCodePass = (props) => {
     const [otp, setOtp] = useState('');
@@ -11,6 +11,11 @@ const ModalSentCodePass = (props) => {
     const [error, setError] = useState('')
     const [isSent, setIsSent] = useState(false)
     const [isCheck, setIsCheck] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [password, setPassword] = useState("")
+    const [passComfrim, setPassComfrim] = useState("")
+
+
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -34,6 +39,7 @@ const ModalSentCodePass = (props) => {
         if (r.status) {
             message.info("Vui lòng check mail của bạn")
             setIsSent(true)
+            setError(null)
         }
         else {
             setError(r.data)
@@ -44,22 +50,44 @@ const ModalSentCodePass = (props) => {
 
     const handleCheckCode = async () => {
         setIsSent(true)
-        setIsCheck(true)
-        let body = {
-            email,
-            otp
-        }
-        let r = await updateCodeReset(body)
+        setIsLoading(true)
+
+
+        let r = await getCheckCode(email, otp)
         if (r.status) {
-            message.info("Vui lòng check mail của bạn")
-            setIsSent(true)
+            setIsCheck(true)
+            setError(null)
         }
         else {
             setError(r.data)
+            setIsCheck(false)
+            setIsLoading(false)
         }
     }
     const handleChangePassword = async () => {
+        setIsLoading(true)
+        if (passComfrim.match(password)) {
 
+            let body = {
+                email, otp, password
+            }
+            let r = await updatePassword(body)
+            if (r.status) {
+                message.info("Cập nhật mật khẩu thành công")
+                setError(null)
+                handleClose()
+            }
+            else {
+                message.error("Thay đổi mật khẩu thất bại")
+                setError("Thay đổi mật khẩu thất bại")
+                setIsLoading(false)
+            }
+        }
+        else {
+            message.error("Mật khẩu không đúng")
+            setError("Mật khẩu không đúng")
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -87,25 +115,31 @@ const ModalSentCodePass = (props) => {
                         <OtpInput
                             containerStyle={ 'd-flex justify-content-center gap-3' }
                             value={ otp }
-                            inputStyle={ 'px-3 py-1 rounded' }
+                            inputStyle={ '' }
                             onChange={ setOtp }
                             numInputs={ 6 }
                             renderSeparator={ <span>{ "  " }</span> }
-                            renderInput={ (props) => <input { ...props } /> }
+                            renderInput={ (props) => <input className='form-control text-dark' { ...props } /> }
                         />
-                        <Button onClick={ handleCheckCode } className='btn-primary-main' icon={ <SendOutlined /> }></Button>
+                        <Button loading={ isLoading } onClick={ handleCheckCode } className='btn-primary-main' icon={ <SendOutlined /> }></Button>
                     </div>
+                    {
+                        error && <span className='text-danger'>{ error }</span>
+                    }
                 </div>
                 <div className='' hidden={ !isCheck }>
                     <div className='mb-3'>
                         <label>Mật khẩu mới</label>
-                        <input className='form-control' type='password' />
+                        <input value={ password } onChange={ (e) => setPassword(e.target.value) } className='form-control' type='password' />
                     </div>
                     <div className='mb-3'>
                         <label>Nhập lại mật khẩu</label>
-                        <input className='form-control' type='password' />
+                        <input value={ passComfrim } onChange={ (e) => setPassComfrim(e.target.value) } className='form-control' type='password' />
                     </div>
-                    <Button onClick={ handleChangePassword } block className='btn-primary-main' icon={ <SaveOutlined /> }></Button>
+                    {
+                        error && <span className='text-danger'>{ error }</span>
+                    }
+                    <Button loading={ isLoading } onClick={ handleChangePassword } block className='btn-primary-main' icon={ <SaveOutlined /> }></Button>
                 </div>
 
             </Modal>
