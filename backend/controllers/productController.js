@@ -38,6 +38,7 @@ const productController = {
             res.status(500).json(err);
         }
     },
+    
     getByCategory: async (req, res) => {
         try {
             const c = await Category.findOne({ "path": req.params.category })

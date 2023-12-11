@@ -15,6 +15,7 @@ const orderRoute = require("./routes/order");
 const distributorRoute = require("./routes/distributor")
 const collectionRoute = require("./routes/collection")
 const empRoute = require("./routes/emp")
+const receiptRoute = require("./routes/receipt")
 
 const { task } = require('./task/discountScheduler')
 dotenv.config();
@@ -54,6 +55,8 @@ app.use("/v1/distributor", distributorRoute)
 app.use("/v1/collection", collectionRoute)
 
 app.use("/v1/emp", empRoute)
+
+app.use("/v1/receipt", receiptRoute)
 
 task.start()
 

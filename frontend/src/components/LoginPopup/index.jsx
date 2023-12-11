@@ -128,7 +128,7 @@ const LoginPopup = () => {
                             <button className='login-btn__submit'
                                 onClick={ handleSubmit }
                             >
-                                Login
+                                Đăng nhập
                             </button>
                         </div>
                     </div>

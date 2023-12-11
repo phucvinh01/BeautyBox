@@ -84,7 +84,7 @@ const RegisterPopup = (props) => {
             <button
                 onClick={ showModal }
                 className='login-btn__register' >
-                Register
+                Đăng ký
             </button>
             <Modal
                 width={ 500 }
