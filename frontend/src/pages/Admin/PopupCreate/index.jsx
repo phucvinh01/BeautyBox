@@ -96,9 +96,9 @@ const PopupCreate = () => {
                 <em className='mx-1'>Thêm một sản phẩm</em>
             </Button>
             <Modal
-                width={ 1000 }
+                width={ 1200 }
                 centered
-                title='Create'
+                title='Thêm một sản phẩm mới'
                 open={ isModalOpen }
                 footer={ null }
                 onOk={ handleOk }
@@ -281,30 +281,34 @@ const PopupCreate = () => {
                     </div>
                 </div>
 
-                <div className='mb-3'>
-                    <label
-                        htmlFor={ id + '-description' }
-                        className='form-label fw-bolder'>
-                        Description
-                    </label>
-                    <TextArea
-                        onChange={ (e) => setDescription(e.target.value) }
-                        style={ {
-                            height: 140,
-                            resize: 'none',
-                        } }
-                        type='text'
-                        className='form-control'
-                        id={ id + '-description' }></TextArea>
-                </div>
+                <div className='d-flex gap-2'>
+                    <div className='col-6 p-3'>
+                        <label
+                            htmlFor={ id + '-description' }
+                            className='form-label fw-bolder'>
+                            Description
+                        </label>
+                        <TextArea
+                            onChange={ (e) => setDescription(e.target.value) }
+                            style={ {
+                                height: 140,
+                                resize: 'none',
+                            } }
+                            type='text'
+                            className='form-control'
+                            id={ id + '-description' }></TextArea>
+                    </div>
 
-                <div className='col-6 p-3'>
-                    <div className='p-0'>
-                        <Upload setImage={ setImage } />
+                    <div className='col-6 p-3'>
+                        <div className='p-0'>
+                            <Upload setImage={ setImage } />
+                        </div>
                     </div>
                 </div>
+
+
                 <div className='d-flex justify-content-end'>
-                    <button disabled={ loading ? true : false } className='btn btn-dark' onClick={ handleClick }>{ loading ? <Spin></Spin> : <>Create</> } </button>
+                    <button disabled={ loading ? true : false } className='btn btn-dark' onClick={ handleClick }>{ loading ? <Spin></Spin> : <>Lưu</> } </button>
                 </div>
             </Modal>
         </>

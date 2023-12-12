@@ -98,7 +98,7 @@ const ModalEditProduct = (props) => {
             <Button icon={ <EditOutlined /> } onClick={ showModal } title='Chỉnh sửa'></Button>
             <Modal okButtonProps={ {
                 disabled: loading
-            } } onCancel={ handleCancel } centered width={ 1000 } footer={ null } title="Basic Modal" open={ isModalOpen }>
+            } } onCancel={ handleCancel } centered width={ 1000 } footer={ null } title="Chỉnh sửa sản phẩm" open={ isModalOpen }>
                 <div className='row g-2'>
                     <div className='col-lg-4 col-md-12 col-sm-12'>
                         <div className='mb-3'>

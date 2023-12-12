@@ -58,7 +58,6 @@ const Sales = () => {
         getRevenueData()
     }, [])
 
-    console.log(salesData);
 
     return (
         <main>

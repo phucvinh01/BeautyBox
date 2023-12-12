@@ -23,6 +23,7 @@ const ModalDetail = (props) => {
     useEffect(() => {
         if (open) {
             getReview(dispatch, state._id)
+            console.log(state.discount?.number);
         }
     }, [open, dispatch, state._id])
 
@@ -66,16 +67,22 @@ const ModalDetail = (props) => {
                                         value={ avg ? avg : 0 }
                                     />
                                     <p>({ reivews && reivews?.length })</p>
-                                </div>                               <p><strong>Xuất xứ:</strong></p>
+                                </div>                               <p><strong>Xuất xứ:</strong> { state.origin }</p>
                                 <p><strong>SKU: </strong>{ state?._id?.match(/[0-9]+/g).join("") }</p>
                             </Space>
                             {
-                                props?.discount?.number > 0 && moment(moment(props?.discount?.timeBegin).format('yyyy-MM-ddThh:mm')).isBetween(moment().format('yyyy-MM-ddThh:mm')) ?
-                                    <Space size={ "large" } align='center' >
-                                        <p className='fs-20 fw-bolder'>{ formatCurrency.format(state.price) }</p>
-                                        <p className='fs-18 text-muted' style={ { textDecorationLine: "line-through" } }>{ formatCurrency.format(state.priceSale) }</p>
-                                        <div className='tag'>{ state.discount?.number }%</div>
-                                    </Space> : <p className='fs-20 fw-bolder'>{ formatCurrency.format(state.priceSale) }</p>
+                                state.discount?.number > 0 ?
+                                    (
+                                        <Space size={ "large" } align='center' >
+                                            <p className='fs-20 fw-bolder'>{ formatCurrency.format(state.price) }</p>
+                                            <p className='fs-18 text-muted' style={ { textDecorationLine: "line-through" } }>{ formatCurrency.format(state.priceSale) }</p>
+                                            <div className='tag'>{ state.discount?.number }%</div>
+                                        </Space>
+                                    )
+                                    :
+                                    (
+                                        <p className='fs-20 fw-bolder'>{ formatCurrency.format(state.priceSale) }</p>
+                                    )
 
                             }
                             <div className='detal-order__method mb-3 fs-14'>

@@ -23,7 +23,7 @@ const productController = {
     //GET ALL
     getAll: async (req, res) => {
         try {
-            const products = await Product.find().sort({ 'updatedAt': -1 });
+            const products = await Product.find({ 'isDelete': false }).sort({ 'updatedAt': -1 });
             res.status(200).json(products);
         } catch (err) {
             res.status(500).json(err);
@@ -43,7 +43,7 @@ const productController = {
         try {
             const c = await Category.findOne({ "path": req.params.category })
             try {
-                const products = await Product.find({ "category": c.name })
+                const products = await Product.find({ "category": c.name, "isDelete": false }).exec()
                 res.status(200).json(products)
             }
             catch (err) {
@@ -429,18 +429,17 @@ const productController = {
                 {
                     $group: {
                         _id: {
-                            $dateToString: { format: '%Y-%m', date: '$createdAt' },
+                            $dateToString: { format: '%m-%Y', date: '$createdAt' },
                         },
                         totalRevenue: { $sum: '$totalPrice' },
                     },
                 },
-                { $sort: { '_id': 1 } },
-            ])
+                { $sort: { _id: 1 } },
+            ]);
+
             res.status(200).json({ success: true, data: result });
-
         } catch (error) {
-            res.status(200).json({ success: false, data: error });
-
+            res.status(500).json({ success: false, error: error.message });
         }
     },
 
@@ -475,16 +474,17 @@ const productController = {
 
     getSalesStatistics: async (req, res) => {
         try {
-            const month = req.query.month;
-            const year = req.query.year;
+            const month = parseInt(req.query.month);
+            const year = parseInt(req.query.year);
+            const startDate = new Date(year, month - 1, 2);
+            const endDate = new Date(year, month - 1, 1);
+            endDate.setMonth(endDate.getMonth() + 1);
 
-            console.log(month, year);
-
-            const startDate = new Date(year, month - 1, 1);
-            const endDate = new Date(year, month, 0);
+            console.log(startDate, endDate);
 
             const data = await Order.aggregate([
                 { $unwind: '$cart.items' },
+                { $match: { createdAt: { $gte: startDate, $lte: endDate } } },
                 {
                     $group: {
                         _id: '$cart.items.productId',
@@ -500,33 +500,7 @@ const productController = {
                         total: { $subtract: ['$totalSale', '$totalCost'] },
                     },
                 },
-            ])
-            // const data = await Order.aggregate([
-            //     { $unwind: '$cart.items' },
-            //     {
-            //         $lookup: {
-            //             from: 'products', // Tên bảng "products"
-            //             localField: 'cart.items.productId',
-            //             foreignField: '_id',
-            //             as: 'product',
-            //         },
-            //     },
-            //     {
-            //         $unwind: '$product',
-            //     },
-            //     {
-            //         $group: {
-            //             _id: '$cart.items.productId',
-            //             productName: { $first: '$product.name' },
-            //             productImg: { $first: '$product.img' },
-            //             totalQuantity: { $sum: '$cart.items.quantity' },
-            //             totalSale: { $sum: '$cart.items.total' },
-            //             totalCost: { $sum: { $multiply: ['$product.in_stock', '$product.priceIn'] } },
-            //             inStock: { $first: '$product.in_stock' },
-            //             profit: { $sum: { $subtract: ['$cart.items.total', { $multiply: ['$product.in_stock', '$product.cost'] }] } },
-            //         },
-            //     },
-            // ]);
+            ]);
 
             const result = await Order.aggregate([
                 {
@@ -540,22 +514,23 @@ const productController = {
                         totalRevenue: { $sum: '$totalPrice' },
                     },
                 },
-            ])
+            ]);
 
             const sumProfit = await Order.aggregate([
                 {
-                    $unwind: "$cart.items" // Tách các mục trong giỏ hàng thành các bản ghi riêng biệt
+                    $unwind: '$cart.items',
                 },
+                { $match: { createdAt: { $gte: startDate, $lte: endDate } } },
                 {
                     $group: {
                         _id: null,
-                        totalSales: { $sum: { $multiply: ["$cart.items.price", "$cart.items.quantity"] } },
-                        totalProfit: { $sum: { $multiply: [{ $subtract: ["$cart.items.price", "$cart.items.priceIn"] }, "$cart.items.quantity"] } }
-                    }
+                        totalSales: { $sum: { $multiply: ['$cart.items.price', '$cart.items.quantity'] } },
+                        totalProfit: { $sum: { $multiply: [{ $subtract: ['$cart.items.price', '$cart.items.priceIn'] }, '$cart.items.quantity'] } },
+                    },
                 },
                 {
                     $addFields: {
-                        total: { $subtract: ['$totalSale', '$totalProfit'] },
+                        total: { $subtract: ['$totalSales', '$totalProfit'] },
                     },
                 },
                 {
@@ -564,26 +539,28 @@ const productController = {
                         totalSales: 1,
                         totalProfit: 1,
                         total: 1,
-                    }
-                }
+                    },
+                },
             ]);
 
             const totalQuantityResult = await Order.aggregate([
                 { $unwind: '$cart.items' },
+                { $match: { createdAt: { $gte: startDate, $lte: endDate } } },
                 { $group: { _id: null, totalQuantity: { $sum: '$cart.items.quantity' } } },
+
             ]);
 
             res.status(200).json({
                 success: true,
                 data: {
                     productStats: data,
-                    totalRevenue: result[0].totalRevenue,
-                    sumProfit: sumProfit[0].totalProfit,
-                    totalQuantity: totalQuantityResult[0].totalQuantity,
+                    totalRevenue: result.length > 0 ? result[0].totalRevenue : 0,
+                    sumProfit: sumProfit.length > 0 ? sumProfit[0].totalProfit : 0,
+                    totalQuantity: totalQuantityResult.length > 0 ? totalQuantityResult[0].totalQuantity : 0,
                 },
             });
         } catch (error) {
-            res.status(200).json({ success: false, data: error });
+            res.status(500).json({ success: false, error: error.message });
         }
     },
 
