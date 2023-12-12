@@ -23,7 +23,7 @@ const productController = {
     //GET ALL
     getAll: async (req, res) => {
         try {
-            const products = await Product.find();
+            const products = await Product.find().sort({ 'updatedAt': -1 });
             res.status(200).json(products);
         } catch (err) {
             res.status(500).json(err);
@@ -38,7 +38,7 @@ const productController = {
             res.status(500).json(err);
         }
     },
-    
+
     getByCategory: async (req, res) => {
         try {
             const c = await Category.findOne({ "path": req.params.category })

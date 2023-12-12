@@ -28,7 +28,7 @@ const ModalProductDistributor = (props) => {
         <>
             <Button title="Xem các sản phẩm" icon={ <EyeOutlined /> } onClick={ showModal } />
             <Modal centered width={ 1200 } title="Danh sách sản phẩm của nhà cung cấp" open={ isModalOpen } onOk={ handleOk } onCancel={ handleCancel }>
-                <TableProduct dataFilter={ filterDistributor } />
+                <TableProduct data={ filterDistributor } />
             </Modal>
         </>
     );

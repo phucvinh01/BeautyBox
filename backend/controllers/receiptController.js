@@ -9,7 +9,7 @@ const receiptController = {
         const newReceipt = new Receipt({ ...req.body });
         try {
             const product = await Product.findById(productId);
-            const p = product.in_stock + quantity
+            const p = +product.in_stock + +quantity
             if (product) {
                 await product.updateOne({ in_stock: p });
                 const savedReceipt = await newReceipt.save();
@@ -33,6 +33,7 @@ const receiptController = {
             const receipts = await Receipt.find({})
                 .populate('productId')
                 .populate('employeeId')
+                .sort({ 'updatedAt': -1 })
                 .exec();
 
             console.log(receipts);

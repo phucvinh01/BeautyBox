@@ -26,6 +26,7 @@ import Profile from './pages/Profile'
 import Distributor from './pages/Admin/pages/Distributor'
 import Login from './pages/Admin/pages/Login'
 import Detail from './pages/Detail'
+import Recepit from './pages/Admin/pages/Recepit'
 function App() {
 
   const dispatch = useDispatch()
@@ -61,7 +62,6 @@ function App() {
         newestOnTop={ false }
         closeOnClick
         rtl={ false }
-        pauseOnFocusLoss
         draggable
         theme="light"
       />
@@ -83,6 +83,7 @@ function App() {
           <Route path='/admin/employee' element={ <Employess /> } />
           <Route path='/admin/sale' element={ <Sales /> } />
           <Route path='/admin/distributor' element={ <Distributor /> } />
+          <Route path='/admin/recepit' element={ <Recepit /> } />
         </Route>
       </Routes>
 

@@ -10,21 +10,19 @@ import formatCurrency from '../../util/formatCurrency';
 import PopconfirmDelPro from '../PopconfirmDelPro';
 import ModalDiscount from '../ModalDiscount';
 import PopupDeleteProduct from '../PopupDeleteProduct';
+import ModalRecepit from '../ModalRecepit';
 
 
 
 
 const TableProduct = (props) => {
     const [filteredProducts, setFilteredProducts] = useState([]);
-    const [products, setProducts] = useState([]);
 
-    const { dataFilter } = props
-    const data = useSelector((state) => state.product.products.data);
+    const { data } = props
 
     useEffect(() => {
-        setProducts(dataFilter ? dataFilter : data);
-        setFilteredProducts(products.filter(product => !product.isDelete));
-    }, [dataFilter, data]);
+        setFilteredProducts(data && data.length > 0 && data.filter(product => !product.isDelete));
+    }, [props]);
 
     const columns = [
         {
@@ -100,7 +98,7 @@ const TableProduct = (props) => {
                     <Space size="small">
                         <ModalDetail state={ record } isAdmin={ true } />
                         <ModalEditProduct state={ record } />
-                        <Button title='Thêm số lượng sản phẩm' icon={ <PlusOutlined /> }></Button>
+                        <ModalRecepit state={ record } />
                     </Space>
                     <Space size="small">
                         <PopupDeleteProduct _id={ record._id } />
@@ -108,7 +106,6 @@ const TableProduct = (props) => {
                         <ModalDiscount state={ record } />
                     </Space>
                 </Space>
-
             ),
         },
     ];

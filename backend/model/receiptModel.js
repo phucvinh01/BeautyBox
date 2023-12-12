@@ -15,7 +15,7 @@ const receiptModel = new mongoose.Schema(
             type: String,
             require: true,
         },
-        quanity: {
+        quantity: {
             type: Number,
             require: true,
         }

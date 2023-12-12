@@ -43,6 +43,11 @@ const Nav = () => {
                             icon={ 'fa-solid fa-building-circle-arrow-right me-3' }
                             title={ 'Nhà phân phối' }
                         />
+                        <NavItem
+                            href={ '/admin/recepit' }
+                            icon={ 'fa-solid fa-building-circle-arrow-right me-3' }
+                            title={ 'Lịch sử nhập hàng' }
+                        />
                     </div>
                 </div>
             </nav>

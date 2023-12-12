@@ -10,6 +10,7 @@ import Axios from '../../../axios/Axios'
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import { getProductList } from '../../../redux/api';
+import ModalRecepit from '../../../components/ModalRecepit';
 const ProductAdmin = () => {
 
     useEffect(() => {
@@ -17,7 +18,6 @@ const ProductAdmin = () => {
     }, [])
 
     const products = useSelector((state) => state.product.products.data);
-    //console.log(products);
     const [dataExport, setdataExport] = useState([])
     const getDataExport = (event, done) => {
         let r = []
@@ -117,7 +117,7 @@ const ProductAdmin = () => {
                                 }
                             </Space> */}
                         </Space>
-                        <TableProduct />
+                        <TableProduct data={ products } />
                     </Space>
                 </div>
             </main>
